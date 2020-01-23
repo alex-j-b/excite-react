@@ -1,52 +1,128 @@
+
 @media screen and (max-width: 700px) {
     .app-header a:not([class*="logo-excite"]) {
         display: none !important;
     }
 
     .app-header .hamburger {
-        display: inline !important;
-        margin: 0 10px 0 auto;
+        position: fixed; display: inline !important;
+        z-index: 9999;
+        top: 2px;
+        right: 0;
+        mix-blend-mode: difference;
+    }
+
+    .app-menu {
+        position: fixed; flex-direction: column;
+        z-index: 9998;
+        left: 0; top: 0;
+        height: 100vh; width: 100vw;
+        padding: 14vh 0 0 25px;
+        background-color: black;
+        opacity: 0;
+        transition: opacity 0.3s ease-out; -webkit-transition: opacity 0.3s ease-out;
+    }
+
+    .app-menu a:first-child {
+        border-top: 1px solid white;
+    }
+    .app-menu a {
+        display: block !important;
+        margin-right: 50px;
+        padding: 14px 0 14px 5px; 
+        font-size: 28px;
+        color: white !important;
+        border-bottom: 1px solid white;
     }
 }
 
+
 .app-background {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    background-color: #cccccc;
+    display: flex; justify-content: center;
+    background-color: rgb(40, 0, 40);
+}
+
+.app-main {
+    height: fit-content; width: 100%; max-width: 1460px;
 }
 
 .app-header {
     display: flex;
-    width: 100%;
-    max-width: 1460px;
-    height: 60px;
+    width: 100%; height: 60px;
     background-color: black;
-    align-self: center;
+}
+
+.app-header .logo-excite {
+    padding: 0 20px 0 30px;
+    margin-right: 50px;
+    font-size: 28px; font-family: "Raleway", Arial; -webkit-text-stroke: 0.5px;
 }
 
 .app-header a {
-    display: flex;
-    align-items: center;
-    height: 100%;
-    width: fit-content;
+    position: relative; display: flex; align-items: center;
+    height: 100%; width: fit-content;
     padding: 0 20px;
     color: white !important;
 }
-.app-header a:hover {
-    text-decoration: underline;
-    transition-duration: 1s;
+
+.app-header a:not([class*="logo-excite"]):after{
+    position: absolute; display: block;
+    right: 0; bottom: 0;
+    width: 0; height: 3px;
+    content: '';
+    background: #fff;
+    transition: width 0.25s ease; -webkit-transition: width 0.25s ease;
+}
+.app-header a:not([class*="logo-excite"]):hover:after{
+    width: 100%;
+    left: 0;
+    background: #fff;
 }
 
-.app-header .logo-excite > span {
-    font-size: 28px;
-    font-family: "Raleway", Arial;
-    -webkit-text-stroke: 0.5px;
+.app-header .hamburger, .app-menu, .app-menu a {
+    display: none;
 }
-.app-header .logo-excite {
+
+
+
+
+.app-footer {
+    display: flex; align-items: center; justify-content: center; flex-wrap: wrap;
+    width: 100%; height: 100%; min-height: 80px;
+    padding: 10px 0 10px 0;
+    background-color: #0d0d0d;
+}
+
+.app-footer .logo-excite {
+    padding: 0 20px 0 20px;
+    font-size: 28px; font-family: "Raleway", Arial; -webkit-text-stroke: 0.5px;
+}
+
+.app-footer a {
+    position: relative; display: flex; align-items: center;
+    height: fit-content; width: fit-content;
+    padding: 10px 10px;
+    font-size: 12px;
+    color: white !important;
+}
+
+.footer-social.twitter {
+    height: 50px; width: 50px;
+    padding-right: 0;
+}
+.footer-social.fb {
+    height: 34px; width: 34px;
+    padding-left: 5px;
     margin-right: 50px;
 }
+@media screen and (max-width: 909px) {
+    .footer-social.fb { margin-right: 0px; }
+    .footer-links { padding-bottom: 14px; }
+}
+.footer-social img {
+    height: 100%; width: 100%;
+}
 
-.app-header .hamburger {
-    display: none;
+.footer-links {
+    display: flex; flex-wrap: wrap; justify-content: center;
 }
