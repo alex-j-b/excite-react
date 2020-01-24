@@ -11,10 +11,27 @@ body {
 a, a:link, a:visited, a:hover, a:active {
     color: #333333;
     text-decoration: none;
+    outline: none !important;
+    box-shadow: none !important;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none !important;
+    -webkit-user-select: none !important;
+    -khtml-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    user-select: none !important;
 }
 
-input, textarea, button {
+input, textarea, button, button:focus {
     outline: none !important;
+    box-shadow: none !important;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none !important;
+    -webkit-user-select: none !important;
+    -khtml-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    user-select: none !important;
 }
 
 .purple {
@@ -23,4 +40,8 @@ input, textarea, button {
 
 * {
     z-index: 2;
+}
+
+p {
+    margin: 0;
 }

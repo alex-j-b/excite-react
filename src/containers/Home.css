@@ -1,32 +1,32 @@
-.home {
-    background-color: black;
-}
 
+.home {
+    background-color: white;
+}
 .home-1 {
     display: flex; align-items: center; justify-content: center;
     height: 700px;
     overflow: hidden;
+    background-color: black;
 }
-
 #videoBG {
-    opacity: 0.15;
     height: 133%;
     flex-shrink: 0;
+    opacity: 0.2;
 }
-
 .home-1 div {
-    position: absolute;
-    display: flex; flex-direction: column; align-items: center;
-    height: fit-content; max-width: 400px;
+    position: absolute; display: flex; flex-direction: column; align-items: center;
+    height: fit-content;
+    margin-top: -40px;
 }
 .home-1 div > p {
-    font-size: 46px; font-family: "Lato", Arial; -webkit-text-stroke: 0.5px;
-    line-height: 66px;
+    font-size: 90px; font-family: "Poppins", Arial; -webkit-text-stroke: 1px;
+    line-height: 134%;
     color: white;
 }
 .home-1 div > button {
     width: fit-content;
     padding: 14px 60px 14px 60px;
+    margin-top: 50px;
     font-size: 36px; font-family: "Lato", Arial; -webkit-text-stroke: 0.5px;
     color: white;
     background-color: rgb(80, 0, 80);
@@ -35,11 +35,132 @@
     -webkit-transition-duration: 0.45s; transition-duration: 0.45s;
 }
 .home-1 div > button:hover, .home-1 div > button:active {
-    background-color: white;
     color: rgb(80, 0, 80);
+    background-color: white;
 }
 
+
+
 .home-2 {
-    height: 800px;
+    display: flex; align-items: top; justify-content: space-evenly; flex-wrap: wrap;
+    height: fit-content;
+    padding: 30px 0 0 0;
+}
+.home-2 p {
+    width: fit-content;
+    margin-right: 10px;
+    font-size: 24px; font-family: "Raleway", Arial; -webkit-text-stroke: 0.75px;
+    text-align: center;
+    color: black;
+}
+.home-2 .third p {
+    max-width: 245px;
+    line-height: 140%;
+}
+.step {
+    display: flex; flex-direction: column; align-items: center;
+    height: fit-content; width: fit-content;
+    padding: 30px 20px 30px 20px;
+}
+.step div {
+    display: flex; align-items: center;
+    height: fit-content; width: fit-content;
+    margin-top: 20px;
+}
+.step .number {
+    height: 38px;
+}
+.step.first .icon {
+    height: 35px;
+    margin-right: 15px;
+}
+.step.second .icon {
+    height: 40px;
+    margin-right: 15px;
+}
+.step.third .icon {
+    height: 50px;
+    margin-right: -5px;
+}
+
+
+
+.home-3 {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    margin-top: 15px;
+    font-size: 30px; font-family: "Raleway", Arial; -webkit-text-stroke: 1px;
+    color: black;
     background-color: white;
+}
+.home-3 > img {
+    width: 300px; max-width: 70%;
+    margin-bottom: 60px;
+}
+.home-3 div {
+    display: flex; align-items: center; justify-content: space-evenly; flex-wrap: wrap;
+    width: 100%;
+    margin-top: 30px;
+}
+.home-3 div > img {
+    width: 480px; max-width: 95.5%;
+    margin-top: 8px;
+}
+.home-3 div:last-child {
+    margin-bottom: 8px;
+}
+
+
+
+@media screen and (max-width: 1000px) {
+
+    .step {
+        padding: 25px 20px 25px 20px;
+    }
+    .home-1 div > p {
+        padding-left: 9%;
+        padding-right: 9%;
+        font-size: 54px; -webkit-text-stroke: 1.5px;
+        text-align: center;
+        line-height: 145%;
+    }
+    .home-1 div > button {
+        margin-top: 60px !important;
+    }
+    .home-1 div {
+        margin-top: -60px;
+    }
+    .home-1 div > button {
+        margin-top: 50px;
+    }
+
+    .home-2 {
+        padding: 30px 0 25px 0;
+    }
+    .step.first .icon {
+        height: 35px;
+        margin: -25px 6px 0 0;
+    }
+    .step.second .icon {
+        height: 40px;
+        margin-right: 15px;
+    }
+    .step.third .icon {
+        height: 50px;
+        margin: -10px -13px 0 0;
+    }
+    .home-2 p {
+        max-width: 188px;
+        font-size: 22px; font-family: "Raleway", Arial; -webkit-text-stroke: 0.75px;
+    }
+
+    .home-3 {
+        font-size: 26px; font-family: "Raleway", Arial; -webkit-text-stroke: 1px;
+        margin-top: 5px;
+    }
+    .home-3 div {
+        margin-top: 15px;
+    }
+    .home-3 > img {
+        margin-bottom: 55px;
+    }
 }

@@ -1,7 +1,7 @@
 import React from 'react'
-import { StyledButton } from './StyledButton'
-import { StyledBox } from '../styledBox/StyledBox'
-import { StyledLines } from '../styledLines/StyledLines'
+import { StyledButton } from './StyledButton.js'
+import { StyledBox } from '../styledBox/StyledBox.js'
+import { StyledLines } from '../styledLines/StyledLines.js'
 
 export const Button = props => {
   const {

@@ -17,13 +17,13 @@ class App extends Component {
             this.refs.appMenu.style.display = "flex";
             setTimeout(function() {
                 this.refs.appMenu.style.opacity = "1";
-            }.bind(this), 1);
+            }.bind(this), 10);
         }
         else {
             this.refs.appMenu.style.opacity = "0";
             setTimeout(function() {
                 this.refs.appMenu.style.display = "none";
-            }.bind(this), 400);
+            }.bind(this), 500);
         }
 
         this.setState({
