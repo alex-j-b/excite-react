@@ -1,13 +1,21 @@
 
+/* //////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
+/* ////////////////////////////////////////////////// OVER 700 //////////////////////////////////////////////////// */
+/* //////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
+
+
+/* -------------------- Purple background -------------------- */
 .app-background {
     display: flex; justify-content: center;
     background-color: rgb(40, 0, 40);
 }
 
+/* -------------------- Center content -------------------- */
 .app-main {
     height: fit-content; width: 100%; max-width: 1460px;
 }
 
+/* -------------------- Header -------------------- */
 .app-header {
     display: flex;
     width: 100%; height: 60px;
@@ -20,6 +28,7 @@
     font-size: 30px; font-family: "Raleway", Arial; -webkit-text-stroke: 0.5px;
 }
 
+/* -------------------- Sections links -------------------- */
 .app-header a {
     position: relative; display: flex; align-items: center;
     height: 100%; width: fit-content;
@@ -41,13 +50,12 @@
     background: #fff;
 }
 
+/* -------------------- Disabled phone menu -------------------- */
 .app-header .hamburger, .app-menu, .app-menu a {
     display: none;
 }
 
-
-
-
+/* -------------------- Footer -------------------- */
 .app-footer {
     display: flex; align-items: center; justify-content: center; flex-wrap: wrap;
     width: 100%; height: 100%; min-height: 80px;
@@ -60,6 +68,7 @@
     font-size: 28px; font-family: "Raleway", Arial; -webkit-text-stroke: 0.5px;
 }
 
+/* -------------------- Footer links and socials -------------------- */
 .app-footer a {
     position: relative; display: flex; align-items: center;
     height: fit-content; width: fit-content;
@@ -67,7 +76,6 @@
     font-size: 12px;
     color: white !important;
 }
-
 .footer-social.twitter {
     height: 50px; width: 50px;
     padding-right: 0;
@@ -84,19 +92,22 @@
 .footer-social img {
     height: 100%; width: 100%;
 }
-
 .footer-links {
     display: flex; flex-wrap: wrap; justify-content: center;
 }
 
-
-
+/* //////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
+/* ////////////////////////////////////////////////// UNDER 700 /////////////////////////////////////////////////// */
+/* //////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
 
 @media screen and (max-width: 700px) {
+
+    /* -------------------- Disabled desktop menu -------------------- */
     .app-header a:not([class*="logo-excite"]) {
         display: none !important;
     }
 
+    /* -------------------- Phone menu -------------------- */
     .app-header .hamburger {
         position: fixed; display: inline !important;
         z-index: 9999;
@@ -104,7 +115,6 @@
         right: 2px;
         mix-blend-mode: difference;
     }
-
     .app-menu {
         position: fixed; flex-direction: column;
         z-index: 9998;
@@ -116,6 +126,7 @@
         transition: opacity 0.4s ease-out; -webkit-transition: opacity 0.3s ease-out;
     }
 
+    /* -------------------- Sections links -------------------- */
     .app-menu a:first-child {
         border-top: 0.25px solid white;
     }

@@ -39,10 +39,10 @@ class App extends Component {
                         <Link className="logo-excite" to="/">
                             <span><span className="purple">E</span>xcite.</span>
                         </Link>
-                        <Link to="/">Jouer</Link>
-                        <Link to="/">Boutique</Link>
-                        <Link to="/">FAQ</Link>
-                        <Link to="/">Contact</Link>
+                        <Link to="/inscription">Jouer</Link>
+                        <Link to="/boutique">Boutique</Link>
+                        <Link to="/faq">FAQ</Link>
+                        <Link to="/contact">Contact</Link>
                         <HamburgerSqueeze
                             className="hamburger"
                             isActive={this.state.isActive}
@@ -53,10 +53,10 @@ class App extends Component {
                     </div>
 
                     <div className="app-menu" ref="appMenu">
-                        <Link to="/">Jouer</Link>
-                        <Link to="/">Boutique</Link>
-                        <Link to="/">FAQ</Link>
-                        <Link to="/">Contact</Link>
+                        <Link to="/inscription">Jouer</Link>
+                        <Link to="/boutique">Boutique</Link>
+                        <Link to="/faq">FAQ</Link>
+                        <Link to="/contact">Contact</Link>
                     </div>
 
                     <Routes />

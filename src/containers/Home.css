@@ -1,25 +1,33 @@
 
+/* //////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
+/* ////////////////////////////////////////////////// OVER 1000 /////////////////////////////////////////////////// */
+/* //////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
+
 .home {
-    background-color: white;
+    background-color: black;
 }
+
+/* //////////////////////////////////////// HOME 1 //////////////////////////////////////// */
+
 .home-1 {
     display: flex; align-items: center; justify-content: center;
     height: 700px;
     overflow: hidden;
-    background-color: black;
 }
 #videoBG {
     height: 133%;
     flex-shrink: 0;
     opacity: 0.2;
 }
+
+/* -------------------- Big text and button -------------------- */
 .home-1 div {
     position: absolute; display: flex; flex-direction: column; align-items: center;
     height: fit-content;
     margin-top: -40px;
 }
 .home-1 div > p {
-    font-size: 90px; font-family: "Poppins", Arial; -webkit-text-stroke: 1px;
+    font-size: 85px; font-family: "Poppins", Arial; -webkit-text-stroke: 3px;
     line-height: 134%;
     color: white;
 }
@@ -39,37 +47,33 @@
     background-color: white;
 }
 
-
+/* //////////////////////////////////////// HOME 2 //////////////////////////////////////// */
 
 .home-2 {
     display: flex; align-items: top; justify-content: space-evenly; flex-wrap: wrap;
     height: fit-content;
     padding: 30px 0 0 0;
+    background-color: white;
 }
-.home-2 p {
-    width: fit-content;
-    margin-right: 10px;
-    font-size: 24px; font-family: "Raleway", Arial; -webkit-text-stroke: 0.75px;
-    text-align: center;
-    color: black;
-}
-.home-2 .third p {
-    max-width: 245px;
-    line-height: 140%;
-}
+
+/* -------------------- .step = 1 of 3 wraped elements -------------------- */
 .step {
     display: flex; flex-direction: column; align-items: center;
     height: fit-content; width: fit-content;
     padding: 30px 20px 30px 20px;
 }
+
+.step .number {
+    height: 38px;
+}
+
+/* -------------------- wrap of icon + text -------------------- */
 .step div {
     display: flex; align-items: center;
     height: fit-content; width: fit-content;
     margin-top: 20px;
 }
-.step .number {
-    height: 38px;
-}
+
 .step.first .icon {
     height: 35px;
     margin-right: 15px;
@@ -83,19 +87,36 @@
     margin-right: -5px;
 }
 
+.step p {
+    width: fit-content;
+    margin-right: 10px;
+    font-size: 24px; font-family: "Raleway", Arial; -webkit-text-stroke: 0.75px;
+    text-align: center;
+    color: black;
+}
+.step.third p {
+    max-width: 245px;
+    line-height: 140%;
+}
 
+/* //////////////////////////////////////// HOME 3 //////////////////////////////////////// */
 
 .home-3 {
     display: flex; flex-direction: column; align-items: center; justify-content: center;
-    margin-top: 15px;
+    padding-top: 16px;
+    margin-top: -1px;
     font-size: 30px; font-family: "Raleway", Arial; -webkit-text-stroke: 1px;
     color: black;
     background-color: white;
 }
+
+/* -------------------- Paragraph separator -------------------- */
 .home-3 > img {
     width: 300px; max-width: 70%;
     margin-bottom: 60px;
 }
+
+/* -------------------- Wrap all games image -------------------- */
 .home-3 div {
     display: flex; align-items: center; justify-content: space-evenly; flex-wrap: wrap;
     width: 100%;
@@ -110,12 +131,19 @@
 }
 
 
+/* //////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
+/* ////////////////////////////////////////////////// UNDER 1000 ////////////////////////////////////////////////// */
+/* //////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
 
 @media screen and (max-width: 1000px) {
 
-    .step {
-        padding: 25px 20px 25px 20px;
+    /* //////////////////////////////////////// HOME 1 //////////////////////////////////////// */
+    
+    /* -------------------- Big text and button -------------------- */
+    .home-1 div {
+        margin-top: -60px;
     }
+
     .home-1 div > p {
         padding-left: 9%;
         padding-right: 9%;
@@ -126,16 +154,19 @@
     .home-1 div > button {
         margin-top: 60px !important;
     }
-    .home-1 div {
-        margin-top: -60px;
-    }
-    .home-1 div > button {
-        margin-top: 50px;
-    }
+
+    /* //////////////////////////////////////// HOME 2 //////////////////////////////////////// */
 
     .home-2 {
         padding: 30px 0 25px 0;
     }
+
+    /* -------------------- .step = 1 of 3 wraped elements -------------------- */
+    .step {
+        padding: 25px 20px 25px 20px;
+    }
+
+    /* -------------------- wrap of icon + text -------------------- */
     .step.first .icon {
         height: 35px;
         margin: -25px 6px 0 0;
@@ -148,19 +179,27 @@
         height: 50px;
         margin: -10px -13px 0 0;
     }
-    .home-2 p {
+
+    .step p {
         max-width: 188px;
         font-size: 22px; font-family: "Raleway", Arial; -webkit-text-stroke: 0.75px;
     }
 
+    /* //////////////////////////////////////// HOME 3 //////////////////////////////////////// */
+
     .home-3 {
         font-size: 26px; font-family: "Raleway", Arial; -webkit-text-stroke: 1px;
-        margin-top: 5px;
+        padding-top: 6px;
+        margin-top: -1px;
     }
-    .home-3 div {
-        margin-top: 15px;
-    }
+
+    /* -------------------- Paragraph separator -------------------- */
     .home-3 > img {
         margin-bottom: 55px;
+    }
+
+    /* -------------------- Wrap all games image -------------------- */
+    .home-3 div {
+        margin-top: 15px;
     }
 }

@@ -1,0 +1,150 @@
+
+/* //////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
+/* ////////////////////////////////////////////////// OVER 460 //////////////////////////////////////////////////// */
+/* //////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
+
+/* -------------------- Background -------------------- */
+.sign {
+    display: flex; align-items: center; justify-content: center;
+    height: 900px;
+    background-position: center;
+    font-size: 16px; font-family: 'Raleway', Arial;
+    font-weight: 400;
+}
+
+/* -------------------- Form -------------------- */
+.sign form {
+    display: flex; flex-direction: column; align-items: center;
+    height: 610px; max-width: 280px;
+    padding: 0 90px 0 90px;
+    border: 1px solid black;
+    background-color: #f9f9f9 !important;
+    overflow: hidden;
+}
+
+/* -------------------- 3 games icons -------------------- */
+.games-icons {
+    display: flex; align-items: center; justify-content: center;
+    height: 60px; width: 500px;
+    background-color: black !important;
+}
+.games-icons > .lol-logo {
+    height: 32px;
+    margin-right: 20px;
+}
+.games-icons > .fortnite-logo {
+    height: 40px;
+    margin-right: 20px;
+}
+.games-icons > .rocket-logo {
+    height: 32px;
+}
+
+/* -------------------- Form title -------------------- */
+.sign form > span {
+    font-size: 26px;
+    margin: 42px 0 35px 0;
+    -webkit-text-stroke: 0.75px;
+}
+
+/* -------------------- Inputs -------------------- */
+.sign label {
+    align-self: flex-start;
+    margin: 10px 0 8px 0;
+    font-size: 18px; -webkit-text-stroke: 0.4px;
+}
+.error-input {
+    display: none;
+}
+
+.sign input {
+    align-self: center;
+    width: 100%;
+    padding: 10px 12px;
+    margin-bottom: 2%;
+    border: 1px solid #d9d9d9;
+    font-size: 16px; font-family: 'Raleway', Arial;
+}
+.sign input::placeholder {
+    font-size: 14px; font-family: 'Raleway', Arial;
+}
+.sign input:focus {
+    background-color: rgb(255, 251, 255);
+}
+
+/* -------------------- Birth inputs -------------------- */
+.wrap-birth-inputs {
+    display: flex;
+    width: 100%;
+    font-size: 16px; font-family: 'Raleway', Arial;
+}
+.day {
+    text-align: center;
+    flex-basis: 15%;
+    margin-right: 2%;
+}
+.month {
+    text-align: center;
+    flex-basis: 58%;
+    padding-left: 8px;
+    margin: 0 2% 6px 0;
+    border: 1px solid #d9d9d9;
+    background-color: white;
+    font-size: 14px; font-family: 'Raleway', Arial;
+    color: grey;
+}
+.year {
+    text-align: center;
+    flex-basis: 23%;
+}
+
+/* -------------------- Legal -------------------- */
+.sign .legal {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 14px;
+    color: grey;
+}
+
+/* -------------------- Button -------------------- */
+.sign button {
+    width: fit-content;
+    padding: 12px 28px 12px 28px;
+    margin-top: 30px;
+    border: none;
+    background-color: rgb(80, 0, 80);
+    font-size: 22px; font-family: "Lato", Arial; -webkit-text-stroke: 0.1px;
+    color: white;
+    cursor: pointer;
+    -webkit-transition-duration: 0.45s; transition-duration: 0.45s;
+}
+.sign button:hover, .sign button:active {
+    color: rgb(100, 0, 100);
+    border: 1px solid;
+    background-color: white;
+}
+
+/* //////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
+/* ////////////////////////////////////////////////// UNDER 460 //////////////////////////////////////////////////// */
+/* //////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
+
+@media screen and (max-width: 460px) {
+
+    .sign {
+        height: auto;
+    }
+    .sign form {
+        width: 70vw; min-width: 70vw;
+        padding: 0 15vw 0 15vw;
+        border: none;
+    }
+
+    .sign button {
+        font-size: 20px;
+        padding: 11px 26px 11px 26px;
+    }
+    
+    .sign form > span {
+        font-size: 24px;
+    }
+}
