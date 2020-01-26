@@ -43,10 +43,6 @@ input, textarea, select, button, button:focus {
     color: purple;
 }
 
-* {
-    z-index: 2;
-}
-
 p {
     margin: 0;
 }

@@ -8,11 +8,12 @@ import fbLogo from "./images/fb-logo.png";
 import twitterLogo from "./images/twitter-logo.svg";
 
 class App extends Component {
+    toggleButton = this.toggleButton.bind(this);
     state = {
         isActive: false
     }
 
-    toggleButton = () => {
+    toggleButton() {
         if (!this.state.isActive) {
             this.refs.appMenu.style.display = "flex";
             setTimeout(function() {
