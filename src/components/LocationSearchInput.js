@@ -4,22 +4,19 @@ import PlacesAutocomplete from 'react-places-autocomplete';
 export default class LocationSearchInput extends Component {
     handleChange = this.handleChange.bind(this);
     handleSelect = this.handleSelect.bind(this);
-    state = {
-        address: ''
-    };
-    
+
     handleChange(address) {
-        this.setState({ address });
+        this.props.onLocationChange(address);
     };
     
     handleSelect(address) {
-        this.setState({ address });
+        this.props.onLocationChange(address);
     };
     
     render() {
         return (
             <PlacesAutocomplete
-                value={this.state.address}
+                value={this.props.address}
                 onChange={this.handleChange}
                 onSelect={this.handleSelect}
             >

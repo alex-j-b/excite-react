@@ -1,24 +1,27 @@
 import React, { Component } from "react";
-import "./Sign.css";
+import { Link } from "react-router-dom";
+import "./Auth.css";
 
 import LocationSearchInput from "../components/LocationSearchInput";
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
 
-import signBG from "../images/mystique-statue.jpg";
+import authBG from "../images/mystique-statue.jpg";
 import lolLogo from "../images/lol-logo.png";
 import fortniteLogo from "../images/fortnite-logo.png";
 import rocketLogo from "../images/rocket-logo.png";
 
 
 export default class Sign extends Component {
-    onSubmit = this.onSubmit.bind(this);
     onChange = this.onChange.bind(this);
+    onLocationChange = this.onLocationChange.bind(this);
+    onSubmit = this.onSubmit.bind(this);
     state = {
-        stepTwo: true,
+        stepTwo: false,
         email: '',
         password: '',
         bd_day: '',
+        bd_month: '01',
         bd_year: '',
         firstname: '',
         lastname: '',
@@ -50,22 +53,25 @@ export default class Sign extends Component {
         }
     }
 
+    onLocationChange(address) {
+        this.setState({ address: address });
+    }
+
     onSubmit(e) {
         e.preventDefault();
         if (!this.state.stepTwo) {
+            const { email, password, bd_day, bd_month, bd_year } = this.state;
+
             const mailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-            const validMail = mailRegex.test(this.state.email.toLowerCase());
+            const validMail = mailRegex.test(email.toLowerCase());
             let errorMail = document.querySelector('.error-input.email');
             errorMail.style.display = validMail ? "none" : "inline";
 
             const passwordRegex = /[^\s]{8,50}/;
-            const validPassword = passwordRegex.test(this.state.password);
+            const validPassword = passwordRegex.test(password);
             let errorPassword = document.querySelector('.error-input.password');
             errorPassword.style.display = validPassword ? "none" : "inline";
 
-            const bd_day = this.state.bd_day;
-            const bd_year = this.state.bd_year;
-            let bd_month = this.state.bd_month;
             const validDate = new Date(bd_year, bd_month, 0).getDate() >= bd_day && bd_year > 1900;
             let errorDate = document.querySelector('.error-input.birthdate');
             errorDate.style.display = validDate ? "none" : "inline";
@@ -75,15 +81,15 @@ export default class Sign extends Component {
             }
         }
         else {
-            console.log(this.state.phone)
-            console.log(this.state.address)
+            const { phone, address } = this.state;
+
             let errorPhone = document.querySelector('.error-input.phone');
-            errorPhone.style.display = this.state.phone.length >= 10 ? "none" : "inline";
+            errorPhone.style.display = phone.length >= 10 ? "none" : "inline";
 
             let errorAddress = document.querySelector('.error-input.address');
-            errorAddress.style.display = this.state.address.length >= 10 ? "none" : "inline";
+            errorAddress.style.display = address.length >= 10 ? "none" : "inline";
 
-            if (this.state.phone.length >= 10 && this.state.address.length >= 10){
+            if (phone.length >= 10 && address.length >= 10){
                 this.setState({ stepTwo: false });
             }
         }
@@ -93,6 +99,7 @@ export default class Sign extends Component {
         const firstStep =
             <>
                 <span><span className="purple">C</span>réez un compte</span>
+                <p className="manual-redirection">Déjà inscrit ? <Link to="/connexion">Connectez-vous</Link></p>
 
                 <label htmlFor="email">
                     <span><span className="purple">E</span>-mail</span>
@@ -139,6 +146,7 @@ export default class Sign extends Component {
                         className="month" 
                         name='bd_month'
                         onChange={this.onChange}
+                        value={this.state.bd_month}
                     >
                         <option value='01'>Janvier</option>
                         <option value='02'>Février</option>
@@ -219,14 +227,17 @@ export default class Sign extends Component {
                     <span><span className="purple">A</span>dresse</span>
                     <span className="error-input address">invalide</span>
                 </label>
-                <LocationSearchInput />
+                <LocationSearchInput
+                    address={this.state.address}
+                    onLocationChange={this.onLocationChange}
+                />
 
                 <button>Valider</button>
             </>;
 
 
         return (
-            <div className="sign" style={{ backgroundImage: `url(${signBG})` }}>
+            <div className="auth log-sign" style={{ backgroundImage: `url(${authBG})` }}>
                 <form onSubmit={this.onSubmit}>
                     <div className="games-icons">
                         <img className="lol-logo" src={lolLogo} alt="lolLogo"></img>
