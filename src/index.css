@@ -46,3 +46,8 @@ input, textarea, select, button, button:focus {
 p {
     margin: 0;
 }
+
+.ecoin {
+    height: 22px;
+    vertical-align: middle;
+}

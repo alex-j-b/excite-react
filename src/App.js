@@ -40,7 +40,7 @@ class App extends Component {
                         <Link className="logo-excite" to="/">
                             <span><span className="purple">E</span>xcite.</span>
                         </Link>
-                        <Link to="/inscription">Jouer</Link>
+                        <Link to="/jouer">Jouer</Link>
                         <Link to="/boutique">Boutique</Link>
                         <Link to="/faq">FAQ</Link>
                         <Link to="/contact">Contact</Link>
@@ -54,7 +54,7 @@ class App extends Component {
                     </div>
 
                     <div className="app-menu" ref="appMenu">
-                        <Link to="/inscription">Jouer</Link>
+                        <Link to="/jouer">Jouer</Link>
                         <Link to="/boutique">Boutique</Link>
                         <Link to="/faq">FAQ</Link>
                         <Link to="/contact">Contact</Link>
@@ -73,13 +73,13 @@ class App extends Component {
                             <img src={fbLogo} alt="fb-logo"></img>
                         </Link>
                         <div className="footer-links">
-                            <Link to="/">Jouer</Link>
-                            <Link to="/">Boutique</Link>
-                            <Link to="/">FAQ</Link>
-                            <Link to="/">Contact</Link>
-                            <Link to="/">Conditions d'utilisations</Link>
-                            <Link to="/">Politique de cookies</Link>
-                            <Link to="/">Politique de confidentialité</Link>
+                            <Link to="/inscription">Jouer</Link>
+                            <Link to="/boutique">Boutique</Link>
+                            <Link to="/faq">FAQ</Link>
+                            <Link to="/contact">Contact</Link>
+                            <Link to="/legal">Conditions d'utilisations</Link>
+                            <Link to="/legal">Politique de cookies</Link>
+                            <Link to="/legal">Politique de confidentialité</Link>
                         </div>
                     </div>
                 </div>

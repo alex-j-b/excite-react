@@ -22,20 +22,20 @@
 }
 
 /* -------------------- 3 games icons -------------------- */
-.games-icons {
+.auth .games-icons {
     display: flex; align-items: center; justify-content: center;
     height: 60px; width: 500px;
     background-color: black !important;
 }
-.games-icons > .lol-logo {
+.auth .games-icons > .lol-logo {
     height: 32px;
     margin-right: 20px;
 }
-.games-icons > .fortnite-logo {
+.auth .games-icons > .fortnite-logo {
     height: 40px;
     margin-right: 20px;
 }
-.games-icons > .rocket-logo {
+.auth .games-icons > .rocket-logo {
     height: 32px;
 }
 

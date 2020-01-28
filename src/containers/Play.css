@@ -1,0 +1,131 @@
+
+/* //////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
+/* /////////////////////////////////////////////// GENERAL DESKTOP //////////////////////////////////////////////// */
+/* //////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
+
+/* -------------------- Background -------------------- */
+.play {
+    display: flex; align-items: center; justify-content: center;
+    height: calc(100vh - 160px); width: 100%;
+    font-size: 16px; font-family: 'Raleway', Arial;
+    background: linear-gradient(180deg, white 50%, black 50%);
+}
+
+/* -------------------- Central square -------------------- */
+.play > div {
+    display: flex; align-items: center; flex-direction: column;
+    height: 500px; width: 750px;
+    border: 1px solid black;
+    background-color: #f9f9f9 !important;
+    overflow: hidden;
+}
+
+/* -------------------- Header -------------------- */
+.play .header {
+    display: flex; align-items: center;
+    height: 60px; width: 100%;
+    background-color: black !important;
+}
+
+/* -------------------- Buttons -------------------- */
+.play .header > .lol-logo {
+    height: 60px; width: 60px;
+    border: none;
+    background-size: 32px 32px; background-repeat: no-repeat; background-position: center;
+    cursor: pointer;
+}
+.play .header > .fortnite-logo {
+    height: 60px; width: 60px;
+    border: none;
+    background-size: 40px 40px; background-repeat: no-repeat; background-position: center;
+    cursor: pointer;
+    
+}
+.play .header > .rocket-logo {
+    height: 60px; width: 60px;
+    margin-right: auto;
+    border: none;
+    background-size: 32px 32px; background-repeat: no-repeat; background-position: center;
+    cursor: pointer;
+    
+}
+.play .header > .history {
+    height: 60px; width: 60px;
+    border: none;
+    background-size: 36px 36px; background-repeat: no-repeat; background-position: center;
+    cursor: pointer;
+}
+
+/* -------------------- E-coin wallet -------------------- */
+.play .header > div {
+    display: inline-block;
+}
+.play .header .ecoin {
+    margin-right: 25px;
+}
+.play .header span {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 3px;
+    -webkit-text-stroke: 0.25px;
+    color: white;
+}
+
+/* -------------------- Columns wrap -------------------- */
+.play .wrap-left-right {
+    display: flex;
+    height: 440px; width: 100%;
+}
+
+/* ---------- Left column ---------- */
+.play .wrap-left-right > .left {
+    display: flex; align-items: center; justify-content: center;
+    width: 58%;
+    overflow: hidden;
+    
+}
+.play .wrap-left-right > .left > img {
+    height: 85%;
+}
+.play .wrap-left-right > .left > img[src*="rocket"] {
+    margin-left: -61px;
+}
+
+/* ---------- Right column ---------- */
+.play .wrap-left-right > .right {
+    display: flex; flex-direction: column; align-items: center;
+    height: 100%; width: 60%;
+    margin-left: -18%;
+}
+
+.play .wrap-left-right > .right > h1 {
+    margin: 90px 0 30px 0;
+    font-size: 26px;
+}
+
+.play .right div > span {
+    margin-right: 3px;
+    font-size: 18px; -webkit-text-stroke: 0.4px;
+}
+.play .right .goal-price {
+    display: inline-block;
+    vertical-align: middle;
+    margin: 15px 2px 20px 0;
+}
+
+.play .right button {
+    width: fit-content;
+    padding: 10px 26px 10px 26px;
+    margin: 30px 0 50px 0;
+    border: none;
+    background-color: rgb(80, 0, 80);
+    font-size: 22px; font-family: "Lato", Arial; -webkit-text-stroke: 0.1px;
+    color: white;
+    cursor: pointer;
+    -webkit-transition-duration: 0.45s; transition-duration: 0.45s;
+}
+.play .right button:hover, .play .right button:active {
+    color: rgb(100, 0, 100);
+    border: 1px solid;
+    background-color: white;
+}
