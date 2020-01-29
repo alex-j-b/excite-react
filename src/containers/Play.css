@@ -6,9 +6,9 @@
 /* -------------------- Background -------------------- */
 .play {
     display: flex; align-items: center; justify-content: center;
-    height: calc(100vh - 160px); width: 100%;
+    height: calc(100vh - 160px);
+    background-position: center;
     font-size: 16px; font-family: 'Raleway', Arial;
-    background: linear-gradient(180deg, white 50%, black 50%);
 }
 
 /* -------------------- Central square -------------------- */
@@ -61,7 +61,7 @@
     display: inline-block;
 }
 .play .header .ecoin {
-    margin-right: 25px;
+    margin-right: 15px;
 }
 .play .header span {
     display: inline-block;
@@ -71,34 +71,34 @@
     color: white;
 }
 
-/* -------------------- Columns wrap -------------------- */
-.play .wrap-left-right {
+/* -------------------- Wrap games -------------------- */
+.play .wrap-games {
     display: flex;
     height: 440px; width: 100%;
 }
 
 /* ---------- Left column ---------- */
-.play .wrap-left-right > .left {
+.play .wrap-games > .left {
     display: flex; align-items: center; justify-content: center;
     width: 58%;
     overflow: hidden;
     
 }
-.play .wrap-left-right > .left > img {
+.play .wrap-games > .left > img {
     height: 85%;
 }
-.play .wrap-left-right > .left > img[src*="rocket"] {
+.play .wrap-games > .left > img[src*="rocket"] {
     margin-left: -61px;
 }
 
 /* ---------- Right column ---------- */
-.play .wrap-left-right > .right {
+.play .wrap-games > .right {
     display: flex; flex-direction: column; align-items: center;
     height: 100%; width: 60%;
     margin-left: -18%;
 }
 
-.play .wrap-left-right > .right > h1 {
+.play .wrap-games > .right > h1 {
     margin: 90px 0 30px 0;
     font-size: 26px;
 }
@@ -116,7 +116,7 @@
 .play .right button {
     width: fit-content;
     padding: 10px 26px 10px 26px;
-    margin: 30px 0 50px 0;
+    margin: 28px 0 50px 0;
     border: none;
     background-color: rgb(80, 0, 80);
     font-size: 22px; font-family: "Lato", Arial; -webkit-text-stroke: 0.1px;
@@ -128,4 +128,114 @@
     color: rgb(100, 0, 100);
     border: 1px solid;
     background-color: white;
+}
+
+/* -------------------- Wrap games -------------------- */
+.history {
+    min-height: 500px;
+    width: 100%;
+}
+.history .item {
+    display: flex; flex-direction: column;
+    height: 58px;
+    padding: 4px 2px 4px 8px;
+    width: 92.75%;
+    margin: 5px 0 5px 2%;
+    border: 1px solid #b3b3b3; border-radius: 5px;
+    background-color: #ebfaeb;
+}
+.wrap-date-game {
+    display: flex; align-items: center;
+    width: 100%;
+    height: 50%;
+}
+.wrap-bet-result {
+    display: flex; align-items: center;
+    width: 100%;
+    height: 50%;
+}
+.history span {
+    padding: 0 20px 0 0;
+}
+
+
+/* //////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
+/* ///////////////////////////////////////////// PLAY UNDER 750 /////////////////////////////////////////////// */
+/* //////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
+
+@media screen and (max-width: 750px) {
+
+    /* -------------------- Background -------------------- */
+    .play {
+        height: auto;
+    }
+
+    /* -------------------- Central square -------------------- */
+    .play > div {
+        height: auto; width: 100%;
+        border: none;
+    }
+
+    /* -------------------- E-coin wallet -------------------- */
+    .play .header > div {
+        display: inline-block;
+    }
+    .play .header .ecoin {
+        margin-right: 10px;
+    }
+    .play .header span {
+        -webkit-text-stroke: 0.4px;
+    }
+    .ecoin-label {
+        display: none;
+    }
+
+    /* -------------------- Columns wrap -------------------- */
+    .play .wrap-games {
+        flex-direction: column;
+        height: fit-content; width: 100%;
+    }
+
+    /* ---------- Left column ---------- */
+    .play .wrap-games > .left {
+        height: auto; width: 100%;
+        margin-bottom: 30px;
+        overflow: hidden;
+        order: 2;
+    }
+    .play .wrap-games > .left > img {
+        width: 100%;
+    }
+    .play .wrap-games > .left > img[src*="riven"] {
+        margin: 0;
+        max-width: 250px;
+    }
+    .play .wrap-games > .left > img[src*="fortnite"] {
+        margin: 0;
+        max-width: 200px;
+    }
+    .play .wrap-games > .left > img[src*="rocket"] {
+        margin: 0;
+        max-width: 400px;
+    }
+    .play .right div > span {
+        margin-right: 3px;
+        font-size: 16px; -webkit-text-stroke: 0.4px;
+    }
+
+    /* ---------- Right column ---------- */
+    .play .wrap-games > .right {
+        flex-direction: column;
+        height: auto; width: 100%;
+        margin: 0;
+        order: 1;
+    }
+    .play .wrap-games > .right > h1 {
+        margin: 30px 0 30px 0;
+        font-size: 22px;
+    }
+    .play .right button {
+        margin: 10px 0 35px 0;
+        font-size: 20px;
+    }
 }

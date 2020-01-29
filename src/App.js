@@ -54,10 +54,10 @@ class App extends Component {
                     </div>
 
                     <div className="app-menu" ref="appMenu">
-                        <Link to="/jouer">Jouer</Link>
-                        <Link to="/boutique">Boutique</Link>
-                        <Link to="/faq">FAQ</Link>
-                        <Link to="/contact">Contact</Link>
+                        <Link to="/jouer" onClick={this.toggleButton}>Jouer</Link>
+                        <Link to="/boutique" onClick={this.toggleButton}>Boutique</Link>
+                        <Link to="/faq" onClick={this.toggleButton}>FAQ</Link>
+                        <Link to="/contact" onClick={this.toggleButton}>Contact</Link>
                     </div>
 
                     <Routes />

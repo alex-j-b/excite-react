@@ -6,7 +6,7 @@
 /* -------------------- Background -------------------- */
 .auth {
     display: flex; align-items: center; justify-content: center;
-    height: 900px;
+    height: calc(100vh - 160px);
     background-position: center;
     font-size: 16px; font-family: 'Raleway', Arial;
 }

@@ -6,13 +6,13 @@ import authBG from "../images/mystique-statue.jpg";
 import lolLogo from "../images/lol-logo.png";
 import fortniteLogo from "../images/fortnite-logo.png";
 import rocketLogo from "../images/rocket-logo.png";
-import history from "../images/history.png";
+import historyWhite from "../images/history-white.png";
+import historyBlack from "../images/history-black.png";
 import ecoin from "../images/e-coin.png";
 
 import riven from "../images/riven.png";
 import fortniteChar from "../images/fortnite-char.png";
 import rocketCrash from "../images/rocket-crash.png";
-
 
 const ecoinOptions = [
     { value: 5, label: '5' },
@@ -32,89 +32,104 @@ const CustomSingleValue = ({ data }) => (
 
 
 export default class Play extends Component {
-    switchGame = this.switchGame.bind(this);
+    switchTab = this.switchTab.bind(this);
     state = {
-        game: 'League of legends',
+        tab: 'history',
         ecoinOption: 5
     }
 
-    switchGame(e) {
-        this.setState({ game: e.target.name })
+    switchTab(e) {
+        this.setState({ tab: e.target.name })
     }
 
     selectChange(value) {
-        console.log(this.state.ecoinOption)
         this.setState({ ecoinOption: value });
     }
 
     render() {
-        let gameImage = this.state.game === 'League of legends' ? riven : fortniteChar;
-        gameImage = this.state.game === 'Rocket League' ? rocketCrash : gameImage;
+        let gameImage = this.state.tab === 'League of legends' ? riven : fortniteChar;
+        gameImage = this.state.tab === 'Rocket League' ? rocketCrash : gameImage;
         return (
-            <div className="play">
+            <div className="play" style={{ backgroundImage: `url(${authBG})` }}>
                 <div>
                     <div className="header">
                         <button
                             className="lol-logo" 
                             style={{
                                 backgroundImage: `url(${lolLogo})`,
-                                backgroundColor: `${this.state.game === 'League of legends' ? '#f9f9f9' : 'transparent'}`
+                                backgroundColor: `${this.state.tab === 'League of legends' ? '#f9f9f9' : 'transparent'}`
                             }}
                             name="League of legends"
-                            onClick={this.switchGame}
+                            onClick={this.switchTab}
                         ></button>
                         <button
                             className="fortnite-logo" 
                             style={{
                                 backgroundImage: `url(${fortniteLogo})`,
-                                backgroundColor: `${this.state.game === 'Fortnite' ? '#f9f9f9' : 'transparent'}`
+                                backgroundColor: `${this.state.tab === 'Fortnite' ? '#f9f9f9' : 'transparent'}`
                             }}
                             name="Fortnite"
-                            onClick={this.switchGame}
+                            onClick={this.switchTab}
                         ></button>
                         <button
                             className="rocket-logo" 
                             style={{
                                 backgroundImage: `url(${rocketLogo})`,
-                                backgroundColor: `${this.state.game === 'Rocket League' ? '#f9f9f9' : 'transparent'}`
+                                backgroundColor: `${this.state.tab === 'Rocket League' ? '#f9f9f9' : 'transparent'}`
                             }}
                             name="Rocket League"
-                            onClick={this.switchGame}
+                            onClick={this.switchTab}
                         ></button>
 
-                        <div><span>E-coins : 500</span><img className="ecoin" src={ecoin} alt="ecoin"></img></div>
+                        <div><span><label className="ecoin-label">E-coins : </label>500</span><img className="ecoin" src={ecoin} alt="ecoin"></img></div>
 
                         <button
                             className="history" 
                             style={{
-                                backgroundImage: `url(${history})`,
-                                backgroundColor: 'transparent'
+                                backgroundImage: `url(${this.state.tab === 'history' ? historyBlack : historyWhite})`,
+                                backgroundColor: `${this.state.tab === 'history' ? '#f9f9f9' : 'transparent'}`
                             }}
+                            name="history"
+                            onClick={this.switchTab}
                         ></button>
                     </div>
 
-                    <div className="wrap-left-right">
-                        <div className="left">
-                            <img src={gameImage} alt="riven"></img>
-                        </div>
-                        <div className="right">
-                            <h1><span className="purple">{this.state.game.charAt(0)}</span>{this.state.game.slice(1)}</h1>
-                            <Select
-                                className="select"
-                                options={ecoinOptions}
-                                defaultValue={ecoinOptions[0]}
-                                components={{ SingleValue: CustomSingleValue }}
-                                blurInputOnSelect={true}
-                                isSearchable={false}
-                                onChange={obj => this.selectChange(obj.value)}
-                            />
-                            <div>
-                                <span className="goal-price">Gagne une partie classée : {this.state.ecoinOption*2}</span>
-                                <img className="ecoin" src={ecoin} alt="ecoin"></img>
+                    { this.state.tab !== 'history' ?
+                        <div className="wrap-games">
+                            <div className="left">
+                                <img src={gameImage} alt="riven"></img>
                             </div>
-                            <button>Parier</button>
+                            <div className="right">
+                                <h1><span className="purple">{this.state.tab.charAt(0)}</span>{this.state.tab.slice(1)}</h1>
+                                <Select
+                                    className="select"
+                                    options={ecoinOptions}
+                                    defaultValue={ecoinOptions[0]}
+                                    components={{ SingleValue: CustomSingleValue }}
+                                    blurInputOnSelect={true}
+                                    isSearchable={false}
+                                    onChange={obj => this.selectChange(obj.value)}
+                                />
+                                <div>
+                                    <span className="goal-price">Gagne une partie classée : {this.state.ecoinOption*2}</span>
+                                    <img className="ecoin" src={ecoin} alt="ecoin"></img>
+                                </div>
+                                <button>Parier</button>
+                            </div>
                         </div>
-                    </div>
+                        :
+                        <div className="history">
+                            <div className="item">
+                                <div className="wrap-date-game">
+                                    <span>24/10/2020 à 19h12</span>
+                                    <span>League of legends</span>
+                                </div>
+                                <div className="wrap-bet-result">
+                                    <span>Gagné ! +5 E-coins</span>
+                                </div>
+                            </div>
+                        </div>
+                    }
                 </div>
             </div>
         );
