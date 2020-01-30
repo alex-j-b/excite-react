@@ -161,7 +161,6 @@
     background-color: rgb(80, 0, 80);
     font-size: 22px; font-family: "Lato", Arial; -webkit-text-stroke: 0.1px;
     color: white;
-    cursor: pointer;
     -webkit-transition-duration: 0.45s; transition-duration: 0.45s;
 }
 .auth button:hover, .auth button:active {
@@ -253,7 +252,6 @@
     background: #ffffff;
     border: 1px solid #cfcece;
     border-radius: 18px;
-    cursor: pointer;
 }
 
 .delete-popup > .wrap-buttons > button {

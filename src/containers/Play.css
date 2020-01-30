@@ -28,32 +28,26 @@
 }
 
 /* -------------------- Buttons -------------------- */
-.play .header > .lol-logo {
+.play .header > .lol-button {
     height: 60px; width: 60px;
     border: none;
     background-size: 32px 32px; background-repeat: no-repeat; background-position: center;
-    cursor: pointer;
 }
-.play .header > .fortnite-logo {
+.play .header > .fortnite-button {
     height: 60px; width: 60px;
     border: none;
     background-size: 40px 40px; background-repeat: no-repeat; background-position: center;
-    cursor: pointer;
-    
 }
-.play .header > .rocket-logo {
+.play .header > .rocket-button {
     height: 60px; width: 60px;
     margin-right: auto;
     border: none;
     background-size: 32px 32px; background-repeat: no-repeat; background-position: center;
-    cursor: pointer;
-    
 }
-.play .header > .history {
+.play .header > .history-button {
     height: 60px; width: 60px;
     border: none;
     background-size: 36px 36px; background-repeat: no-repeat; background-position: center;
-    cursor: pointer;
 }
 
 /* -------------------- E-coin wallet -------------------- */
@@ -121,7 +115,6 @@
     background-color: rgb(80, 0, 80);
     font-size: 22px; font-family: "Lato", Arial; -webkit-text-stroke: 0.1px;
     color: white;
-    cursor: pointer;
     -webkit-transition-duration: 0.45s; transition-duration: 0.45s;
 }
 .play .right button:hover, .play .right button:active {
@@ -130,32 +123,54 @@
     background-color: white;
 }
 
-/* -------------------- Wrap games -------------------- */
+/* -------------------- History -------------------- */
 .history {
-    min-height: 500px;
-    width: 100%;
+    display: flex; flex-direction: column; align-items: center;
+    max-height: 440px; width: 99.25%;
+    overflow-y: scroll; overflow: -moz-scrollbars-vertical;
+}
+.history::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 0.75%;
+}
+.history::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: #999999;
+}
+.history h1 {
+    margin-top: 25px;
+    font-size: 26px;
 }
 .history .item {
     display: flex; flex-direction: column;
     height: 58px;
-    padding: 4px 2px 4px 8px;
-    width: 92.75%;
-    margin: 5px 0 5px 2%;
+    padding: 4px 0 4px 0;
+    margin: 8px 5px 6px 5px;
     border: 1px solid #b3b3b3; border-radius: 5px;
-    background-color: #ebfaeb;
+    -webkit-text-stroke: 0.1px;
 }
 .wrap-date-game {
     display: flex; align-items: center;
-    width: 100%;
     height: 50%;
 }
 .wrap-bet-result {
     display: flex; align-items: center;
-    width: 100%;
     height: 50%;
 }
-.history span {
-    padding: 0 20px 0 0;
+.wrap-bet-result span {
+    font-family: 'Lato';
+}
+.wrap-bet-result .ecoin {
+    margin-top: -3px;
+}
+.history .item span {
+    padding: 0 13px 0 13px;
+}
+.history .item.win {
+    background-color: #ebfaeb;
+}
+.history .item.lose {
+    background-color: #ffe6e6;
 }
 
 
@@ -192,8 +207,8 @@
 
     /* -------------------- Columns wrap -------------------- */
     .play .wrap-games {
-        flex-direction: column;
         height: fit-content; width: 100%;
+        flex-direction: column;
     }
 
     /* ---------- Left column ---------- */
@@ -207,16 +222,16 @@
         width: 100%;
     }
     .play .wrap-games > .left > img[src*="riven"] {
-        margin: 0;
         max-width: 250px;
+        margin: 0;
     }
     .play .wrap-games > .left > img[src*="fortnite"] {
-        margin: 0;
         max-width: 200px;
+        margin: 0;
     }
     .play .wrap-games > .left > img[src*="rocket"] {
-        margin: 0;
         max-width: 400px;
+        margin: 0;
     }
     .play .right div > span {
         margin-right: 3px;
@@ -237,5 +252,15 @@
     .play .right button {
         margin: 10px 0 35px 0;
         font-size: 20px;
+    }
+
+    /* -------------------- History -------------------- */
+    .history {
+        height: auto; min-height: 600px; max-height: none; width: 100%;
+        overflow: hidden;
+    }
+    .history h1 {
+        margin-top: 30px;
+        font-size: 22px;
     }
 }

@@ -39,6 +39,10 @@ input, textarea, select, button, button:focus {
     user-select: none !important;
 }
 
+button {
+    cursor: pointer;
+}
+
 .purple {
     color: purple;
 }
@@ -48,6 +52,6 @@ p {
 }
 
 .ecoin {
-    height: 22px;
+    height: 20px;
     vertical-align: middle;
 }

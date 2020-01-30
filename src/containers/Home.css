@@ -39,7 +39,6 @@
     color: white;
     background-color: rgb(80, 0, 80);
     border: none; border-radius: 100px;
-    cursor: pointer;
     -webkit-transition-duration: 0.45s; transition-duration: 0.45s;
 }
 .home-1 div > button:hover, .home-1 div > button:active {

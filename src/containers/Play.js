@@ -54,7 +54,7 @@ export default class Play extends Component {
                 <div>
                     <div className="header">
                         <button
-                            className="lol-logo" 
+                            className="lol-button" 
                             style={{
                                 backgroundImage: `url(${lolLogo})`,
                                 backgroundColor: `${this.state.tab === 'League of legends' ? '#f9f9f9' : 'transparent'}`
@@ -63,7 +63,7 @@ export default class Play extends Component {
                             onClick={this.switchTab}
                         ></button>
                         <button
-                            className="fortnite-logo" 
+                            className="fortnite-button" 
                             style={{
                                 backgroundImage: `url(${fortniteLogo})`,
                                 backgroundColor: `${this.state.tab === 'Fortnite' ? '#f9f9f9' : 'transparent'}`
@@ -72,7 +72,7 @@ export default class Play extends Component {
                             onClick={this.switchTab}
                         ></button>
                         <button
-                            className="rocket-logo" 
+                            className="rocket-button" 
                             style={{
                                 backgroundImage: `url(${rocketLogo})`,
                                 backgroundColor: `${this.state.tab === 'Rocket League' ? '#f9f9f9' : 'transparent'}`
@@ -84,7 +84,7 @@ export default class Play extends Component {
                         <div><span><label className="ecoin-label">E-coins : </label>500</span><img className="ecoin" src={ecoin} alt="ecoin"></img></div>
 
                         <button
-                            className="history" 
+                            className="history-button" 
                             style={{
                                 backgroundImage: `url(${this.state.tab === 'history' ? historyBlack : historyWhite})`,
                                 backgroundColor: `${this.state.tab === 'history' ? '#f9f9f9' : 'transparent'}`
@@ -119,13 +119,95 @@ export default class Play extends Component {
                         </div>
                         :
                         <div className="history">
-                            <div className="item">
+                            <h1><span className="purple">H</span>istorique</h1>
+
+                            <div className="item win">
                                 <div className="wrap-date-game">
                                     <span>24/10/2020 à 19h12</span>
                                     <span>League of legends</span>
                                 </div>
                                 <div className="wrap-bet-result">
-                                    <span>Gagné ! +5 E-coins</span>
+                                    <span>Gagné ! +5 <img className="ecoin" src={ecoin} alt="ecoin"></img></span>
+                                </div>
+                            </div>
+
+                            <div className="item win">
+                                <div className="wrap-date-game">
+                                    <span>23/10/2020 à 17h45</span>
+                                    <span>League of legends</span>
+                                </div>
+                                <div className="wrap-bet-result">
+                                    <span>Gagné ! +50 <img className="ecoin" src={ecoin} alt="ecoin"></img></span>
+                                </div>
+                            </div>
+
+                            <div className="item lose">
+                                <div className="wrap-date-game">
+                                    <span>22/10/2020 à 11h30</span>
+                                    <span>League of legends</span>
+                                </div>
+                                <div className="wrap-bet-result">
+                                    <span>Perdu ! -20 <img className="ecoin" src={ecoin} alt="ecoin"></img></span>
+                                </div>
+                            </div>
+
+                            <div className="item win">
+                                <div className="wrap-date-game">
+                                    <span>24/10/2020 à 19h12</span>
+                                    <span>League of legends</span>
+                                </div>
+                                <div className="wrap-bet-result">
+                                    <span>Gagné ! +5 <img className="ecoin" src={ecoin} alt="ecoin"></img></span>
+                                </div>
+                            </div>
+
+                            <div className="item win">
+                                <div className="wrap-date-game">
+                                    <span>23/10/2020 à 17h45</span>
+                                    <span>League of legends</span>
+                                </div>
+                                <div className="wrap-bet-result">
+                                    <span>Gagné ! +50 <img className="ecoin" src={ecoin} alt="ecoin"></img></span>
+                                </div>
+                            </div>
+
+                            <div className="item lose">
+                                <div className="wrap-date-game">
+                                    <span>22/10/2020 à 11h30</span>
+                                    <span>League of legends</span>
+                                </div>
+                                <div className="wrap-bet-result">
+                                    <span>Perdu ! -20 <img className="ecoin" src={ecoin} alt="ecoin"></img></span>
+                                </div>
+                            </div>
+                            
+                            <div className="item win">
+                                <div className="wrap-date-game">
+                                    <span>24/10/2020 à 19h12</span>
+                                    <span>League of legends</span>
+                                </div>
+                                <div className="wrap-bet-result">
+                                    <span>Gagné ! +5 <img className="ecoin" src={ecoin} alt="ecoin"></img></span>
+                                </div>
+                            </div>
+
+                            <div className="item win">
+                                <div className="wrap-date-game">
+                                    <span>23/10/2020 à 17h45</span>
+                                    <span>League of legends</span>
+                                </div>
+                                <div className="wrap-bet-result">
+                                    <span>Gagné ! +50 <img className="ecoin" src={ecoin} alt="ecoin"></img></span>
+                                </div>
+                            </div>
+
+                            <div className="item lose">
+                                <div className="wrap-date-game">
+                                    <span>22/10/2020 à 11h30</span>
+                                    <span>League of legends</span>
+                                </div>
+                                <div className="wrap-bet-result">
+                                    <span>Perdu ! -20 <img className="ecoin" src={ecoin} alt="ecoin"></img></span>
                                 </div>
                             </div>
                         </div>

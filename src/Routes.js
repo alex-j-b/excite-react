@@ -5,6 +5,7 @@ import Log from "./containers/Log";
 import Sign from "./containers/Sign";
 import Account from "./containers/Account";
 import Play from "./containers/Play";
+import NotFound from "./containers/NotFound";
 
 export default function Routes() {
     return (
@@ -14,6 +15,7 @@ export default function Routes() {
             <Route exact path="/inscription" component={Sign} />
             <Route exact path="/mon-compte" component={Account} />
             <Route exact path="/jouer" component={Play} />
+            <Route path="*" component={NotFound} />
         </Switch>
     );
 }
