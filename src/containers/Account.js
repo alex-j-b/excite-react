@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "./Auth.css";
 
+import DotsLoader from '../components/DotsLoader';
 import Popup from "reactjs-popup";
 import LocationSearchInput from "../components/LocationSearchInput";
 import PhoneInput from 'react-phone-input-2'
@@ -309,7 +310,10 @@ export default class Account extends Component {
 
                     <div className="wrap-account-buttons">
                         <button className="log-out">Déconnexion</button>
-                        <button className="validate">Valider</button>
+                        <div>
+                            <button>Valider</button>
+                            <DotsLoader loading={this.state.scrollLoading}/>
+                        </div>
                     </div>
                 </form>
             </div>

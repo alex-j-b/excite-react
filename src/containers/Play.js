@@ -15,6 +15,7 @@ import riven from "../images/riven.png";
 import fortniteChar from "../images/fortnite-char.png";
 import rocketCrash from "../images/rocket-crash.png";
 
+
 const ecoinOptions = [
     { value: 5, label: '5' },
     { value: 10, label: '10' },
@@ -30,7 +31,6 @@ const CustomSingleValue = ({ data }) => (
         </div>
     </div>
 );
-
 
 export default class Play extends Component {
     switchTab = this.switchTab.bind(this);

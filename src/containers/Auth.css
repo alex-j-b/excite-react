@@ -16,7 +16,7 @@
 .auth form:not(.account-form) {
     display: flex; flex-direction: column; align-items: center;
     height: auto; max-width: 280px;
-    padding: 0 90px 0 90px;
+    padding: 0 90px 40px 90px;
     border: 1px solid black;
     background-color: #f9f9f9 !important;
     overflow: hidden;
@@ -29,15 +29,15 @@
     background-color: black !important;
 }
 .auth .games-icons > .lol-logo {
-    height: 32px;
+    height: 34px;
     margin-right: 20px;
 }
 .auth .games-icons > .fortnite-logo {
-    height: 40px;
+    height: 34px;
     margin-right: 20px;
 }
 .auth .games-icons > .rocket-logo {
-    height: 32px;
+    height: 34px;
 }
 
 /* -------------------- Form title -------------------- */
@@ -157,7 +157,7 @@
 .auth button {
     width: fit-content;
     padding: 12px 28px 12px 28px;
-    margin: 30px 0 50px 0;
+    margin: 30px 0 10px 0;
     border: none;
     background-color: rgb(80, 0, 80);
     font-size: 22px; font-family: "Lato", Arial; -webkit-text-stroke: 0.1px;
@@ -204,6 +204,7 @@
 .auth.account form {
     display: flex; flex-direction: column; align-items: center;
     max-width: 780px;
+    padding-bottom: 40px;
     border: 1px solid black;
     background-color: #f9f9f9 !important;
 }
@@ -234,10 +235,15 @@
     text-decoration: underline !important;
 }
 
-/* -------------------- Account delete button -------------------- */
+
+.wrap-account-buttons {
+    display: flex; align-items: center;
+}
+/* -------------------- Logout button -------------------- */
 .auth.account .log-out {
+    height: fit-content;
     padding: 10px 15px 10px 15px;
-    margin: 30px 238px 50px 0;
+    margin: 0 238px 0 0;
     border: 1px solid #e60000;
     background-color: transparent;
     color: #e60000;
@@ -261,13 +267,12 @@
 
 .delete-popup > .close {
     position: absolute; display: block;
-    right: -10px; top: -10px;
+    top: -10px; right: -10px;
     padding: 2px 5px;
     font-size: 24px;
     line-height: 20px;
     background: #ffffff;
-    border: 1px solid #cfcece;
-    border-radius: 18px;
+    border: 1px solid #cfcece; border-radius: 18px;
 }
 
 .delete-popup > .wrap-buttons > button {
@@ -303,13 +308,17 @@
 
 @media screen and (max-width: 780px) {
 
+    .auth form {
+        padding-bottom: 40px !important;
+    }
+
     /* -------------------- Form account -------------------- */
     .auth.account {
         height: auto;
     }
     .auth.account form {
         width: 70vw; min-width: 70vw;
-        padding: 0 15vw 0 15vw;
+        padding: 0 15vw 0 15vw !important;
     }
     .auth.account form > .wrap-columns {
         flex-direction: column;
@@ -327,24 +336,24 @@
         font-size: 22px;
     }
 
-    /* -------------------- 2nd div -------------------- */
+    /* -------------------- Wrap columns -------------------- */
     .auth.account div[class="wrap-columns"] > div:nth-child(2) label:first-of-type {
         margin-top: 10px !important;
     }
 
-
-
-
+    /* -------------------- Wrap buttons -------------------- */
     .auth.account .wrap-account-buttons {
-        display: flex; flex-direction: column; align-items: center;
+        flex-direction: column;
     }
-    /* -------------------- Button -------------------- */
+    .auth.account .wrap-account-buttons > div {
+        flex-direction: column;
+        margin-bottom: 30px;
+    }
     .auth.account button {
         padding: 11px 26px 11px 26px;
-        margin-bottom: 30px;
         font-size: 20px;
     }
-    /* -------------------- Account delete button -------------------- */
+    /* ------ Account delete button ------ */
     .auth.account .log-out {
         padding: 10px 15px 10px 15px;
         margin: 0 0 50px 0;
@@ -359,12 +368,6 @@
         border: 1px solid;
         background-color: #e60000;
     }
-
-
-
-
-
-
 
     /* -------------------- Popup -------------------- */
     .delete-popup {

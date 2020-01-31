@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import DotsLoader from '../components/DotsLoader';
 import "./Auth.css";
 
 import authBG from "../images/mystique-statue.jpg";
@@ -82,8 +83,10 @@ export default class Log extends Component {
                     <p className="manual-redirection forgot"><Link to="/inscription">Mot de passe oublié ?</Link></p>
                     <p className="error-input log-attempt">Mot de passe ou email invalide</p>
 
-                    <button>Connexion</button>
-
+                    <div>
+                        <button>Connexion</button>
+                        <DotsLoader loading={this.state.scrollLoading}/>
+                    </div>
                 </form>
             </div>
         );

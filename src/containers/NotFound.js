@@ -5,6 +5,7 @@ import "./NotFound.css";
 import forestBG from "../images/forest.jpg";
 import teemo from "../images/teemo.png";
 
+
 export default class Play extends Component {
     render() {
         return (

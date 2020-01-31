@@ -59,7 +59,7 @@ class App extends Component {
                             <span><span className="purple">E</span>xcite.</span>
                         </Link>
                         <Link to="/jouer">Jouer</Link>
-                        <Link to="/boutique">Boutique</Link>
+                        <Link to="/connexion">Boutique</Link>
                         <Link to="/faq">FAQ</Link>
                         <Link to="/contact">Contact</Link>
                         <HamburgerSqueeze

@@ -37,7 +37,7 @@ export default class Home extends Component {
                     <div>
                         <p>Mise sur ton skill et</p>
                         <p>Gagne des cadeaux !</p>
-                        <button>Jouer</button>
+                        <button onClick={() => this.props.history.push(`/connexion`)}>Jouer</button>
                     </div>
                 </div>
 

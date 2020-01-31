@@ -4,10 +4,9 @@
 }
 
 body {
-    margin: 0;
     padding: 0;
-    font-family: "Raleway", Arial;
-    font-size: 16px;
+    margin: 0;
+    font-size: 16px; font-family: "Raleway", Arial;
     color: #333333;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;

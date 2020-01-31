@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import "./Auth.css";
 
+import DotsLoader from '../components/DotsLoader';
 import LocationSearchInput from "../components/LocationSearchInput";
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
@@ -90,7 +91,8 @@ export default class Sign extends Component {
             errorAddress.style.display = address.length >= 10 ? "none" : "inline";
 
             if (phone.length >= 10 && address.length >= 10){
-                this.setState({ stepTwo: false });
+                //this.setState({ stepTwo: false });
+                window.open("http://192.168.1.47:3000/jouer","_self")
             }
         }
     }
@@ -172,7 +174,10 @@ export default class Sign extends Component {
                     ></input>
                 </div>
                 <p className="legal">En créant se compte vous acceptez les conditions générales d’utilisation.</p>
-                <button>Démarrer</button>
+                <div>
+                    <button>Démarrer</button>
+                    <DotsLoader loading={this.state.scrollLoading}/>
+                </div>
             </>;
 
 
@@ -231,8 +236,10 @@ export default class Sign extends Component {
                     address={this.state.address}
                     onLocationChange={this.onLocationChange}
                 />
-
-                <button>Valider</button>
+                <div>
+                    <button>Valider</button>
+                    <DotsLoader loading={this.state.scrollLoading}/>
+                </div>
             </>;
 
 
