@@ -307,7 +307,10 @@ export default class Account extends Component {
                         </div>
                     </div>
 
-                    <button>Valider</button>
+                    <div className="wrap-account-buttons">
+                        <button className="log-out">Déconnexion</button>
+                        <button className="validate">Valider</button>
+                    </div>
                 </form>
             </div>
         );

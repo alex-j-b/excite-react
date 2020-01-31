@@ -50,6 +50,11 @@
     left: 0;
     background: #fff;
 }
+.app-header a[class*="current-route"]:after{
+    width: 100%;
+    left: 0;
+    background: #fff;
+}
 
 /* -------------------- Disabled phone menu -------------------- */
 .app-header .hamburger, .app-menu, .app-menu a {

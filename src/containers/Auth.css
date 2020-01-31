@@ -9,6 +9,7 @@
     height: calc(100vh - 160px);
     background-position: center;
     font-size: 16px; font-family: 'Raleway', Arial;
+    overflow: hidden;
 }
 
 /* -------------------- Form Log & Sign -------------------- */
@@ -233,7 +234,22 @@
     text-decoration: underline !important;
 }
 
-/* ----------------- Pop up ----------------- */
+/* -------------------- Account delete button -------------------- */
+.auth.account .log-out {
+    padding: 10px 15px 10px 15px;
+    margin: 30px 238px 50px 0;
+    border: 1px solid #e60000;
+    background-color: transparent;
+    color: #e60000;
+    font-size: 16px;
+}
+.auth.account .log-out:hover, .auth.account .log-out:active {
+    color: white;
+    border: 1px solid;
+    background-color: #e60000;
+}
+
+/* ----------------- Pop up delete account ----------------- */
 .delete-popup {
     display: flex; flex-direction: column; align-items: center;
     padding: 16px;
@@ -316,11 +332,39 @@
         margin-top: 10px !important;
     }
 
+
+
+
+    .auth.account .wrap-account-buttons {
+        display: flex; flex-direction: column; align-items: center;
+    }
     /* -------------------- Button -------------------- */
     .auth.account button {
         padding: 11px 26px 11px 26px;
+        margin-bottom: 30px;
         font-size: 20px;
     }
+    /* -------------------- Account delete button -------------------- */
+    .auth.account .log-out {
+        padding: 10px 15px 10px 15px;
+        margin: 0 0 50px 0;
+        border: 1px solid #e60000;
+        background-color: transparent;
+        color: #e60000;
+        font-size: 14px;
+        order: 2;
+    }
+    .auth.account .log-out:hover, .auth.account .log-out:active {
+        color: white;
+        border: 1px solid;
+        background-color: #e60000;
+    }
+
+
+
+
+
+
 
     /* -------------------- Popup -------------------- */
     .delete-popup {

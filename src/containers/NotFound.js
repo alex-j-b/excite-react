@@ -11,7 +11,7 @@ export default class Play extends Component {
             <div className="NotFound" style={{ backgroundImage: `url(${forestBG})` }}>
                 <span>404</span>
                 <span>Page introuvable.</span>
-                <img src={teemo}></img>
+                <img src={teemo} alt="teemo"></img>
                 <Link to="/">Retour à la page d'accueil</Link>
             </div>
         );

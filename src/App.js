@@ -9,6 +9,7 @@ import twitterLogo from "./images/twitter-logo.svg";
 
 class App extends Component {
     toggleButton = this.toggleButton.bind(this);
+    setUnderline = this.setUnderline.bind(this);
     state = {
         isActive: false
     }
@@ -30,6 +31,23 @@ class App extends Component {
         this.setState({
             isActive: !this.state.isActive
         })
+    }
+
+    setUnderline() {
+        const resetUnderline = document.querySelectorAll('.current-route');
+        for (let i = 0; i < resetUnderline.length; ++i) {
+            resetUnderline[i].classList.remove("current-route");
+        }
+        const currentRoute = window.location.href.substring(21); //TO_CHANGE_AFTER_DEPLOY
+        let headerRouteElement = document.querySelectorAll(`.app-header > a[href="${currentRoute}"]`);
+        if (headerRouteElement[0]) headerRouteElement[0].classList.add("current-route");
+    }
+
+    componentDidMount () {
+        this.setUnderline();
+        this.props.history.listen(() => {
+            this.setUnderline();
+        });
     }
 
     render() {

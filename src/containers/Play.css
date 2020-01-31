@@ -143,34 +143,38 @@
 }
 .history .item {
     display: flex; flex-direction: column;
-    height: 58px;
+    height: 58px; min-height: fit-content;
+    width: 95%; max-width: 350px;
     padding: 4px 0 4px 0;
-    margin: 8px 5px 6px 5px;
+    margin: 0 0 8px 0;
     border: 1px solid #b3b3b3; border-radius: 5px;
     -webkit-text-stroke: 0.1px;
 }
 .wrap-date-game {
-    display: flex; align-items: center;
-    height: 50%;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 50%; min-height: fit-content;
 }
 .wrap-bet-result {
-    display: flex; align-items: center;
-    height: 50%;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 50%; min-height: fit-content;
 }
-.wrap-bet-result span {
+.wrap-bet-result span:last-child {
     font-family: 'Lato';
 }
 .wrap-bet-result .ecoin {
     margin-top: -3px;
 }
 .history .item span {
-    padding: 0 13px 0 13px;
+    padding: 0 6px 0 6px;
 }
 .history .item.win {
     background-color: #ebfaeb;
 }
 .history .item.lose {
     background-color: #ffe6e6;
+}
+.history .item.pending {
+    background-color: #e6e6e6;
 }
 
 
@@ -187,7 +191,7 @@
 
     /* -------------------- Central square -------------------- */
     .play > div {
-        height: auto; width: 100%;
+        height: auto; min-height: 700px; width: 100%;
         border: none;
     }
 

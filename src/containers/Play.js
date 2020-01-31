@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "./Play.css";
 import Select from 'react-select';
+import ImageFadeIn from 'react-image-fade-in';
 
 import authBG from "../images/mystique-statue.jpg";
 import lolLogo from "../images/lol-logo.png";
@@ -34,8 +35,9 @@ const CustomSingleValue = ({ data }) => (
 export default class Play extends Component {
     switchTab = this.switchTab.bind(this);
     state = {
-        tab: 'history',
-        ecoinOption: 5
+        tab: 'League of legends',
+        ecoinOption: 5,
+        imageReady: true
     }
 
     switchTab(e) {
@@ -44,6 +46,15 @@ export default class Play extends Component {
 
     selectChange(value) {
         this.setState({ ecoinOption: value });
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
+        if (this.state.tab !== nextState.tab) this.setState({ imageReady: false });
+        return true;
+    }
+
+    componentDidUpdate() {
+        if (!this.state.imageReady) this.setState({ imageReady: true });
     }
 
     render() {
@@ -97,7 +108,8 @@ export default class Play extends Component {
                     { this.state.tab !== 'history' ?
                         <div className="wrap-games">
                             <div className="left">
-                                <img src={gameImage} alt="riven"></img>
+                                {/* <img src={gameImage} alt="game_image"></img> */}
+                                {this.state.imageReady && <ImageFadeIn src={gameImage} />}
                             </div>
                             <div className="right">
                                 <h1><span className="purple">{this.state.tab.charAt(0)}</span>{this.state.tab.slice(1)}</h1>
@@ -121,13 +133,14 @@ export default class Play extends Component {
                         <div className="history">
                             <h1><span className="purple">H</span>istorique</h1>
 
-                            <div className="item win">
+                            <div className="item pending">
                                 <div className="wrap-date-game">
                                     <span>24/10/2020 à 19h12</span>
                                     <span>League of legends</span>
                                 </div>
                                 <div className="wrap-bet-result">
-                                    <span>Gagné ! +5 <img className="ecoin" src={ecoin} alt="ecoin"></img></span>
+                                    <span>Gagné une partie classée</span>
+                                    <span>En cours... 5 <img className="ecoin" src={ecoin} alt="ecoin"></img></span>
                                 </div>
                             </div>
 
@@ -137,7 +150,8 @@ export default class Play extends Component {
                                     <span>League of legends</span>
                                 </div>
                                 <div className="wrap-bet-result">
-                                    <span>Gagné ! +50 <img className="ecoin" src={ecoin} alt="ecoin"></img></span>
+                                    <span>Gagné une partie classée</span>
+                                    <span>Victoire +50 <img className="ecoin" src={ecoin} alt="ecoin"></img></span>
                                 </div>
                             </div>
 
@@ -147,7 +161,8 @@ export default class Play extends Component {
                                     <span>League of legends</span>
                                 </div>
                                 <div className="wrap-bet-result">
-                                    <span>Perdu ! -20 <img className="ecoin" src={ecoin} alt="ecoin"></img></span>
+                                    <span>Gagné une partie classée</span>
+                                    <span>Défaite -20 <img className="ecoin" src={ecoin} alt="ecoin"></img></span>
                                 </div>
                             </div>
 
@@ -157,7 +172,8 @@ export default class Play extends Component {
                                     <span>League of legends</span>
                                 </div>
                                 <div className="wrap-bet-result">
-                                    <span>Gagné ! +5 <img className="ecoin" src={ecoin} alt="ecoin"></img></span>
+                                    <span>Gagné une partie classée</span>
+                                    <span>Victoire +5 <img className="ecoin" src={ecoin} alt="ecoin"></img></span>
                                 </div>
                             </div>
 
@@ -167,7 +183,8 @@ export default class Play extends Component {
                                     <span>League of legends</span>
                                 </div>
                                 <div className="wrap-bet-result">
-                                    <span>Gagné ! +50 <img className="ecoin" src={ecoin} alt="ecoin"></img></span>
+                                    <span>Gagné une partie classée</span>
+                                    <span>Victoire +50 <img className="ecoin" src={ecoin} alt="ecoin"></img></span>
                                 </div>
                             </div>
 
@@ -177,7 +194,8 @@ export default class Play extends Component {
                                     <span>League of legends</span>
                                 </div>
                                 <div className="wrap-bet-result">
-                                    <span>Perdu ! -20 <img className="ecoin" src={ecoin} alt="ecoin"></img></span>
+                                    <span>Gagné une partie classée</span>
+                                    <span>Défaite -20 <img className="ecoin" src={ecoin} alt="ecoin"></img></span>
                                 </div>
                             </div>
                             
@@ -187,7 +205,8 @@ export default class Play extends Component {
                                     <span>League of legends</span>
                                 </div>
                                 <div className="wrap-bet-result">
-                                    <span>Gagné ! +5 <img className="ecoin" src={ecoin} alt="ecoin"></img></span>
+                                    <span>Gagné une partie classée</span>
+                                    <span>Victoire +5 <img className="ecoin" src={ecoin} alt="ecoin"></img></span>
                                 </div>
                             </div>
 
@@ -197,7 +216,8 @@ export default class Play extends Component {
                                     <span>League of legends</span>
                                 </div>
                                 <div className="wrap-bet-result">
-                                    <span>Gagné ! +50 <img className="ecoin" src={ecoin} alt="ecoin"></img></span>
+                                    <span>Gagné une partie classée</span>
+                                    <span>Victoire +50 <img className="ecoin" src={ecoin} alt="ecoin"></img></span>
                                 </div>
                             </div>
 
@@ -207,7 +227,8 @@ export default class Play extends Component {
                                     <span>League of legends</span>
                                 </div>
                                 <div className="wrap-bet-result">
-                                    <span>Perdu ! -20 <img className="ecoin" src={ecoin} alt="ecoin"></img></span>
+                                    <span>Gagné une partie classée</span>
+                                    <span>Défaite -20 <img className="ecoin" src={ecoin} alt="ecoin"></img></span>
                                 </div>
                             </div>
                         </div>

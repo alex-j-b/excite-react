@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "./Home.css";
 
-import trophyBG from "../images/trophy-background.jpg";
+import frame1BG from "../images/esport-background-frame1.png";
 import esportBG from "../images/esport-background.mp4";
 
 import oneIcon from "../images/one.png";
@@ -31,7 +31,7 @@ export default class Home extends Component {
             <div className="home">
 
                 <div className="home-1">
-                    <video id="videoBG" poster={trophyBG} playbackRate="3.0" autoPlay muted loop>
+                    <video id="videoBG" poster={frame1BG} playbackRate="3.0" autoPlay muted loop>
                         <source src={esportBG} type="video/mp4"></source>
                     </video>
                     <div>
