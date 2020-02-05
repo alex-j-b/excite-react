@@ -156,9 +156,9 @@
 /* -------------------- Button -------------------- */
 .auth button {
     width: fit-content;
-    padding: 12px 28px 12px 28px;
+    padding: 12px 26px 12px 26px;
     margin: 30px 0 10px 0;
-    border: none;
+    border: 1px solid;
     background-color: rgb(80, 0, 80);
     font-size: 22px; font-family: "Lato", Arial; -webkit-text-stroke: 0.1px;
     color: white;
@@ -166,7 +166,6 @@
 }
 .auth button:hover, .auth button:active {
     color: rgb(100, 0, 100);
-    border: 1px solid;
     background-color: white;
 }
 

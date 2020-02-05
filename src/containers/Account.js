@@ -1,33 +1,40 @@
+//React
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import "./Auth.css";
-
+//Redux
+import { connect } from "react-redux";
+import { loggedInCheck, updateUser, logOut, deleteUser, updatePassword } from "../actions";
+//Libs
 import DotsLoader from '../components/DotsLoader';
 import Popup from "reactjs-popup";
 import LocationSearchInput from "../components/LocationSearchInput";
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
-
+//Images
 import authBG from "../images/mystique-statue.jpg";
 
 
-export default class Account extends Component {
+class Account extends Component {
     onChange = this.onChange.bind(this);
     onLocationChange = this.onLocationChange.bind(this);
     onSubmit = this.onSubmit.bind(this);
     togglePopUp = this.togglePopUp.bind(this);
     state = {
-        pseudo: 'example',
-        firstname: 'Jean',
-        lastname: 'Robert',
-        bd_day: '01',
-        bd_month: '05',
-        bd_year: '1997',
-        phone: '+33 6 27 82 25 89',
-        address: '2 Rue des Pyramides, Paris, France',
+        nickname: '',
+        givenName: '',
+        familyName: '',
+        bdDay: '01',
+        bdMonth: '05',
+        bdYear: '1997',
+        phoneNumber: '',
+        address: '',
         currentPassword: '',
         newPassword: '',
         newPasswordRepeat: '',
-        popUpDeleteAccount: false
+        userLoaded: false,
+        popUpDeleteAccount: false,
+        loading: false
     }
 
     togglePopUp() {
@@ -45,37 +52,37 @@ export default class Account extends Component {
     onSubmit(e) {
         e.preventDefault();
         const {
-            pseudo,
-            bd_day,
-            bd_month,
-            bd_year,
-            phone,
+            nickname,
+            bdDay,
+            bdMonth,
+            bdYear,
+            phoneNumber,
             address,
             currentPassword,
             newPassword,
             newPasswordRepeat,
-            firstname,
-            lastname,
+            givenName,
+            familyName,
         } = this.state;
 
-        const currentPseudo = 'this.props.pseudo';
-        const currentFirstname = 'this.props.firstname';
-        const currentLastname = 'this.props.lastname';
-        const currentBdDay = 'this.props.bdDay';
-        const currentBdMonth = 'this.props.bdMonth';
-        const currentBdYear = 'this.props.bdYear';
-        const currentPhone = 'this.props.phone';
-        const currentAddress = 'this.props.address';
+        const currentNickname = this.props.user.nickname;
+        const currentGivenName = this.props.user.given_name;
+        const currentFamilyName = this.props.user.family_name;
+        const currentBdDay = this.props.user.bdDay;
+        const currentBdMonth = this.props.user.bdMonth;
+        const currentBdYear = this.props.user.bdYear;
+        const currentPhoneNumber = this.props.user.phone_number;
+        const currentAddress = this.props.user.address;
 
-        let errorPseudo = document.querySelector('.error-input.pseudo');
-        errorPseudo.style.display = pseudo === 'disponible?' ? "none" : "inline";
+        let errorNickname = document.querySelector('.error-input.nickname');
+        errorNickname.style.display = nickname.length >= 3 ? "none" : "inline";
 
-        const validDate = new Date(bd_year, bd_month, 0).getDate() >= bd_day && bd_year > 1900;
+        const validDate = new Date(bdYear, bdMonth, 0).getDate() >= bdDay && bdYear > 1900;
         let errorDate = document.querySelector('.error-input.birthdate');
         errorDate.style.display = validDate ? "none" : "inline";
 
-        let errorPhone = document.querySelector('.error-input.phone');
-        errorPhone.style.display = phone.length >= 10 ? "none" : "inline";
+        let errorPhoneNumber = document.querySelector('.error-input.phone_number');
+        errorPhoneNumber.style.display = phoneNumber.length >= 12 ? "none" : "inline";
 
         let errorAddress = document.querySelector('.error-input.address');
         errorAddress.style.display = address.length >= 10 ? "none" : "inline";
@@ -102,31 +109,104 @@ export default class Account extends Component {
             }
         }
         else if (validPassword && validNewPassword && newPassword===newPasswordRepeat){
-            //PatchPassword.then(
-            document.querySelector('.confirmation-modif.password').style.display = "inline";
+            this.props.updatePassword(currentPassword, newPassword);
+            this.setState({ loading: true });
         }
 
-        const updatePseudo = (pseudo.length >= 3 && pseudo!==currentPseudo);
-        const updateFirstname = (firstname!=='' && firstname!==currentFirstname);
-        const updateLastname = (lastname!=='' && lastname!==currentLastname);
-        const updateDate = (validDate && (bd_day!==currentBdDay || bd_month!==currentBdMonth || bd_year!==currentBdYear));
-        const updatePhone = (phone.length >= 10 && phone!==currentPhone);
+        const updateNickname = (nickname.length >= 3 && (nickname!==currentNickname));
+        const updateGivenName = (givenName!=='' && givenName!==currentGivenName);
+        const updateFamilyName = (familyName!=='' && familyName!==currentFamilyName);
+        const updateDate = (validDate && (bdDay!==currentBdDay || bdMonth!==currentBdMonth || bdYear!==currentBdYear));
+        const updatePhoneNumber = (phoneNumber.length >= 12 && phoneNumber!==currentPhoneNumber);
         const updateAddress = (address.length >= 10 && address!==currentAddress);
 
-        if (updatePseudo || updateFirstname || updateLastname || updateDate || updatePhone || updateAddress) {
-            //PatchUser.then(
-            if (updatePseudo) document.querySelector('.confirmation-modif.pseudo').style.display = "inline";
-            if (updateFirstname) document.querySelector('.confirmation-modif.firstname').style.display = "inline";
-            if (updateLastname) document.querySelector('.confirmation-modif.lastname').style.display = "inline";
-            if (updateDate) document.querySelector('.confirmation-modif.birthdate').style.display = "inline";
-            if (updatePhone) document.querySelector('.confirmation-modif.phone').style.display = "inline";
-            if (updateAddress) document.querySelector('.confirmation-modif.address').style.display = "inline";
+        if (updateNickname || updateGivenName || updateFamilyName || updateDate || updatePhoneNumber || updateAddress) {
+            this.props.updateUser({
+                'nickname': updateNickname ? this.state.nickname : '',
+                'given_name': updateGivenName ? this.state.givenName : '',
+                'family_name': updateFamilyName ? this.state.familyName : '',
+                'birthdate': updateDate ? `${this.state.bdYear}-${this.state.bdMonth}-${this.state.bdDay}` : '',
+                'phone_number': updatePhoneNumber ? this.state.phoneNumber.replace(/\s/g, '') : '',
+                'address': updateAddress ? this.state.address : ''
+            });
+            this.setState({ loading: true });
         }
 
     }
 
+    componentDidUpdate(prevProps) {
+        //Not Logged Redirection
+        if (!this.props.isLogged) {
+            this.props.history.push('/connexion');
+        }
+        //App first load
+        else if (!this.state.userLoaded) {
+            this.setState({
+                userLoaded: true,
+                nickname: this.props.user.nickname || '',
+                givenName: this.props.user.given_name || '',
+                familyName: this.props.user.family_name || '',
+                bdYear: this.props.user.bdYear || '',
+                bdMonth: this.props.user.bdMonth || '',
+                bdDay: this.props.user.bdDay || '',
+                phoneNumber: this.props.user.phone_number || '',
+                address: this.props.user.address || ''
+            })
+        }
+        //Confirmation : Attribute Update
+        if (this.state.loading && prevProps.user !== this.props.user) {
+            this.setState({ loading: false });
+            const attributesKeys = ['nickname', 'given_name', 'family_name', 'birthdate', 'phone_number', 'address']
+            attributesKeys.forEach(key => {
+                if (prevProps.user[key] !== this.props.user[key]) {
+                    document.querySelector(`.confirmation-modif.${key}`).style.display = "inline";
+                }
+                else {
+                    document.querySelector(`.confirmation-modif.${key}`).style.display = "none";
+                }
+            })
+        }
+        //Error + Confirmation : Password Update
+        let errorPassword = document.querySelector('.error-input.current-password');
+        let confirmationPassword = document.querySelector('.confirmation-modif.password');
+        if (this.state.loading && prevProps.authStatus !== this.props.authStatus) {
+            if (this.props.authStatus === 'errorPassword') {
+                this.setState({ loading: false }, () => {
+                    errorPassword.style.display = "inline";
+                    confirmationPassword.style.display = "none";
+                });
+            }
+            else if (this.props.authStatus === 'confirmationPassword') {
+                this.setState({
+                    loading: false,
+                    currentPassword: '',
+                    newPassword: '',
+                    newPasswordRepeat: ''
+                }, () => {
+                    confirmationPassword.style.display = "inline";
+                    errorPassword.style.display = "none";
+                });
+            }
+        }
+    }
+    
+    componentDidMount() {
+        if (this.props.isLogged) {
+            this.setState({
+                userLoaded: true,
+                nickname: this.props.user.nickname || '',
+                givenName: this.props.user.given_name || '',
+                familyName: this.props.user.family_name || '',
+                bdYear: this.props.user.bdYear || '',
+                bdMonth: this.props.user.bdMonth || '',
+                bdDay: this.props.user.bdDay || '',
+                phoneNumber: this.props.user.phone_number || '',
+                address: this.props.user.address || ''
+            })
+        }
+    }
+
     render() {
-        const href = "javascript:void(0);";
         return (
             <div className="auth account" style={{ backgroundImage: `url(${authBG})` }}>
                 <form className="account-form" onSubmit={this.onSubmit}>
@@ -136,49 +216,47 @@ export default class Account extends Component {
                             <label htmlFor="email">
                                 <span><span className="purple">E</span>mail</span>
                             </label>
-                            <cite>example@gmail.com</cite>
+                            <cite>{this.props.user.email}</cite>
 
-                            <label htmlFor="pseudo">
+                            <label htmlFor="nickname">
                                 <span><span className="purple">P</span>seudo</span>
-                                <span className="error-input pseudo">déjà pris</span>
-                                <span className="confirmation-modif pseudo">modifié &#10004;</span>
+                                <span className="error-input nickname">3 caractères minimum</span>
+                                <span className="confirmation-modif nickname">modifié &#10004;</span>
                             </label>
                             <input
                                 type="text"
                                 placeholder="Pseudo"
-                                name="pseudo"
+                                name="nickname"
                                 spellCheck={false}
                                 onChange={this.onChange}
-                                value={this.state.pseudo}
+                                value={this.state.nickname}
                                 required
                             ></input>
 
-                            <label htmlFor="firstname">
+                            <label htmlFor="givenName">
                                 <span><span className="purple">P</span>rénom</span>
-                                <span className="confirmation-modif firstname">modifié &#10004;</span>
+                                <span className="confirmation-modif given_name">modifié &#10004;</span>
                             </label>
                             <input
                                 type="text"
                                 placeholder="Prénom"
-                                name="firstname"
+                                name="givenName"
                                 spellCheck={false}
                                 onChange={this.onChange}
-                                value={this.state.firstname}
-                                required
+                                value={this.state.givenName}
                             ></input>
 
-                            <label htmlFor="lastname">
+                            <label htmlFor="familyName">
                                 <span><span className="purple">N</span>om</span>
-                                <span className="confirmation-modif lastname">modifié &#10004;</span>
+                                <span className="confirmation-modif family_name">modifié &#10004;</span>
                             </label>
                             <input
                                 type="text"
                                 placeholder="Nom"
-                                name="lastname"
+                                name="familyName"
                                 spellCheck={false}
                                 onChange={this.onChange}
-                                value={this.state.lastname}
-                                required
+                                value={this.state.familyName}
                             ></input>
 
                             <label htmlFor="birthdate">
@@ -191,16 +269,16 @@ export default class Account extends Component {
                                     className="day"
                                     type="text"
                                     placeholder="Jour"
-                                    name="bd_day"
+                                    name="bdDay"
                                     onChange={this.onChange}
-                                    value={this.state.bd_day}
+                                    value={this.state.bdDay}
                                     spellCheck={false}
                                 ></input>
                                 <select
                                     className="month" 
-                                    name='bd_month'
+                                    name='bdMonth'
                                     onChange={this.onChange}
-                                    value={this.state.bd_month}
+                                    value={this.state.bdMonth}
                                 >
                                     <option value='01'>Janvier</option>
                                     <option value='02'>Février</option>
@@ -219,36 +297,35 @@ export default class Account extends Component {
                                     className="year"
                                     type="text"
                                     placeholder="Année"
-                                    name="bd_year"
+                                    name="bdYear"
                                     onChange={this.onChange}
-                                    value={this.state.bd_year}
+                                    value={this.state.bdYear}
                                     spellCheck={false}
                                 ></input>
                             </div>
                         </div>
 
                         <div>
-                            <label htmlFor="phone">
+                            <label htmlFor="phoneNumber">
                                 <span><span className="purple">T</span>éléphone</span>
-                                <span className="error-input phone">invalide</span>
-                                <span className="confirmation-modif phone">modifié &#10004;</span>
+                                <span className="error-input phone_number">10 caractères requis</span>
+                                <span className="confirmation-modif phone_number">modifié &#10004;</span>
                             </label>
                             <PhoneInput
                                 buttonClass="phone-input"
                                 dropdownClass="phone-dropdown"
                                 country={'fr'}
                                 localization={'fr'}
-                                value={this.state.phone}
-                                onChange={phone => this.setState({ phone: phone })}
+                                value={this.state.phoneNumber}
+                                onChange={phoneNumber => this.setState({ phoneNumber: phoneNumber })}
                                 inputProps={{
-                                    name: 'phone',
-                                    required: true
+                                    name: 'phoneNumber'
                                 }}
                             />
 
                             <label htmlFor="address">
                                 <span><span className="purple">A</span>dresse</span>
-                                <span className="error-input address">invalide</span>
+                                <span className="error-input address">10 caractères minimum</span>
                                 <span className="confirmation-modif address">modifié &#10004;</span>
                             </label>
                             <LocationSearchInput
@@ -286,7 +363,7 @@ export default class Account extends Component {
                             ></input>
 
                             <p className="manual-redirection" onClick={this.togglePopUp}>
-                                <a href={href}>Supprimer mon compte</a>
+                                <Link to="#">Supprimer mon compte</Link>
                             </p>
                             <Popup
                                 open={this.state.popUpDeleteAccount}
@@ -294,25 +371,29 @@ export default class Account extends Component {
                                 closeOnDocumentClick
                             >
                                 <div className="delete-popup">
-                                    <a className="close" href={href} onClick={this.togglePopUp}>
+                                    <Link to="#" className="close" onClick={this.togglePopUp}>
                                         &times;
-                                    </a>
+                                    </Link>
                                     <p>Voulez-vous vraiment supprimer <b>définitivement</b> votre compte Excite ?</p>
                                     <div className="wrap-buttons">
-                                        <button className="yes" onClick={this.togglePopUp}>Oui</button>
-                                        <button className="no" onClick={this.togglePopUp}>Non</button>
+                                        <button className="yes" type="button" onClick={() => this.props.deleteUser()}>Oui</button>
+                                        <button className="no" type="button" onClick={this.togglePopUp}>Non</button>
                                     </div>
                                 </div>
                             </Popup>
-
                         </div>
                     </div>
 
                     <div className="wrap-account-buttons">
-                        <button className="log-out">Déconnexion</button>
+                        <button 
+                            className="log-out"
+                            type="button"
+                            onClick={() => this.props.logOut()}
+                            >Déconnexion
+                        </button>
                         <div>
                             <button>Valider</button>
-                            <DotsLoader loading={this.state.scrollLoading}/>
+                            <DotsLoader loading={this.state.loading}/>
                         </div>
                     </div>
                 </form>
@@ -320,3 +401,31 @@ export default class Account extends Component {
         );
     }
 }
+
+function mapDispatchToProps(dispatch) {
+    return {
+        loggedInCheck: function(userCredentials){
+            dispatch(loggedInCheck(userCredentials));
+        },
+        updateUser: function(newAttributes){
+            dispatch(updateUser(newAttributes));
+        },
+        updatePassword: function(currentPassword, newPassword){
+            dispatch(updatePassword(currentPassword, newPassword));
+        },
+        logOut: function(){
+            dispatch(logOut());
+        },
+        deleteUser: function(){
+            dispatch(deleteUser());
+        }
+    }
+};
+function mapStateToProps(reduxState) {
+    return {
+        user: reduxState.user,
+        isLogged: reduxState.isLogged,
+        authStatus: reduxState.authStatus
+    };
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Account);

@@ -17,7 +17,7 @@ export default class DotsLoader extends Component {
                 sizeUnit={"px"}
                 size={10}
                 color={'rgb(100, 0, 100)'}
-                loading={false}
+                loading={this.props.loading}
             />
         </div> 
         )

@@ -16,7 +16,7 @@ export default class LocationSearchInput extends Component {
     render() {
         return (
             <PlacesAutocomplete
-                value={this.props.address}
+                value={this.props.address || ''}
                 onChange={this.handleChange}
                 onSelect={this.handleSelect}
             >

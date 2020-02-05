@@ -1,21 +1,24 @@
+//React
 import React, { Component } from 'react'
-import { withRouter, Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { HamburgerSqueeze } from './hamburger/HamburgerSqueeze/HamburgerSqueeze.js'
 import Routes from "./Routes";
 import "./App.css";
-
+//Redux
+import { connect } from "react-redux";
+import { loggedInCheck } from "./actions";
+//Images
 import fbLogo from "./images/fb-logo.png";
 import twitterLogo from "./images/twitter-logo.svg";
 
 class App extends Component {
     toggleButton = this.toggleButton.bind(this);
-    setUnderline = this.setUnderline.bind(this);
     state = {
-        isActive: false
+        phoneMenuActive: false
     }
 
     toggleButton() {
-        if (!this.state.isActive) {
+        if (!this.state.phoneMenuActive) {
             this.refs.appMenu.style.display = "flex";
             setTimeout(function() {
                 this.refs.appMenu.style.opacity = "1";
@@ -29,25 +32,12 @@ class App extends Component {
         }
 
         this.setState({
-            isActive: !this.state.isActive
+            phoneMenuActive: !this.state.phoneMenuActive
         })
     }
 
-    setUnderline() {
-        const resetUnderline = document.querySelectorAll('.current-route');
-        for (let i = 0; i < resetUnderline.length; ++i) {
-            resetUnderline[i].classList.remove("current-route");
-        }
-        const currentRoute = window.location.href.substring(21); //TO_CHANGE_AFTER_DEPLOY
-        let headerRouteElement = document.querySelectorAll(`.app-header > a[href="${currentRoute}"]`);
-        if (headerRouteElement[0]) headerRouteElement[0].classList.add("current-route");
-    }
-
     componentDidMount () {
-        this.setUnderline();
-        this.props.history.listen(() => {
-            this.setUnderline();
-        });
+        this.props.loggedInCheck();
     }
 
     render() {
@@ -58,13 +48,18 @@ class App extends Component {
                         <Link className="logo-excite" to="/">
                             <span><span className="purple">E</span>xcite.</span>
                         </Link>
-                        <Link to="/jouer">Jouer</Link>
-                        <Link to="/connexion">Boutique</Link>
-                        <Link to="/faq">FAQ</Link>
-                        <Link to="/contact">Contact</Link>
+                        <NavLink 
+                            to={`/${this.props.isLogged ? 'jouer' : 'inscription'}`}
+                            activeClassName="current-route"
+                            >Jouer
+                        </NavLink>
+                        {this.props.isLogged && <NavLink to="/mon-compte" activeClassName="current-route">Mon Compte</NavLink>}
+                        <NavLink to="/connexion" activeClassName="current-route">Boutique</NavLink>
+                        <NavLink to="/faq" activeClassName="current-route">FAQ</NavLink>
+                        <NavLink to="/contact" activeClassName="current-route">Contact</NavLink>
                         <HamburgerSqueeze
                             className="hamburger"
-                            isActive={this.state.isActive}
+                            isActive={this.state.phoneMenuActive}
                             toggleButton={this.toggleButton}
                             buttonColor="transparent"
                             barColor="white"
@@ -72,7 +67,8 @@ class App extends Component {
                     </div>
 
                     <div className="app-menu" ref="appMenu">
-                        <Link to="/jouer" onClick={this.toggleButton}>Jouer</Link>
+                        <Link to={`/${this.props.isLogged ? 'jouer' : 'inscription'}`} onClick={this.toggleButton}>Jouer</Link>
+                        {this.props.isLogged && <Link to="/mon-compte">Mon Compte</Link>}
                         <Link to="/boutique" onClick={this.toggleButton}>Boutique</Link>
                         <Link to="/faq" onClick={this.toggleButton}>FAQ</Link>
                         <Link to="/contact" onClick={this.toggleButton}>Contact</Link>
@@ -91,7 +87,8 @@ class App extends Component {
                             <img src={fbLogo} alt="fb-logo"></img>
                         </Link>
                         <div className="footer-links">
-                            <Link to="/inscription">Jouer</Link>
+                            <Link to={`/${this.props.isLogged ? 'jouer' : 'inscription'}`}>Jouer</Link>
+                            {this.props.isLogged && <Link to="/mon-compte">Mon Compte</Link>}
                             <Link to="/boutique">Boutique</Link>
                             <Link to="/faq">FAQ</Link>
                             <Link to="/contact">Contact</Link>
@@ -106,4 +103,17 @@ class App extends Component {
     }
 }
 
-export default withRouter(App);
+function mapDispatchToProps(dispatch) {
+    return {
+        loggedInCheck: function(){
+            dispatch(loggedInCheck());
+        }
+    }
+};
+function mapStateToProps(reduxState) {
+    return {
+        user: reduxState.user,
+        isLogged: reduxState.isLogged
+    };
+}
+export default connect(mapStateToProps, mapDispatchToProps)(App);

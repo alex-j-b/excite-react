@@ -1,33 +1,38 @@
+//React
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import "./Auth.css";
-
+//Redux
+import { connect } from "react-redux";
+import { sign, updateUser } from "../actions";
+//Libs
 import DotsLoader from '../components/DotsLoader';
 import LocationSearchInput from "../components/LocationSearchInput";
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
-
+//Images
 import authBG from "../images/mystique-statue.jpg";
 import lolLogo from "../images/lol-logo.png";
 import fortniteLogo from "../images/fortnite-logo.png";
 import rocketLogo from "../images/rocket-logo.png";
 
 
-export default class Sign extends Component {
+class Sign extends Component {
     onChange = this.onChange.bind(this);
     onLocationChange = this.onLocationChange.bind(this);
     onSubmit = this.onSubmit.bind(this);
     state = {
-        stepTwo: false,
         email: '',
         password: '',
         bd_day: '',
         bd_month: '01',
         bd_year: '',
-        firstname: '',
-        lastname: '',
-        phone: '',
-        address: ''
+        givenName: '',
+        familyName: '',
+        phoneNumber: '',
+        address: '',
+        stepTwo: false,
+        loading: false
     }
 
     onChange(e) {
@@ -78,22 +83,44 @@ export default class Sign extends Component {
             errorDate.style.display = validDate ? "none" : "inline";
 
             if (validMail && validPassword & validDate){
-                this.setState({ stepTwo: true });
+                this.props.sign({
+                    email: email,
+                    password: password,
+                    birthdate: `${bd_year}-${bd_month}-${bd_day}`
+                });
+                this.setState({ loading: true });
             }
         }
         else {
-            const { phone, address } = this.state;
+            const { phoneNumber, address } = this.state;
 
             let errorPhone = document.querySelector('.error-input.phone');
-            errorPhone.style.display = phone.length >= 10 ? "none" : "inline";
+            errorPhone.style.display = phoneNumber.length >= 12 ? "none" : "inline";
 
             let errorAddress = document.querySelector('.error-input.address');
             errorAddress.style.display = address.length >= 10 ? "none" : "inline";
 
-            if (phone.length >= 10 && address.length >= 10){
-                //this.setState({ stepTwo: false });
-                window.open("http://192.168.1.47:3000/jouer","_self")
+            if (phoneNumber.length >= 12 && address.length >= 10){
+                this.props.updateUser({
+                    'given_name': this.state.givenName,
+                    'family_name': this.state.familyName,
+                    'phone_number': this.state.phoneNumber.replace(/\s/g, ''),
+                    'address': this.state.address
+                });
+                this.setState({ loading: true });
             }
+        }
+    }
+
+    componentDidUpdate() {
+        if (this.props.user.given_name) {
+            this.props.history.push('/jouer');
+        }
+        else if (!this.state.stepTwo && this.props.isLogged) {
+            this.setState({
+                loading: false,
+                stepTwo: true
+            });
         }
     }
 
@@ -176,7 +203,7 @@ export default class Sign extends Component {
                 <p className="legal">En créant se compte vous acceptez les conditions générales d’utilisation.</p>
                 <div>
                     <button>Démarrer</button>
-                    <DotsLoader loading={this.state.scrollLoading}/>
+                    <DotsLoader loading={this.state.loading}/>
                 </div>
             </>;
 
@@ -185,45 +212,45 @@ export default class Sign extends Component {
             <>
                 <span><span className="purple">C</span>omplétez vos informations</span>
 
-                <label htmlFor="firstname">
+                <label htmlFor="givenName">
                     <span><span className="purple">P</span>rénom</span>
                 </label>
                 <input
                     type="text"
                     placeholder="Prénom"
-                    name="firstname"
+                    name="givenName"
                     spellCheck={false}
                     onChange={this.onChange}
-                    value={this.state.firstname}
+                    value={this.state.givenName}
                     required
                 ></input>
 
-                <label htmlFor="lastname">
+                <label htmlFor="familyName">
                     <span><span className="purple">N</span>om</span>
                 </label>
                 <input
                     type="text"
                     placeholder="Nom"
-                    name="lastname"
+                    name="familyName"
                     spellCheck={false}
                     onChange={this.onChange}
-                    value={this.state.lastname}
+                    value={this.state.familyName}
                     required
                 ></input>
 
-                <label htmlFor="phone">
+                <label htmlFor="phoneNumber">
                     <span><span className="purple">T</span>éléphone</span>
-                    <span className="error-input phone">invalide</span>
+                    <span className="error-input phone">12 caractères requis</span>
                 </label>
                 <PhoneInput
                     buttonClass="phone-input"
                     dropdownClass="phone-dropdown"
                     country={'fr'}
                     localization={'fr'}
-                    value={this.state.phone}
-                    onChange={phone => this.setState({ phone: phone })}
+                    value={this.state.phoneNumber}
+                    onChange={phoneNumber => this.setState({ phoneNumber: phoneNumber })}
                     inputProps={{
-                        name: 'phone',
+                        name: 'phoneNumber',
                         required: true
                     }}
                 />
@@ -238,7 +265,7 @@ export default class Sign extends Component {
                 />
                 <div>
                     <button>Valider</button>
-                    <DotsLoader loading={this.state.scrollLoading}/>
+                    <DotsLoader loading={this.state.loading}/>
                 </div>
             </>;
 
@@ -257,3 +284,21 @@ export default class Sign extends Component {
         );
     }
 }
+
+function mapDispatchToProps(dispatch) {
+    return {
+        sign: function(userCredentials){
+            dispatch(sign(userCredentials));
+        },
+        updateUser: function(newAttributes){
+            dispatch(updateUser(newAttributes));
+        }
+    }
+};
+function mapStateToProps(reduxState) {
+    return {
+        user: reduxState.user,
+        isLogged: reduxState.isLogged
+    };
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Sign);
