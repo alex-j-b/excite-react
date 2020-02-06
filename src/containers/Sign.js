@@ -4,8 +4,9 @@ import { Link } from "react-router-dom";
 import "./Auth.css";
 //Redux
 import { connect } from "react-redux";
-import { sign, updateUser } from "../actions";
+import { updateUser, deleteUser } from "../actions";
 //Libs
+import { Auth } from "aws-amplify";
 import DotsLoader from '../components/DotsLoader';
 import LocationSearchInput from "../components/LocationSearchInput";
 import PhoneInput from 'react-phone-input-2'
@@ -27,6 +28,7 @@ class Sign extends Component {
         bd_day: '',
         bd_month: '01',
         bd_year: '',
+        confCode: '',
         givenName: '',
         familyName: '',
         phoneNumber: '',
@@ -63,7 +65,7 @@ class Sign extends Component {
         this.setState({ address: address });
     }
 
-    onSubmit(e) {
+    async onSubmit(e) {
         e.preventDefault();
         if (!this.state.stepTwo) {
             const { email, password, bd_day, bd_month, bd_year } = this.state;
@@ -83,44 +85,67 @@ class Sign extends Component {
             errorDate.style.display = validDate ? "none" : "inline";
 
             if (validMail && validPassword & validDate){
-                this.props.sign({
-                    email: email,
-                    password: password,
-                    birthdate: `${bd_year}-${bd_month}-${bd_day}`
-                });
                 this.setState({ loading: true });
+                try {
+                    await Auth.signUp({
+                        'username': email,
+                        'password': password,
+                        'attributes': {
+                            'email': email,
+                            'nickname': email,
+                            'birthdate': `${bd_year}-${bd_month}-${bd_day}`
+                        }
+                    });
+                    await Auth.signIn(email, password);
+                    await Auth.verifyCurrentUserAttribute('email');
+                    this.setState({ loading: false, stepTwo: true });
+                } catch (e) {
+                    this.setState({ loading: false });
+                }
             }
         }
         else {
-            const { phoneNumber, address } = this.state;
+            const { confCode, givenName, familyName, address } = this.state;
+            let phoneNumber = this.state.phoneNumber.replace(/\s/g, '');
 
             let errorPhone = document.querySelector('.error-input.phone');
-            errorPhone.style.display = phoneNumber.length >= 12 ? "none" : "inline";
-
+            errorPhone.style.display = phoneNumber.length === 12 ? "none" : "inline";
             let errorAddress = document.querySelector('.error-input.address');
             errorAddress.style.display = address.length >= 10 ? "none" : "inline";
 
-            if (phoneNumber.length >= 12 && address.length >= 10){
-                this.props.updateUser({
-                    'given_name': this.state.givenName,
-                    'family_name': this.state.familyName,
-                    'phone_number': this.state.phoneNumber.replace(/\s/g, ''),
-                    'address': this.state.address
-                });
+            if (phoneNumber.length === 12 && address.length >= 10){
                 this.setState({ loading: true });
+                Auth.verifyCurrentUserAttributeSubmit('email', confCode)
+                .then(() => {
+                    this.props.updateUser({
+                        'given_name': givenName,
+                        'family_name': familyName,
+                        'phone_number': phoneNumber,
+                        'address': address
+                    });
+                }).catch(e => {
+                    this.setState({ loading: false });
+                    document.querySelector('.error-input.conf-code').style.display = "inline";
+                });
             }
         }
     }
 
+    componentWillUnmount() {
+        if (this.props.user.email_verified !== 'true') {
+            this.props.deleteUser();
+        }
+    }
+
     componentDidUpdate() {
-        if (this.props.user.given_name) {
+        if (this.props.isLogged) {
             this.props.history.push('/jouer');
         }
-        else if (!this.state.stepTwo && this.props.isLogged) {
-            this.setState({
-                loading: false,
-                stepTwo: true
-            });
+    }
+
+    componentDidMount() {
+        if (this.props.isLogged) {
+            this.props.history.push('/jouer');
         }
     }
 
@@ -212,6 +237,20 @@ class Sign extends Component {
             <>
                 <span><span className="purple">C</span>omplétez vos informations</span>
 
+                <label htmlFor="confCode">
+                    <span><span className="purple">C</span>ode de confirmation</span>
+                    <span className="error-input conf-code">incorrect</span>
+                </label>
+                <input
+                    type="text"
+                    placeholder="Vérifiez votre adresse email"
+                    name="confCode"
+                    spellCheck={false}
+                    onChange={this.onChange}
+                    value={this.state.confCode}
+                    required
+                ></input>
+
                 <label htmlFor="givenName">
                     <span><span className="purple">P</span>rénom</span>
                 </label>
@@ -287,11 +326,11 @@ class Sign extends Component {
 
 function mapDispatchToProps(dispatch) {
     return {
-        sign: function(userCredentials){
-            dispatch(sign(userCredentials));
-        },
         updateUser: function(newAttributes){
             dispatch(updateUser(newAttributes));
+        },
+        deleteUser: function(){
+            dispatch(deleteUser());
         }
     }
 };

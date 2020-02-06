@@ -1,8 +1,12 @@
+//React
 import React, { Component } from "react";
 import "./Play.css";
+//Redux
+import { connect } from "react-redux";
+//libs
 import Select from 'react-select';
 import ImageFadeIn from 'react-image-fade-in';
-
+//Images
 import authBG from "../images/mystique-statue.jpg";
 import lolLogo from "../images/lol-logo.png";
 import fortniteLogo from "../images/fortnite-logo.png";
@@ -10,7 +14,6 @@ import rocketLogo from "../images/rocket-logo.png";
 import historyWhite from "../images/history-white.png";
 import historyBlack from "../images/history-black.png";
 import ecoin from "../images/e-coin.png";
-
 import riven from "../images/riven.png";
 import fortniteChar from "../images/fortnite-char.png";
 import rocketCrash from "../images/rocket-crash.png";
@@ -32,7 +35,7 @@ const CustomSingleValue = ({ data }) => (
     </div>
 );
 
-export default class Play extends Component {
+class Play extends Component {
     switchTab = this.switchTab.bind(this);
     state = {
         tab: 'League of legends',
@@ -54,7 +57,17 @@ export default class Play extends Component {
     }
 
     componentDidUpdate() {
+        //Not Logged Redirection
+        if (!this.props.isLogged) {
+            this.props.history.push('/connexion');
+        }
         if (!this.state.imageReady) this.setState({ imageReady: true });
+    }
+
+    componentDidMount() {
+        if (this.props.authStatus === 'deleteUser') {
+            this.props.history.push('/connexion');
+        }
     }
 
     render() {
@@ -238,3 +251,11 @@ export default class Play extends Component {
         );
     }
 }
+
+function mapStateToProps(reduxState) {
+    return {
+        user: reduxState.user,
+        isLogged: reduxState.isLogged
+    };
+}
+export default connect(mapStateToProps)(Play);

@@ -68,7 +68,7 @@ class App extends Component {
 
                     <div className="app-menu" ref="appMenu">
                         <Link to={`/${this.props.isLogged ? 'jouer' : 'inscription'}`} onClick={this.toggleButton}>Jouer</Link>
-                        {this.props.isLogged && <Link to="/mon-compte">Mon Compte</Link>}
+                        {this.props.isLogged && <Link to="/mon-compte" onClick={this.toggleButton}>Mon Compte</Link>}
                         <Link to="/boutique" onClick={this.toggleButton}>Boutique</Link>
                         <Link to="/faq" onClick={this.toggleButton}>FAQ</Link>
                         <Link to="/contact" onClick={this.toggleButton}>Contact</Link>

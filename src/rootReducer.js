@@ -5,7 +5,8 @@ import {
 const DEFAULT_STATE = {
     isLogged: false,
     authStatus: '',
-    user: {}
+    user: {},
+    forceUpdate: 0
 }
 
 export default function refresh(state = DEFAULT_STATE, action = {}) {
@@ -17,14 +18,14 @@ export default function refresh(state = DEFAULT_STATE, action = {}) {
             let isLogged, authStatus;
             
             if (typeof user === "string") {
-                console.log(user)
+                console.log('string: ', user)
                 authStatus = action.user;
-                if (user === ("logOut" || "deleteUser")) {
+                if (user === "logOut" || user === "deleteUser") {
                     isLogged = false;
                     user = {};
                 }
                 else {
-                    console.log(newState.user)
+                    console.log('newState.user: ', newState.user)
                     isLogged = newState.isLogged;
                     user = newState.user;
                 }
@@ -36,11 +37,12 @@ export default function refresh(state = DEFAULT_STATE, action = {}) {
                 user.bdYear = bdArray[0];
                 user.bdMonth = bdArray[1];
                 user.bdDay = bdArray[2];
-                console.log(user)
+                console.log('user: ', user)
             }
             
             return {
                 ...newState,
+                forceUpdate: newState.forceUpdate + 1,
                 isLogged: isLogged,
                 authStatus: authStatus,
                 user: user

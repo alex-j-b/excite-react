@@ -6,6 +6,8 @@ import "./Auth.css";
 //Redux
 import { connect } from "react-redux";
 import { logIn } from "../actions";
+//Libs
+import { Auth } from "aws-amplify";
 //Images
 import authBG from "../images/mystique-statue.jpg";
 import lolLogo from "../images/lol-logo.png";
@@ -15,19 +17,23 @@ import rocketLogo from "../images/rocket-logo.png";
 
 class Log extends Component {
     onChange = this.onChange.bind(this);
-    onSubmit = this.onSubmit.bind(this);
+    onLogSubmit = this.onLogSubmit.bind(this);
+    onForgotSubmit = this.onForgotSubmit.bind(this);
     state = {
         email: '',
         password: '',
+        forgotEmail: '',
+        forgotCode: '',
+        forgotPassword: '',
         loading: false,
-        forgotPassword: false
+        forgotForm: false
     }
 
     onChange(e) {
         this.setState({ [e.target.name]: e.target.value });
     }
 
-    onSubmit(e) {
+    onLogSubmit(e) {
         e.preventDefault();
         const { email, password } = this.state;
 
@@ -50,6 +56,43 @@ class Log extends Component {
         }
     }
 
+    async onForgotSubmit(e) {
+        e.preventDefault();
+        const { forgotEmail, forgotCode, forgotPassword } = this.state;
+
+        switch(this.state.forgotForm) {
+            case 1:
+                document.querySelector('.error-input.forgot-email').style.display = "none";
+                this.setState({ loading: true });
+                try {
+                    await Auth.forgotPassword(forgotEmail);
+                    this.setState({ forgotForm: 2 });
+                } catch (e) {
+                    document.querySelector('.error-input.forgot-email').style.display = "inline";
+                }
+                this.setState({ loading: false });
+                break;
+            case 2:
+                document.querySelector('.error-input.forgot-code').style.display = "none";
+                const passwordRegex = /[^\s]{8,50}/;
+                const validPassword = passwordRegex.test(forgotPassword);
+                document.querySelector('.error-input.forgot-password').style.display = validPassword ? "none" : "inline";
+                if (!validPassword) break;
+
+                this.setState({ loading: true });
+                try {
+                    await Auth.forgotPasswordSubmit(forgotEmail, forgotCode, forgotPassword);
+                    this.setState({ forgotForm: false });
+                } catch (e) {
+                    document.querySelector('.error-input.forgot-code').style.display = "inline";
+                }
+                this.setState({ loading: false });
+                break;
+            default:
+                return;
+        }
+    }
+
     componentDidUpdate() {
         let errorAttempt = document.querySelector('.error-input.log-attempt');
         if (this.props.isLogged) {
@@ -67,8 +110,8 @@ class Log extends Component {
     render() {
         return (
             <div className="auth log-sign" style={{ backgroundImage: `url(${authBG})` }}>
-                {!this.state.forgotPassword &&
-                    <form onSubmit={this.onSubmit}>
+                {!this.state.forgotForm &&
+                    <form onSubmit={this.onLogSubmit}>
                         <div className="games-icons">
                             <img className="lol-logo" src={lolLogo} alt="lolLogo"></img>
                             <img className="fortnite-logo" src={fortniteLogo} alt="fortniteLogo"></img>
@@ -93,7 +136,6 @@ class Log extends Component {
 
                         <label htmlFor="password">
                             <span><span className="purple">M</span>ot de passe</span>
-                            
                         </label>
                         <input 
                             type="password"
@@ -106,7 +148,7 @@ class Log extends Component {
                         
                         <p 
                             className="manual-redirection forgot"
-                            onClick={() => this.setState({ forgotPassword: 1 })}
+                            onClick={() => this.setState({ forgotForm: 1 })}
                             ><Link to="#">Mot de passe oublié ?</Link>
                         </p>
                         <p className="error-input log-attempt">Mot de passe ou email invalide</p>
@@ -117,8 +159,8 @@ class Log extends Component {
                         </div>
                     </form>
                 }
-                {this.state.forgotPassword &&
-                    <form onSubmit={this.onSubmit}>
+                {this.state.forgotForm &&
+                    <form onSubmit={this.onForgotSubmit}>
                         <div className="games-icons">
                             <img className="lol-logo" src={lolLogo} alt="lolLogo"></img>
                             <img className="fortnite-logo" src={fortniteLogo} alt="fortniteLogo"></img>
@@ -127,57 +169,53 @@ class Log extends Component {
                         
                         <span><span className="purple">M</span>ot de passe oublié</span>
 
-                        {this.state.forgotPassword === 1 &&
+                        {this.state.forgotForm === 1 &&
                             <>
-                            <label htmlFor="emailForgot">
+                            <label htmlFor="forgotEmail">
                                 <span><span className="purple">E</span>-mail</span>
+                                <span className="error-input forgot-email">inexistant</span>
                             </label>
                             <input
                                 type="text"
                                 placeholder="Adresse e-mail"
-                                name="emailForgot"
+                                name="forgotEmail"
                                 onChange={this.onChange}
-                                value={this.state.emailForgot}
+                                value={this.state.forgotEmail}
                                 spellCheck={false}
                                 required
                             ></input>
                             </>
                         }
 
-                        {this.state.forgotPassword === 2 &&
+                        {this.state.forgotForm === 2 &&
                             <>
-                            <label htmlFor="confCode">
+                            <label htmlFor="forgotCode">
                                 <span><span className="purple">C</span>ode</span>
+                                <span className="error-input forgot-code">incorrect</span>
                             </label>
                             <input 
                                 type="text"
                                 placeholder="Code de confirmation"
-                                name="confCode"
+                                name="forgotCode"
                                 onChange={this.onChange}
-                                value={this.state.confCode}
+                                value={this.state.forgotCode}
                                 required
                             ></input>
-                            </>
-                        }
 
-                        {this.state.forgotPassword === 3 &&
-                            <>
-                            <label htmlFor="newPassword">
+                            <label htmlFor="forgotPassword">
                                 <span><span className="purple">N</span>ouveau mot de passe</span>
-                                
+                                <span className="error-input forgot-password">8 caractères minimum</span>
                             </label>
                             <input 
-                                type="text"
+                                type="password"
                                 placeholder="Mot de passe"
-                                name="newPassword"
+                                name="forgotPassword"
                                 onChange={this.onChange}
-                                value={this.state.newPassword}
+                                value={this.state.forgotPassword}
                                 required
                             ></input>
                             </>
                         }
-
-                        <p className="error-input log-attempt">Mot de passe ou email invalide</p>
 
                         <div>
                             <button>Envoyer</button>
@@ -201,7 +239,8 @@ function mapStateToProps(reduxState) {
     return {
         authStatus: reduxState.authStatus,
         isLogged: reduxState.isLogged,
-        user: reduxState.user
+        user: reduxState.user,
+        forceUpdate: reduxState.forceUpdate
     };
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Log);

@@ -6,7 +6,7 @@
 /* -------------------- Background -------------------- */
 .auth {
     display: flex; align-items: center; justify-content: center;
-    height: calc(100vh - 160px);
+    min-height: calc(100vh - 160px);
     background-position: center;
     font-size: 16px; font-family: 'Raleway', Arial;
     overflow: hidden;
@@ -176,7 +176,7 @@
 @media screen and (max-width: 460px) {
 
     .auth.log-sign {
-        height: auto;
+        min-height: 0;
     }
     .auth.log-sign form {
         width: 70vw; min-width: 70vw;
@@ -260,6 +260,7 @@
     padding: 16px;
 }
 .delete-popup p {
+    margin: 0 !important;
     font-size: 16px; font-family: 'Raleway', Arial, Helvetica; -webkit-text-stroke: 0.1px;
     color: #333333;
 }
@@ -277,7 +278,7 @@
 .delete-popup > .wrap-buttons > button {
     padding: 4px 12px 4px 12px;
     background: none;
-    font-size: 18px; font-family: 'Raleway', Arial, Helvetica; -webkit-text-stroke: 0.3px;
+    font-size: 18px; font-family: 'Raleway', Arial, Helvetica; -webkit-text-stroke: 0.6px;
     transition-duration: 0.4s; -webkit-transition-duration: 0.4s;
 }
 
@@ -313,7 +314,7 @@
 
     /* -------------------- Form account -------------------- */
     .auth.account {
-        height: auto;
+        min-height: 0;
     }
     .auth.account form {
         width: 70vw; min-width: 70vw;

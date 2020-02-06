@@ -6,7 +6,7 @@
 /* -------------------- Background -------------------- */
 .play {
     display: flex; align-items: center; justify-content: center;
-    height: calc(100vh - 160px);
+    min-height: calc(100vh - 160px);
     background-position: center;
     font-size: 16px; font-family: 'Raleway', Arial;
 }
@@ -186,7 +186,7 @@
 
     /* -------------------- Background -------------------- */
     .play {
-        height: auto;
+        min-height: 0;
     }
 
     /* -------------------- Central square -------------------- */

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import "./Auth.css";
 //Redux
 import { connect } from "react-redux";
-import { loggedInCheck, updateUser, logOut, deleteUser, updatePassword } from "../actions";
+import { loggedInCheck, updateUser, logOut, disableUser, updatePassword } from "../actions";
 //Libs
 import DotsLoader from '../components/DotsLoader';
 import Popup from "reactjs-popup";
@@ -56,7 +56,6 @@ class Account extends Component {
             bdDay,
             bdMonth,
             bdYear,
-            phoneNumber,
             address,
             currentPassword,
             newPassword,
@@ -64,6 +63,7 @@ class Account extends Component {
             givenName,
             familyName,
         } = this.state;
+        let phoneNumber = this.state.phoneNumber.replace(/\s/g, '');
 
         const currentNickname = this.props.user.nickname;
         const currentGivenName = this.props.user.given_name;
@@ -82,7 +82,7 @@ class Account extends Component {
         errorDate.style.display = validDate ? "none" : "inline";
 
         let errorPhoneNumber = document.querySelector('.error-input.phone_number');
-        errorPhoneNumber.style.display = phoneNumber.length >= 12 ? "none" : "inline";
+        errorPhoneNumber.style.display = phoneNumber.length === 12 ? "none" : "inline";
 
         let errorAddress = document.querySelector('.error-input.address');
         errorAddress.style.display = address.length >= 10 ? "none" : "inline";
@@ -117,17 +117,17 @@ class Account extends Component {
         const updateGivenName = (givenName!=='' && givenName!==currentGivenName);
         const updateFamilyName = (familyName!=='' && familyName!==currentFamilyName);
         const updateDate = (validDate && (bdDay!==currentBdDay || bdMonth!==currentBdMonth || bdYear!==currentBdYear));
-        const updatePhoneNumber = (phoneNumber.length >= 12 && phoneNumber!==currentPhoneNumber);
+        const updatePhoneNumber = (phoneNumber.length === 12 && phoneNumber!==currentPhoneNumber);
         const updateAddress = (address.length >= 10 && address!==currentAddress);
 
         if (updateNickname || updateGivenName || updateFamilyName || updateDate || updatePhoneNumber || updateAddress) {
             this.props.updateUser({
-                'nickname': updateNickname ? this.state.nickname : '',
-                'given_name': updateGivenName ? this.state.givenName : '',
-                'family_name': updateFamilyName ? this.state.familyName : '',
-                'birthdate': updateDate ? `${this.state.bdYear}-${this.state.bdMonth}-${this.state.bdDay}` : '',
-                'phone_number': updatePhoneNumber ? this.state.phoneNumber.replace(/\s/g, '') : '',
-                'address': updateAddress ? this.state.address : ''
+                'nickname': updateNickname ? nickname : '',
+                'given_name': updateGivenName ? givenName : '',
+                'family_name': updateFamilyName ? familyName : '',
+                'birthdate': updateDate ? `${bdYear}-${bdMonth}-${bdDay}` : '',
+                'phone_number': updatePhoneNumber ? phoneNumber.replace(/\s/g, '') : '',
+                'address': updateAddress ? address : ''
             });
             this.setState({ loading: true });
         }
@@ -169,7 +169,7 @@ class Account extends Component {
         //Error + Confirmation : Password Update
         let errorPassword = document.querySelector('.error-input.current-password');
         let confirmationPassword = document.querySelector('.confirmation-modif.password');
-        if (this.state.loading && prevProps.authStatus !== this.props.authStatus) {
+        if (this.state.loading && prevProps.forceUpdate !== this.props.forceUpdate) {
             if (this.props.authStatus === 'errorPassword') {
                 this.setState({ loading: false }, () => {
                     errorPassword.style.display = "inline";
@@ -191,7 +191,10 @@ class Account extends Component {
     }
     
     componentDidMount() {
-        if (this.props.isLogged) {
+        if (this.props.authStatus === 'deleteUser') {
+            this.props.history.push('/connexion');
+        }
+        else if (this.props.isLogged) {
             this.setState({
                 userLoaded: true,
                 nickname: this.props.user.nickname || '',
@@ -375,8 +378,9 @@ class Account extends Component {
                                         &times;
                                     </Link>
                                     <p>Voulez-vous vraiment supprimer <b>définitivement</b> votre compte Excite ?</p>
+                                    <p>⚠ Vous ne pourrez plus recréer de compte avec cet email.</p>
                                     <div className="wrap-buttons">
-                                        <button className="yes" type="button" onClick={() => this.props.deleteUser()}>Oui</button>
+                                        <button className="yes" type="button" onClick={() => this.props.disableUser()}>Oui</button>
                                         <button className="no" type="button" onClick={this.togglePopUp}>Non</button>
                                     </div>
                                 </div>
@@ -416,8 +420,8 @@ function mapDispatchToProps(dispatch) {
         logOut: function(){
             dispatch(logOut());
         },
-        deleteUser: function(){
-            dispatch(deleteUser());
+        disableUser: function(){
+            dispatch(disableUser());
         }
     }
 };
@@ -425,7 +429,8 @@ function mapStateToProps(reduxState) {
     return {
         user: reduxState.user,
         isLogged: reduxState.isLogged,
-        authStatus: reduxState.authStatus
+        authStatus: reduxState.authStatus,
+        forceUpdate: reduxState.forceUpdate
     };
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Account);

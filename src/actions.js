@@ -24,29 +24,20 @@ export function loggedInCheck() {
             attributes.forEach(el => {
                 user[el.Name] = el.Value;
             });
-            dispatch(setUser(user));
+            if (user.email_verified === 'true') {
+                dispatch(setUser(user));
+            }
+            else {
+                const userSession = await Auth.currentSession();
+                await Auth.signOut();
+                const params = { AccessToken: userSession.accessToken.jwtToken };
+                let cognitoidentityserviceprovider = new AWS.CognitoIdentityServiceProvider({region: 'eu-west-2'});
+                cognitoidentityserviceprovider.deleteUser(params, function(error, data) {
+                    error ? console.log(error) : dispatch(setUser("deleteUser"));
+                });
+            }
         } catch (e) {
-            console.log(e);
-        }
-    }
-}
-
-export function sign(userCredentials) {
-    return async dispatch => {
-        try {
-            await Auth.signUp({
-                username: userCredentials.email,
-                password: userCredentials.password,
-                'attributes': {
-                    email: userCredentials.email,
-                    nickname: userCredentials.email,
-                    birthdate: userCredentials.birthdate
-                }
-            });
-            const user = await Auth.signIn(userCredentials.email, userCredentials.password);
-            dispatch(setUser(user.attributes));
-        } catch (e) {
-            console.log(e);
+            dispatch(setUser("logOut"));
         }
     }
 }
@@ -109,10 +100,24 @@ export function updatePassword(oldPassword, newPassword) {
 export function deleteUser() {
     return async dispatch => {
         const userSession = await Auth.currentSession();
+        await Auth.signOut();
         const params = { AccessToken: userSession.accessToken.jwtToken };
         let cognitoidentityserviceprovider = new AWS.CognitoIdentityServiceProvider({region: 'eu-west-2'});
         cognitoidentityserviceprovider.deleteUser(params, function(error, data) {
             error ? console.log(error) : dispatch(setUser("deleteUser"));
         });
+    }
+}
+
+export function disableUser() {
+    return async dispatch => {
+        try {
+            const currentAuthenticatedUser = await Auth.currentAuthenticatedUser();
+            await Auth.updateUserAttributes(currentAuthenticatedUser, {"custom:disabled_account": "true"});
+            await Auth.signOut();
+            dispatch(setUser("logOut"));
+        } catch (e) {
+            console.log(e);
+        }
     }
 }
