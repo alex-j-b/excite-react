@@ -87,30 +87,31 @@ class Account extends Component {
         let errorAddress = document.querySelector('.error-input.address');
         errorAddress.style.display = address.length >= 10 ? "none" : "inline";
 
-        const passwordRegex = /[^\s]{8,50}/;
-        const validPassword = passwordRegex.test(currentPassword);
-        const validNewPassword = passwordRegex.test(newPassword);
-        if (currentPassword!=='' && (!validPassword || !validNewPassword || newPassword!==newPasswordRepeat)) {
+        if (currentPassword!=='') {
             let errorCurrentPassword = document.querySelector('.error-input.current-password');
-            errorCurrentPassword.style.display = "none";
             let errorNewPassword = document.querySelector('.error-input.new-password');
-            errorNewPassword.style.display = "none";
             let errorpasswordRepeat = document.querySelector('.error-input.new-password-repeat');
-            errorpasswordRepeat.style.display = "none";
             document.querySelector('.confirmation-modif.password').style.display = "none";
-            if (!validPassword){
+            errorCurrentPassword.style.display = "none";
+            errorNewPassword.style.display = "none";
+            errorpasswordRepeat.style.display = "none";
+
+            const passwordRegex = /[^\s]{8,50}/;
+            const validPassword = passwordRegex.test(currentPassword);
+            const validNewPassword = passwordRegex.test(newPassword);
+            if (!validPassword) {
                 errorCurrentPassword.style.display = "inline";
             }
-            else if (!validNewPassword){
+            else if (!validNewPassword) {
                 errorNewPassword.style.display = "inline";
             }
-            else if (newPassword!==newPasswordRepeat){
+            else if (newPassword!==newPasswordRepeat) {
                 errorpasswordRepeat.style.display = "inline";
             }
-        }
-        else if (validPassword && validNewPassword && newPassword===newPasswordRepeat){
-            this.props.updatePassword(currentPassword, newPassword);
-            this.setState({ loading: true });
+            else {
+                this.props.updatePassword(currentPassword, newPassword);
+                this.setState({ loading: true });
+            }
         }
 
         const updateNickname = (nickname.length >= 3 && (nickname!==currentNickname));
@@ -153,7 +154,7 @@ class Account extends Component {
                 address: this.props.user.address || ''
             })
         }
-        //Confirmation : Attribute Update
+        //Attribute Update -> Confirmation
         if (this.state.loading && prevProps.user !== this.props.user) {
             this.setState({ loading: false });
             const attributesKeys = ['nickname', 'given_name', 'family_name', 'birthdate', 'phone_number', 'address']
@@ -166,7 +167,7 @@ class Account extends Component {
                 }
             })
         }
-        //Error + Confirmation : Password Update
+        //Password Update -> Error + Confirmation
         let errorPassword = document.querySelector('.error-input.current-password');
         let confirmationPassword = document.querySelector('.confirmation-modif.password');
         if (this.state.loading && prevProps.forceUpdate !== this.props.forceUpdate) {
@@ -247,6 +248,7 @@ class Account extends Component {
                                 spellCheck={false}
                                 onChange={this.onChange}
                                 value={this.state.givenName}
+                                required
                             ></input>
 
                             <label htmlFor="familyName">
@@ -260,6 +262,7 @@ class Account extends Component {
                                 spellCheck={false}
                                 onChange={this.onChange}
                                 value={this.state.familyName}
+                                required
                             ></input>
 
                             <label htmlFor="birthdate">
@@ -311,7 +314,7 @@ class Account extends Component {
                         <div>
                             <label htmlFor="phoneNumber">
                                 <span><span className="purple">T</span>éléphone</span>
-                                <span className="error-input phone_number">10 caractères requis</span>
+                                <span className="error-input phone_number">12 caractères requis</span>
                                 <span className="confirmation-modif phone_number">modifié &#10004;</span>
                             </label>
                             <PhoneInput
@@ -328,7 +331,7 @@ class Account extends Component {
 
                             <label htmlFor="address">
                                 <span><span className="purple">A</span>dresse</span>
-                                <span className="error-input address">10 caractères minimum</span>
+                                <span className="error-input address">invalide</span>
                                 <span className="confirmation-modif address">modifié &#10004;</span>
                             </label>
                             <LocationSearchInput

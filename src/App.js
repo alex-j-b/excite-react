@@ -1,6 +1,6 @@
 //React
 import React, { Component } from 'react'
-import { Link, NavLink } from "react-router-dom";
+import { withRouter, Link, NavLink } from "react-router-dom";
 import { HamburgerSqueeze } from './hamburger/HamburgerSqueeze/HamburgerSqueeze.js'
 import Routes from "./Routes";
 import "./App.css";
@@ -38,6 +38,9 @@ class App extends Component {
 
     componentDidMount () {
         this.props.loggedInCheck();
+        this.props.history.listen(() => {
+            window.scrollTo(0, 0);
+        });
     }
 
     render() {
@@ -116,4 +119,5 @@ function mapStateToProps(reduxState) {
         isLogged: reduxState.isLogged
     };
 }
+App = withRouter(App);
 export default connect(mapStateToProps, mapDispatchToProps)(App);

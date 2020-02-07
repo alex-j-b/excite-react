@@ -112,6 +112,7 @@ class Sign extends Component {
             errorPhone.style.display = phoneNumber.length === 12 ? "none" : "inline";
             let errorAddress = document.querySelector('.error-input.address');
             errorAddress.style.display = address.length >= 10 ? "none" : "inline";
+            document.querySelector('.error-input.conf-code').style.display = "none";
 
             if (phoneNumber.length === 12 && address.length >= 10){
                 this.setState({ loading: true });
