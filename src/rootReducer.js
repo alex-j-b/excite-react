@@ -1,5 +1,6 @@
 import {
-    SET_USER
+    SET_USER,
+    CHECK_LOL_ACCOUNT
 } from './actions';
 
 const DEFAULT_STATE = {
@@ -11,6 +12,7 @@ const DEFAULT_STATE = {
 
 export default function refresh(state = DEFAULT_STATE, action = {}) {
     let newState = {...state};
+    let newStateUser = Object.assign({}, newState.user);
     switch(action.type) {
 
         case SET_USER:
@@ -48,8 +50,17 @@ export default function refresh(state = DEFAULT_STATE, action = {}) {
                 user: user
             };
 
+        case CHECK_LOL_ACCOUNT:
+            const body = action.body;
+            console.log('body: ', body)
+            newStateUser['custom:games_account'].lol = { region: body.region, accountId: body.accountId };
+
+            return {
+                ...newState,
+                user: newStateUser
+            };
+
         default:
             return state;
-
     }
 }

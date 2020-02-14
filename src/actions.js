@@ -1,12 +1,18 @@
-import { Auth } from "aws-amplify";
+import { Auth, API } from "aws-amplify";
 import AWS from 'aws-sdk/global';
 
 export const SET_USER = 'SET_USER';
+export const CHECK_LOL_ACCOUNT = 'CHECK_LOL_ACCOUNT';
 
 const rmvEmptyValues = (obj) => {
     Object.keys(obj).forEach((key) => (obj[key]==='') && delete obj[key]);
     return obj;
 }
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////// USER COGNITO ///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 export function setUser(user) {
     return {
@@ -19,11 +25,20 @@ export function loggedInCheck() {
     return async dispatch => {
         try {
             const currentAuthenticatedUser = await Auth.currentAuthenticatedUser();
+            console.log(currentAuthenticatedUser)
             const attributes = await Auth.userAttributes(currentAuthenticatedUser);
             let user = {};
             attributes.forEach(el => {
                 user[el.Name] = el.Value;
             });
+
+            if ('custom:games_account' in user) {
+                user['custom:games_account'] = JSON.parse(user['custom:games_account']);
+            }
+            else {
+                user['custom:games_account'] = {};
+            }
+
             if (user.email_verified === 'true') {
                 dispatch(setUser(user));
             }
@@ -119,5 +134,38 @@ export function disableUser() {
         } catch (e) {
             console.log(e);
         }
+    }
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////// GAMES //////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// ---------------- League of Legends ---------------- //
+
+export function setCheckLolAccount(body) {
+    return {
+        type: CHECK_LOL_ACCOUNT,
+        body
+    };
+}
+
+export function checkLolAccount(summonerName, region) {
+    return async dispatch => {
+        const currentAuthenticatedUser = await Auth.currentAuthenticatedUser();
+        return API.get('exciteAPI', '/lol/checkAccount', {
+            'queryStringParameters': {
+            'summonerName': summonerName,
+            'region': region,
+            'accessToken': currentAuthenticatedUser.signInUserSession.accessToken.jwtToken
+            }
+        }).then(response => {
+            console.log(response.body);
+            if (response.statusCode === 200) {
+                dispatch(setCheckLolAccount(response.body));
+            }
+            return response;
+        });
     }
 }

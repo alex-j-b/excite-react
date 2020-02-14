@@ -75,7 +75,6 @@
 }
 .error-input.log-attempt {
     -webkit-text-stroke: 0.2px;
-    color: red;
 }
 .confirmation-modif {
     display: none;

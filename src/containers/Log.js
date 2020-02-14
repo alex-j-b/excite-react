@@ -234,7 +234,7 @@ function mapDispatchToProps(dispatch) {
             dispatch(logIn(userCredentials));
         }
     }
-};
+}
 function mapStateToProps(reduxState) {
     return {
         authStatus: reduxState.authStatus,
