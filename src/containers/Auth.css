@@ -71,7 +71,7 @@
     display: none;
     margin-left: 8px;
     font-size: 14px;
-    color: red;
+    color: red !important;
 }
 .error-input.log-attempt {
     -webkit-text-stroke: 0.2px;
@@ -259,8 +259,8 @@
     padding: 16px;
 }
 .delete-popup p {
-    margin: 0 !important;
-    font-size: 16px; font-family: 'Raleway', Arial, Helvetica; -webkit-text-stroke: 0.1px;
+    margin: 10px 0 0 0 !important;
+    font-size: 16px; font-family: 'Raleway', Arial, Helvetica; -webkit-text-stroke: 0.2px;
     color: #333333;
 }
 

@@ -49,7 +49,7 @@ class App extends Component {
                 <div className="app-main">
                     <div className="app-header">
                         <Link className="logo-excite" to="/">
-                            <span><span className="purple">E</span>xcite.</span>
+                            <span><span className="purple">E</span>xcite<b>.</b></span>
                         </Link>
                         <NavLink 
                             to={`/${this.props.isLogged ? 'jouer' : 'inscription'}`}
@@ -81,7 +81,7 @@ class App extends Component {
 
                     <div className="app-footer">
                         <Link className="logo-excite" to="/">
-                            <span><span className="purple">E</span>xcite.</span>
+                            <span><span className="purple">E</span>xcite<b>.</b></span>
                         </Link>
                         <Link className="footer-social twitter" to="/">
                             <img src={twitterLogo} alt="twitter-logo"></img>

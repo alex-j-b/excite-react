@@ -381,7 +381,7 @@ class Account extends Component {
                                         &times;
                                     </Link>
                                     <p>Voulez-vous vraiment supprimer <b>définitivement</b> votre compte Excite ?</p>
-                                    <p>⚠ Vous ne pourrez plus recréer de compte avec cet email.</p>
+                                    <p>⚠ Vous ne pourrez plus recréer de compte avec cet email et vos comptes de jeux seront bloqués.</p>
                                     <div className="wrap-buttons">
                                         <button className="yes" type="button" onClick={() => this.props.disableUser()}>Oui</button>
                                         <button className="no" type="button" onClick={this.togglePopUp}>Non</button>

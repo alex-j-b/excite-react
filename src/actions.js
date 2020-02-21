@@ -2,13 +2,16 @@ import { Auth, API } from "aws-amplify";
 import AWS from 'aws-sdk/global';
 
 export const SET_USER = 'SET_USER';
-export const CHECK_LOL_ACCOUNT = 'CHECK_LOL_ACCOUNT';
+export const GET_BETS = 'GET_BETS';
+export const ADD_BET = 'ADD_BET';
+export const CONFIRM_LOL_ACCOUNT = 'CONFIRM_LOL_ACCOUNT';
+export const CONFIRM_FORTNITE_ACCOUNT = 'CONFIRM_FORTNITE_ACCOUNT';
+
 
 const rmvEmptyValues = (obj) => {
     Object.keys(obj).forEach((key) => (obj[key]==='') && delete obj[key]);
     return obj;
 }
-
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////// USER COGNITO ///////////////////////////////////////////////////////////
@@ -31,13 +34,15 @@ export function loggedInCheck() {
             attributes.forEach(el => {
                 user[el.Name] = el.Value;
             });
+            user['custom:ecoin'] = user['custom:ecoin'] ? user['custom:ecoin'] : '500';
 
-            if ('custom:games_account' in user) {
-                user['custom:games_account'] = JSON.parse(user['custom:games_account']);
-            }
-            else {
-                user['custom:games_account'] = {};
-            }
+            const getGameAccounts = await API.get('exciteAPI', '/getGameAccounts');
+            let gameAccounts = {};
+            getGameAccounts.body.forEach(el => {
+                gameAccounts[el.game] = el;
+                delete gameAccounts[el.game].game;
+            });
+            user['game_accounts'] = gameAccounts;
 
             if (user.email_verified === 'true') {
                 dispatch(setUser(user));
@@ -51,7 +56,8 @@ export function loggedInCheck() {
                     error ? console.log(error) : dispatch(setUser("deleteUser"));
                 });
             }
-        } catch (e) {
+        } catch(e) {
+            console.log(e);
             dispatch(setUser("logOut"));
         }
     }
@@ -60,11 +66,22 @@ export function loggedInCheck() {
 export function logIn(userCredentials) {
     return async dispatch => {
         try {
-            const user = await Auth.signIn(userCredentials.email, userCredentials.password);
-            dispatch(setUser(user.attributes));
-        } catch (e) {
+            const userSignIn = await Auth.signIn(userCredentials.email, userCredentials.password);
+            let user = userSignIn.attributes;
+            user['custom:ecoin'] = user['custom:ecoin'] ? user['custom:ecoin'] : '500';
+
+            const getGameAccounts = await API.get('exciteAPI', '/getGameAccounts');
+            let gameAccounts = {};
+            getGameAccounts.body.forEach(el => {
+                gameAccounts[el.game] = el;
+                delete gameAccounts[el.game].game;
+            });
+            user['game_accounts'] = gameAccounts;
+
+            dispatch(setUser(user));
+        } catch(e) {
             console.log(e);
-            dispatch(setUser("errorPassword"))
+            dispatch(setUser("errorPassword"));
         }
     }
 }
@@ -73,8 +90,8 @@ export function logOut() {
     return async dispatch => {
         try {
             await Auth.signOut();
-            dispatch(setUser("logOut"))
-        } catch (e) {
+            dispatch(setUser("logOut"));
+        } catch(e) {
             console.log(e);
         }
     }
@@ -91,8 +108,18 @@ export function updateUser(newAttributes) {
             attributes.forEach(el => {
                 user[el.Name] = el.Value;
             });
+            user['custom:ecoin'] = user['custom:ecoin'] ? user['custom:ecoin'] : '500';
+
+            const getGameAccounts = await API.get('exciteAPI', '/getGameAccounts');
+            let gameAccounts = {};
+            getGameAccounts.body.forEach(el => {
+                gameAccounts[el.game] = el;
+                delete gameAccounts[el.game].game;
+            });
+            user['game_accounts'] = gameAccounts;
+
             dispatch(setUser(user));
-        } catch (e) {
+        } catch(e) {
             console.log(e);
             dispatch(setUser("updateUserFailed"));
         }
@@ -105,7 +132,7 @@ export function updatePassword(oldPassword, newPassword) {
             const currentAuthenticatedUser = await Auth.currentAuthenticatedUser();
             await Auth.changePassword(currentAuthenticatedUser, oldPassword, newPassword);
             dispatch(setUser("confirmationPassword"));
-        } catch (e) {
+        } catch(e) {
             console.log(e);
             dispatch(setUser("errorPassword"));
         }
@@ -131,7 +158,7 @@ export function disableUser() {
             await Auth.updateUserAttributes(currentAuthenticatedUser, {"custom:disabled_account": "true"});
             await Auth.signOut();
             dispatch(setUser("logOut"));
-        } catch (e) {
+        } catch(e) {
             console.log(e);
         }
     }
@@ -142,30 +169,144 @@ export function disableUser() {
 ////////////////////////////////////////////////////////////// GAMES //////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// ---------------- League of Legends ---------------- //
+// -------------------------------- League of Legends -------------------------------- //
 
-export function setCheckLolAccount(body) {
+/* -------------------- ConfirmLolAccount -------------------- */
+export function setConfirmLolAccount(body) {
     return {
-        type: CHECK_LOL_ACCOUNT,
+        type: CONFIRM_LOL_ACCOUNT,
+        body: body
+    };
+}
+export function confirmLolAccount(summonerName, region) {
+    return dispatch => {
+        return API.get('exciteAPI', '/lol/confirmAccount', {
+            'queryStringParameters': {
+                'summonerName': encodeURIComponent(summonerName),
+                'region': region
+            }
+        }).then(response => {
+            console.log(response)
+            if (response.statusCode === 200) {
+                dispatch(setConfirmLolAccount(response.body));
+            }
+            return response;
+        });
+    }
+}
+
+/* -------------------- getLolBets -------------------- */
+export function setGetLolBets(body) {
+    return {
+        type: GET_BETS,
+        actions: {
+            body: body,
+            game: 'leagueoflegends'
+        }
+    };
+}
+export function getLolBets() {
+    return dispatch => {
+        API.get('exciteAPI', '/lol/getBets')
+        .then(response => {
+            if (response.statusCode === 200) {
+                dispatch(setGetLolBets(response.body));
+            }
+        });
+    }
+}
+
+/* -------------------- addLolBet -------------------- */
+export function setAddLolBet(body) {
+    return {
+        type: ADD_BET,
+        actions: {
+            body: body,
+            game: 'leagueoflegends'
+        }
+    };
+}
+export function addLolBet(ecoinBet) {
+    return dispatch => {
+        API.post('exciteAPI', '/lol/addBet', {
+            'body': {
+                'ecoinBet': ecoinBet
+            }
+        }).then(response => {
+            if (response.statusCode === 200) {
+                dispatch(setAddLolBet(response.body));
+            }
+        });
+    }
+}
+
+
+// ------------------------------------ Fortnite ------------------------------------- //
+
+/* -------------------- ConfirmFortniteAccount -------------------- */
+export function setConfirmFortniteAccount(body) {
+    return {
+        type: CONFIRM_FORTNITE_ACCOUNT,
         body
     };
 }
-
-export function checkLolAccount(summonerName, region) {
-    return async dispatch => {
-        const currentAuthenticatedUser = await Auth.currentAuthenticatedUser();
-        return API.get('exciteAPI', '/lol/checkAccount', {
+export function confirmFortniteAccount(accountId) {
+    return dispatch => {
+        return API.get('exciteAPI', '/fortnite/confirmAccount', {
             'queryStringParameters': {
-            'summonerName': summonerName,
-            'region': region,
-            'accessToken': currentAuthenticatedUser.signInUserSession.accessToken.jwtToken
+                'accountId': encodeURIComponent(accountId)
             }
         }).then(response => {
-            console.log(response.body);
+            console.log(response)
             if (response.statusCode === 200) {
-                dispatch(setCheckLolAccount(response.body));
+                dispatch(setConfirmFortniteAccount(response.body));
             }
             return response;
+        });
+    }
+}
+
+/* -------------------- getFortniteBets -------------------- */
+export function setGetFortniteBets(body) {
+    return {
+        type: GET_BETS,
+        actions: {
+            body: body,
+            game: 'fortnite'
+        }
+    };
+}
+export function getFortniteBets() {
+    return dispatch => {
+        API.get('exciteAPI', '/fortnite/getBets')
+        .then(response => {
+            if (response.statusCode === 200) {
+                dispatch(setGetFortniteBets(response.body));
+            }
+        });
+    }
+}
+
+/* -------------------- addFortniteBet -------------------- */
+export function setAddFortniteBet(body) {
+    return {
+        type: ADD_BET,
+        actions: {
+            body: body,
+            game: 'fortnite'
+        }
+    };
+}
+export function addFortniteBet(ecoinBet) {
+    return dispatch => {
+        API.post('exciteAPI', '/fortnite/addBet', {
+            'body': {
+                'ecoinBet': ecoinBet
+            }
+        }).then(response => {
+            if (response.statusCode === 200) {
+                dispatch(setAddFortniteBet(response.body));
+            }
         });
     }
 }
