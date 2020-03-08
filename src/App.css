@@ -126,7 +126,7 @@
         padding: 14vh 0 0 15px;
         background-color: black;
         opacity: 0;
-        transition: opacity 0.4s ease-out; -webkit-transition: opacity 0.3s ease-out;
+        transition: opacity 0.4s ease-out; -webkit-transition: opacity 0.4s ease-out;
     }
 
     /* -------------------- Sections links -------------------- */

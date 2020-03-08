@@ -8,9 +8,12 @@ import { isEqual } from 'lodash';
 import Select from 'react-select';
 import ImageFadeIn from 'react-image-fade-in';
 import DotsLoader from '../components/DotsLoader';
+
 //Images
 import ecoin from "../images/e-coin.png";
 import rocketCrash from "../images/rocket-crash.png";
+
+
 
 
 const ecoinOptions = [
@@ -32,6 +35,7 @@ const CustomSingleValue = ({ data }) => (
 
 export default class RocketLeague extends Component {
     onChange = this.onChange.bind(this);
+    steamUser = this.steamUser.bind(this);
     state = {
         ecoinOption: '5',
         imageReady: true,
@@ -46,8 +50,11 @@ export default class RocketLeague extends Component {
         this.setState({ [name]: value });
     }
 
-    render() {
+    steamUser() {
 
+    }
+
+    render() {
         return (
             <div className="wrap-rocketleague" style={{ display: this.props.display ? 'flex' : 'none' }}>
                 <div className="left">
@@ -56,7 +63,7 @@ export default class RocketLeague extends Component {
                 <div className="right">
                     <h1><span className="purple">R</span>ocket League</h1>
 
-                { true /*'lol' in this.props.user['custom:games_account']*/ ?
+                { false /*'lol' in this.props.user['custom:games_account']*/ ?
                     <>
                     <Select
                         className="select-ecoin"
@@ -104,7 +111,7 @@ export default class RocketLeague extends Component {
                         <p>Veuillez changer votre icon afin de valider votre compte</p>
                     </div>
 
-                    <button>Valider</button>
+                    <button onClick={this.steamUser}>Valider</button>
                     <p className="error-input wrong-pseudo-region">Nom d'invocateur ou région invalide</p>
                     <p className="error-input wrong-icon">Veuillez changer votre icon</p>
                     <DotsLoader loading={this.state.loading}/>

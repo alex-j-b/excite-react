@@ -3,16 +3,22 @@ import React, { Component } from "react";
 import "./Play.css";
 //Redux
 import { connect } from "react-redux";
-import { getLolBets, getFortniteBets } from "../actions";
+import {
+    getLolBets,
+    getFortniteBets,
+    getCsgoBets
+} from "../actions";
+//libs
+import CircleLoader from '../components/CircleLoader';
 //Components
 import LeagueOfLegends from '../components/LeagueOfLegends';
 import Fortnite from '../components/Fortnite';
-import RocketLeague from '../components/RocketLeague';
+import CounterStrike from '../components/CounterStrike';
 //Images
 import authBG from "../images/mystique-statue.jpg";
 import lolLogo from "../images/lol-logo.png";
 import fortniteLogo from "../images/fortnite-logo.png";
-import rocketLogo from "../images/rocket-logo.png";
+import csgoLogo from "../images/csgo-logo.png";
 import historyBlack from "../images/history-black.png";
 import ecoin from "../images/e-coin.png";
 
@@ -37,10 +43,7 @@ class Play extends Component {
                 this.setState({ historyScrollBar: !this.state.historyScrollBar })
             }, 1)
         }
-        this.props.history.push({
-            pathname: '/jouer',
-            search: `?game=${e.target.name}`
-        });
+        this.props.history.push(`/jouer?game=${e.target.name}`);
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -55,20 +58,16 @@ class Play extends Component {
         }
         else if (this.props.isLogged !== prevProps.isLogged) {
             let urlParams = (new URL(document.location)).searchParams;
-            let gameParam = urlParams.get('game');
-            console.log(gameParam)
-            if (gameParam !== null) {
-                this.setState({ tab: gameParam });
+            if (urlParams.get('game') !== null) {
+                this.setState({ tab: urlParams.get('game') });
             }
             else {
                 this.setState({ tab: 'leagueoflegends' });
-                this.props.history.push({
-                    pathname: '/jouer',
-                    search: '?game=leagueoflegends'
-                });
+                this.props.history.push('/jouer?game=leagueoflegends');
             }
             this.props.getLolBets();
             this.props.getFortniteBets();
+            this.props.getCsgoBets();
         }
         if (!this.state.imageReady) this.setState({ imageReady: true });
     }
@@ -79,20 +78,16 @@ class Play extends Component {
         }
         else if (this.props.isLogged) {
             let urlParams = (new URL(document.location)).searchParams;
-            let gameParam = urlParams.get('game');
-            console.log(gameParam)
-            if (gameParam !== null) {
-                this.setState({ tab: gameParam });
+            if (urlParams.get('game') !== null) {
+                this.setState({ tab: urlParams.get('game') });
             }
             else {
                 this.setState({ tab: 'leagueoflegends' });
-                this.props.history.push({
-                    pathname: '/jouer',
-                    search: '?game=leagueoflegends'
-                });
+                this.props.history.push('/jouer?game=leagueoflegends');
             }
             this.props.getLolBets();
             this.props.getFortniteBets();
+            this.props.getCsgoBets();
         }
     }
 
@@ -101,20 +96,17 @@ class Play extends Component {
             return (
                 <div className={`item ${el.status}`} key={el.betId}>
                     <div className="wrap-date-game">
-                        <span>{el.date}</span>
+                        <span className="number">{el.date}</span>
                         <span>{el.game}</span>
                     </div>
                     <div className="wrap-bet-result">
                         <span>{el.goal}</span>
-                        <span>{el.message + el.ecoinBet} <img className="ecoin" src={ecoin} alt="ecoin"></img></span>
+                        <span className="number">{el.message + el.ecoinBet} <img className="ecoin" src={ecoin} alt="ecoin"></img></span>
                     </div>
                 </div>
             );
         });
-        betsHistoryList = [];
-        if (betsHistoryList.length === 0) {
-            betsHistoryList = <span>Aucun pari pour l'instant</span>;
-        }
+        if (betsHistoryList.length === 0) betsHistoryList = <span>Aucun pari pour l'instant</span>;
 
         return (
             <div className="play" style={{ backgroundImage: `url(${authBG})` }}>
@@ -139,18 +131,19 @@ class Play extends Component {
                             onClick={this.switchTab}
                         ></button>
                         <button
-                            className="rocket-button" 
+                            className="csgo-button" 
                             style={{
-                                backgroundImage: `url(${rocketLogo})`,
-                                backgroundColor: `${this.state.tab === 'rocketleague' ? '#f9f9f9' : 'transparent'}`
+                                filter: `${this.state.tab === 'counterstrikego' ? '' : 'invert(100%)'}`,
+                                backgroundImage: `url(${csgoLogo})`,
+                                backgroundColor: `${this.state.tab === 'counterstrikego' ? '#f9f9f9' : 'transparent'}`
                             }}
-                            name="rocketleague"
+                            name="counterstrikego"
                             onClick={this.switchTab}
                         ></button>
 
                         { this.props.isLogged && 
-                            <div>
-                                <span><label className="ecoin-label">E-coins : </label>{this.props.user['custom:ecoin']}</span>
+                            <div className="wallet-ecoin">
+                                <span><label>E-coins : </label><span className="number">{this.props.user['custom:ecoin']}</span></span>
                                 <img className="ecoin" src={ecoin} alt="ecoin"></img>
                             </div>
                         }
@@ -167,6 +160,7 @@ class Play extends Component {
                         ></button>
                     </div>
 
+                    <CircleLoader loading={!this.props.isLogged}/>
                     { this.props.isLogged &&
                         <>
                         <div className="wrap-games" style={{ display: this.state.tab !== 'history' ? 'flex' : 'none' }}>
@@ -180,12 +174,13 @@ class Play extends Component {
                                 imageReady={this.state.imageReady}
                                 accountConfirmed={this.props.isLogged && 'fortnite' in this.props.user['game_accounts']}
                             />
-                            <RocketLeague
-                                display={this.state.tab === 'rocketleague'}
+                            <CounterStrike
+                                display={this.state.tab === 'counterstrikego'}
                                 imageReady={this.state.imageReady}
+                                accountConfirmed={this.props.isLogged && 'counterstrikego' in this.props.user['game_accounts']}
                             />
                         </div>
-                        
+
                         <div
                             className="history"
                             style={{
@@ -211,6 +206,9 @@ function mapDispatchToProps(dispatch) {
         },
         getFortniteBets: function () {
             dispatch(getFortniteBets());
+        },
+        getCsgoBets: function () {
+            dispatch(getCsgoBets());
         }
     }
 }

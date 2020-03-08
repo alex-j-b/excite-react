@@ -2,6 +2,7 @@ import {
     SET_USER,
     CONFIRM_LOL_ACCOUNT,
     CONFIRM_FORTNITE_ACCOUNT,
+    CONFIRM_CSGO_ACCOUNT,
     GET_BETS,
     ADD_BET
 } from './actions';
@@ -20,6 +21,16 @@ export default function refresh(state = DEFAULT_STATE, action = {}) {
     let newStateUser = Object.assign({}, newState.user);
     let newStateBetsHistory = [...newState.betsHistory];
     let newStatePendingBets = Object.assign({}, newState.pendingBets);
+
+    const displayGameFunc = (game) => {
+        return ({
+            leagueoflegends: 'League of legends',
+            fortnite: 'Fortnite',
+            counterstrikego: 'Counter Strike'
+        })[action.actions.game] || 'undefined';
+    } 
+
+
     switch(action.type) {
 
         case SET_USER:
@@ -79,14 +90,25 @@ export default function refresh(state = DEFAULT_STATE, action = {}) {
             };
 
 
+        case CONFIRM_CSGO_ACCOUNT:
+            const csgoAccount = action.body;
+            newStateUser['game_accounts'].counterstrikego = csgoAccount;
+            delete newStateUser['game_accounts'].counterstrikego.game;
+
+            return {
+                ...newState,
+                user: newStateUser
+            };
+
+
         case GET_BETS:
-            let getBets = action.actions.body;
-            let getGame = ({leagueoflegends: 'League of legends', fortnite: 'Fortnite'})[action.actions.game] || 'undefined';
+            const getBets = action.actions.body;
+            const displayGame1 = displayGameFunc(action.actions.game);
             let betPending = false;
             let allTimestamps = newStateBetsHistory.map(bet => bet.timestamp);
 
             getBets.forEach(el => {
-                el.game = getGame;
+                el.game = displayGame1;
                 el.message = ({win: 'Victoire +', lost: 'Défaite -'})[el.status] || 'En cours... ';
                 let date = new Date(el.timestamp);
                 let month = date.getMonth()+1 > 9 ? date.getMonth()+1 : '0' + (date.getMonth()+1).toString();
@@ -125,9 +147,9 @@ export default function refresh(state = DEFAULT_STATE, action = {}) {
 
         case ADD_BET:
             let newBet = action.actions.body;
-            const addGame = ({leagueoflegends: 'League of legends', fortnite: 'Fortnite'})[action.actions.game] || 'undefined';
+            const displayGame2 = displayGameFunc(action.actions.game);
 
-            newBet.game = addGame;
+            newBet.game = displayGame2;
             newBet.message = ({win: 'Victoire +', lost: 'Défaite -'})[newBet.status] || 'En cours... ';
             let date = new Date(newBet.timestamp);
             let month = date.getMonth()+1 > 9 ? date.getMonth()+1 : '0' + (date.getMonth()+1).toString();

@@ -43,36 +43,30 @@
 /* -------------------- Form title -------------------- */
 .auth form > span {
     width: 92vw; max-width: 460px;
-    margin: 42px 4vw 0 4vw;
+    margin: 40px 0 0 0;
     font-size: 24px; -webkit-text-stroke: 0.75px; text-align: center;
 }
 
 /* -------------------- Legal and Redirection -------------------- */
-.auth p {
+.auth .manual-redirection {
     margin: 10px 0 0 0;
     font-size: 14px; text-align: center;
     color: grey;
 }
 
-.manual-redirection a {
+.auth .manual-redirection a {
     color: grey !important;
     text-decoration: underline !important;
 }
-.manual-redirection.forgot a {
+.auth .manual-redirection.forgot a {
     text-decoration: none !important;
 }
-.manual-redirection a:hover {
+.auth .manual-redirection a:hover {
     color: black !important;
     text-decoration: underline !important;
 }
 
 /* -------------------- Notifs -------------------- */
-.error-input {
-    display: none;
-    margin-left: 8px;
-    font-size: 14px;
-    color: red !important;
-}
 .error-input.log-attempt {
     -webkit-text-stroke: 0.2px;
 }
@@ -93,25 +87,10 @@
     font-size: 18px; -webkit-text-stroke: 0.4px;
 }
 
-.auth input {
-    width: 100%;
-    padding: 10px 12px;
-    margin-bottom: 5px;
-    border: 1px solid #cdcdcd;
-    font-size: 16px; font-family: 'Raleway', Arial;
-}
-.auth input::placeholder {
-    font-size: 14px; font-family: 'Raleway', Arial;
-}
-.auth input:focus {
-    background-color: rgb(255, 251, 255);
-}
-
 /* -------------------- Birth inputs -------------------- */
 .wrap-birth-inputs {
     display: flex;
     width: 100%;
-    font-size: 16px; font-family: 'Raleway', Arial;
 }
 .day {
     flex-basis: 15%;
@@ -150,22 +129,6 @@
 #phone-form-control {
     height: 40px;
     font-size: 16px !important; font-family: 'Raleway', Arial !important;
-}
-
-/* -------------------- Button -------------------- */
-.auth button {
-    width: fit-content;
-    padding: 12px 26px 12px 26px;
-    margin: 30px 0 10px 0;
-    border: 1px solid;
-    background-color: rgb(80, 0, 80);
-    font-size: 22px; font-family: "Lato", Arial; -webkit-text-stroke: 0.1px;
-    color: white;
-    -webkit-transition-duration: 0.45s; transition-duration: 0.45s;
-}
-.auth button:hover, .auth button:active {
-    color: rgb(100, 0, 100);
-    background-color: white;
 }
 
 /* //////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
@@ -223,25 +186,32 @@
 .auth.account form cite {
     font-style: normal;
 }
-.auth.account form p {
-    margin-top: 25px;
-}
 .auth.account form p > a {
+    font-size: 12px;
     text-decoration: none !important;
 }
 .auth.account form p > a:hover {
     text-decoration: underline !important;
 }
 
-
+/* -------------------- Bottom wrap -------------------- */
 .wrap-account-buttons {
     display: flex; align-items: center;
 }
+.auth.account .wrap-account-buttons > div {
+    display: flex; flex-direction: column; align-items: center;
+    width: fit-content;
+    margin: 0 0 0 0;
+}
+.auth.account .wrap-account-buttons > div:first-child {
+    margin-right: 238px;
+}
+
 /* -------------------- Logout button -------------------- */
 .auth.account .log-out {
     height: fit-content;
     padding: 10px 15px 10px 15px;
-    margin: 0 238px 0 0;
+    margin: 20px 0 5px 0;
     border: 1px solid #e60000;
     background-color: transparent;
     color: #e60000;
@@ -306,7 +276,6 @@
 /* //////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
 
 @media screen and (max-width: 780px) {
-
     .auth form {
         padding-bottom: 40px !important;
     }
@@ -345,22 +314,24 @@
         flex-direction: column;
     }
     .auth.account .wrap-account-buttons > div {
-        flex-direction: column;
-        margin-bottom: 30px;
+        margin: 0 0 0 0;
+    }
+    .auth.account .wrap-account-buttons > div:first-child {
+        margin: 0 0 30px 0;
+        order: 1;
     }
     .auth.account button {
+        margin: 25px 0 8px 0;
         padding: 11px 26px 11px 26px;
         font-size: 20px;
     }
-    /* ------ Account delete button ------ */
+    /* ------ Account logout button ------ */
     .auth.account .log-out {
         padding: 10px 15px 10px 15px;
-        margin: 0 0 50px 0;
         border: 1px solid #e60000;
         background-color: transparent;
         color: #e60000;
         font-size: 14px;
-        order: 2;
     }
     .auth.account .log-out:hover, .auth.account .log-out:active {
         color: white;

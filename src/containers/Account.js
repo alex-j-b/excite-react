@@ -367,6 +367,17 @@ class Account extends Component {
                                 onChange={this.onChange}
                                 value={this.state.newPasswordRepeat}
                             ></input>
+                        </div>
+                    </div>
+
+                    <div className="wrap-account-buttons">
+                        <div>
+                            <button 
+                                className="log-out"
+                                type="button"
+                                onClick={() => this.props.logOut()}
+                                >Déconnexion
+                            </button>
 
                             <p className="manual-redirection" onClick={this.togglePopUp}>
                                 <Link to="#">Supprimer mon compte</Link>
@@ -389,15 +400,7 @@ class Account extends Component {
                                 </div>
                             </Popup>
                         </div>
-                    </div>
 
-                    <div className="wrap-account-buttons">
-                        <button 
-                            className="log-out"
-                            type="button"
-                            onClick={() => this.props.logOut()}
-                            >Déconnexion
-                        </button>
                         <div>
                             <button>Valider</button>
                             <DotsLoader loading={this.state.loading}/>

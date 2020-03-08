@@ -6,6 +6,7 @@ export const GET_BETS = 'GET_BETS';
 export const ADD_BET = 'ADD_BET';
 export const CONFIRM_LOL_ACCOUNT = 'CONFIRM_LOL_ACCOUNT';
 export const CONFIRM_FORTNITE_ACCOUNT = 'CONFIRM_FORTNITE_ACCOUNT';
+export const CONFIRM_CSGO_ACCOUNT = 'CONFIRM_CSGO_ACCOUNT';
 
 
 const rmvEmptyValues = (obj) => {
@@ -169,9 +170,9 @@ export function disableUser() {
 ////////////////////////////////////////////////////////////// GAMES //////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// -------------------------------- League of Legends -------------------------------- //
+// ----------------//---------------- League of Legends ----------------//---------------- //
 
-/* -------------------- ConfirmLolAccount -------------------- */
+/* ----------------- ConfirmLolAccount ----------------- */
 export function setConfirmLolAccount(body) {
     return {
         type: CONFIRM_LOL_ACCOUNT,
@@ -195,7 +196,7 @@ export function confirmLolAccount(summonerName, region) {
     }
 }
 
-/* -------------------- getLolBets -------------------- */
+/* -------------------- getLolBets --------------------- */
 export function setGetLolBets(body) {
     return {
         type: GET_BETS,
@@ -216,7 +217,7 @@ export function getLolBets() {
     }
 }
 
-/* -------------------- addLolBet -------------------- */
+/* --------------------- addLolBet --------------------- */
 export function setAddLolBet(body) {
     return {
         type: ADD_BET,
@@ -241,9 +242,9 @@ export function addLolBet(ecoinBet) {
 }
 
 
-// ------------------------------------ Fortnite ------------------------------------- //
+// -------------------//----------------- Fortnite -------------------//------------------ //
 
-/* -------------------- ConfirmFortniteAccount -------------------- */
+/* ------------- ConfirmFortniteAccount --------------- */
 export function setConfirmFortniteAccount(body) {
     return {
         type: CONFIRM_FORTNITE_ACCOUNT,
@@ -266,7 +267,7 @@ export function confirmFortniteAccount(accountId) {
     }
 }
 
-/* -------------------- getFortniteBets -------------------- */
+/* ------------------ getFortniteBets ------------------ */
 export function setGetFortniteBets(body) {
     return {
         type: GET_BETS,
@@ -287,7 +288,7 @@ export function getFortniteBets() {
     }
 }
 
-/* -------------------- addFortniteBet -------------------- */
+/* ------------------- addFortniteBet ------------------- */
 export function setAddFortniteBet(body) {
     return {
         type: ADD_BET,
@@ -306,6 +307,79 @@ export function addFortniteBet(ecoinBet) {
         }).then(response => {
             if (response.statusCode === 200) {
                 dispatch(setAddFortniteBet(response.body));
+            }
+        });
+    }
+}
+
+
+// ----------------//---------------- Counter Strike -------------------//------------- //
+
+/* ----------------- ConfirmCsgoAccount ------------------- */
+export function setConfirmCsgoAccount(body) {
+    return {
+        type: CONFIRM_CSGO_ACCOUNT,
+        body: body
+    };
+}
+export function confirmCsgoAccount(steamId64, authenticationCode, lastMatchToken) {
+    return dispatch => {
+        return API.get('exciteAPI', '/csgo/confirmAccount', {
+            'queryStringParameters': {
+                'steamId64': steamId64,
+                'authenticationCode': authenticationCode,
+                'lastMatchToken': lastMatchToken
+            }
+        }).then(response => {
+            console.log(response)
+            if (response.statusCode === 200) {
+                dispatch(setConfirmCsgoAccount(response.body));
+            }
+            return response;
+        });
+    }
+}
+
+/* ------------------ getCsgoBets ------------------ */
+export function setGetCsgoBets(body) {
+    return {
+        type: GET_BETS,
+        actions: {
+            body: body,
+            game: 'counterstrikego'
+        }
+    };
+}
+export function getCsgoBets() {
+    return dispatch => {
+        API.get('exciteAPI', '/csgo/getBets')
+        .then(response => {
+            if (response.statusCode === 200) {
+                dispatch(setGetCsgoBets(response.body));
+            }
+        });
+    }
+}
+
+/* ------------------- addCsgoBet ------------------- */
+export function setAddCsgoBet(body) {
+    return {
+        type: ADD_BET,
+        actions: {
+            body: body,
+            game: 'counterstrikego'
+        }
+    };
+}
+export function addCsgoBet(ecoinBet) {
+    return dispatch => {
+        API.post('exciteAPI', '/csgo/addBet', {
+            'body': {
+                'ecoinBet': ecoinBet
+            }
+        }).then(response => {
+            if (response.statusCode === 200) {
+                dispatch(setAddCsgoBet(response.body));
             }
         });
     }

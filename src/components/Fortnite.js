@@ -27,7 +27,7 @@ const ecoinOptions = [
 const CustomSingleValue = ({ data }) => (
     <div className="input-select">
         <div className="input-select__single-value">
-            <span>{data.label}</span>
+            <span className="number">{data.label}</span>
             <span className="input-select__icon"><img className="ecoin" src={ecoin} alt="ecoin"></img></span>
         </div>
     </div>
@@ -36,11 +36,14 @@ const CustomSingleValue = ({ data }) => (
 
 class Fortnite extends Component {
     onChange = this.onChange.bind(this);
+    handleEnter = this.handleEnter.bind(this);
+    selectChange = this.selectChange.bind(this);
     confirmFortniteAccount = this.confirmFortniteAccount.bind(this);
     addFortniteBet = this.addFortniteBet.bind(this);
     state = {
         ecoinOption: '5',
         fortniteId: '',
+        defaultEcoinOption: undefined,
         betIsPending: false,
         loading: false
     }
@@ -55,21 +58,15 @@ class Fortnite extends Component {
 
     confirmFortniteAccount() {
         const { fortniteId } = this.state;
+        this.refs.errorInputId.style.display = "none";
         if (fortniteId === '') {
-            document.querySelector('.error-input.wrong-pseudo-region').style.display = "inline";
+            this.refs.errorInputId.style.display = "inline";
         }
         else {
             this.setState({ loading: true });
             this.props.confirmFortniteAccount(fortniteId).then(response => {
                 this.setState({ loading: false });
-                if (response.statusCode === 500) {
-                    if (response.body.error === 'error bad profileIconId') {
-                        document.querySelector('.error-input.wrong-icon').style.display = "inline";
-                    }
-                    else {
-                        document.querySelector('.error-input.wrong-pseudo-region').style.display = "inline";
-                    }
-                }
+                if (response.statusCode === 500) this.refs.errorInputId.style.display = "inline";
             });
         }
     }
@@ -79,17 +76,34 @@ class Fortnite extends Component {
         this.props.addFortniteBet(this.state.ecoinOption);
     }
 
+    handleEnter(e) {
+        if (this.props.display && e.keyCode === 13) {
+            if (this.props.accountConfirmed) {
+                this.addFortniteBet();
+            }
+            else {
+                this.confirmFortniteAccount();
+            }
+        }
+    }
+
     componentDidUpdate(prevProps) {
         const prevBets = prevProps.pendingBets;
         const thisBets = this.props.pendingBets;
         if (!isEqual(prevBets, thisBets)) {
             if ("fortnite" in thisBets && !isEqual(prevBets.fortnite, thisBets.fortnite)) {
-                this.setState({ loading: false, betIsPending: true });
+                const ecoinValue = this.props.pendingBets.fortnite.ecoinBet.toString();
+                const optionIndex = ecoinOptions.findIndex(option => option.value === ecoinValue);
+                this.setState({
+                    loading: false,
+                    betIsPending: true,
+                    defaultEcoinOption: ecoinOptions[optionIndex]
+                });
                 this.refs.buttonFortniteBet.disabled = true;
                 this.refs.notifFortniteBet.style.display = 'inline';
                 const countDown = () => {
                     const timestamp = thisBets.fortnite.timestamp;
-                    const timeRemaining = 1800 - ((Date.now() - timestamp) / 1000);
+                    const timeRemaining = 600 - ((Date.now() - timestamp) / 1000);
                     if (timeRemaining < 0) {
                         this.refs.notifFortniteBet.innerHTML = 'Pari en cours...';
                     }
@@ -108,7 +122,7 @@ class Fortnite extends Component {
                 }, 60000);
             }
             else if ("fortnite" in prevBets && !("fortnite" in thisBets)) {
-                this.setState({ betIsPending: false });
+                this.setState({ betIsPending: false, defaultEcoinOption: undefined });
                 this.props.loggedInCheck();
                 this.refs.buttonFortniteBet.disabled = false;
                 this.refs.notifFortniteBet.style.display = 'none';
@@ -120,12 +134,18 @@ class Fortnite extends Component {
     componentDidMount() {
         const thisBets = this.props.pendingBets;
         if ("fortnite" in thisBets) {
-            this.setState({ loading: false, betIsPending: true });
+            const ecoinValue = this.props.pendingBets.fortnite.ecoinBet.toString();
+            const optionIndex = ecoinOptions.findIndex(option => option.value === ecoinValue);
+            this.setState({
+                loading: false,
+                betIsPending: true,
+                defaultEcoinOption: ecoinOptions[optionIndex]
+            });
             this.refs.buttonFortniteBet.disabled = true;
             this.refs.notifFortniteBet.style.display = 'inline';
             const countDown = () => {
                 const timestamp = thisBets.fortnite.timestamp;
-                const timeRemaining = 1800 - ((Date.now() - timestamp) / 1000);
+                const timeRemaining = 600 - ((Date.now() - timestamp) / 1000);
                 if (timeRemaining < 0) {
                     this.refs.notifFortniteBet.innerHTML = 'Pari en cours...';
                 }
@@ -143,6 +163,7 @@ class Fortnite extends Component {
                 this.props.getFortniteBets();
             }, 60000);
         }
+        document.addEventListener("keydown", this.handleEnter, false);
     }
 
     componentWillUnmount() {
@@ -151,23 +172,25 @@ class Fortnite extends Component {
             this.refs.notifFortniteBet.style.display = 'none';
             clearInterval(window.intervalFortniteBet);
         }
+        document.removeEventListener("keydown", this.handleEnter, false);
     }
 
     render() {
         return (
             <div className="wrap-fortnite" style={{ display: this.props.display ? 'flex' : 'none' }}>
                 <div className="left">
-                    {this.props.imageReady && <ImageFadeIn src={fortniteChar} />}
+                    { this.props.imageReady && <ImageFadeIn src={fortniteChar} /> }
                 </div>
                 <div className="right">
                     <h1><span className="purple">F</span>ortnite</h1>
 
-                    {this.props.accountConfirmed ?
+                    { this.props.accountConfirmed ?
                         <>
                             <Select
                                 className="select-ecoin"
                                 options={ecoinOptions}
                                 defaultValue={ecoinOptions[0]}
+                                value={this.state.defaultEcoinOption}
                                 components={{ SingleValue: CustomSingleValue }}
                                 blurInputOnSelect={true}
                                 isSearchable={false}
@@ -175,17 +198,23 @@ class Fortnite extends Component {
                                 onChange={obj => this.selectChange('ecoinOption', obj.value)}
                             />
                             <div>
-                                <span className="goal-price">Finir top 10 en BL solo : {this.state.ecoinOption * 2}</span>
-                                <img className="ecoin" src={ecoin} alt="ecoin"></img>
+                                <span className="goal-price">Finir top 10 en Battle Royal solo : <span className="number">{this.state.ecoinOption * 2}</span>
+                                    <img className="ecoin" src={ecoin} alt="ecoin"></img>
+                                </span>
                             </div>
                             <button ref="buttonFortniteBet" onClick={this.addFortniteBet}>Parier</button>
-                            <p ref="notifFortniteBet" className="notif">Pari en cours... il vous reste <span ref="countDown"></span> pour finir top 10</p>
+                            <p ref="notifFortniteBet" className="notif">
+                                Pari en cours... il vous reste&nbsp;
+                                <span ref="countDown"></span>
+                                &nbsp;pour rejoindre une partie
+                            </p>
                             <DotsLoader loading={this.state.loading} />
                         </>
                         :
                         <>
-                            <div className="confirm-game-account">
+                            <div className="confirm-inputs">
                                 <div>
+                                <p>(PC, xbox et ps4 seulement)</p>
                                     <label htmlFor="fortniteId">
                                         <span>ID de votre compte</span>
                                     </label>
@@ -201,15 +230,14 @@ class Fortnite extends Component {
                                 </div>
                             </div>
 
-                            <div className="confirm-account">
+                            <div className="confirm-instructions">
                                 <p>L'ID de votre compte se trouve sur le site d'epic games :
-                            <a href="https://www.epicgames.com/account/personal" target="_blank" rel="noopener noreferrer">epicgames.com/account...</a>
+                                    <a href="https://www.epicgames.com/account/personal" target="_blank" rel="noopener noreferrer"> epicgames.com/account...</a>
                                 </p>
                             </div>
 
                             <button onClick={this.confirmFortniteAccount}>Valider</button>
-                            <p className="error-input wrong-pseudo-region">Nom d'invocateur ou région invalide</p>
-                            <p className="error-input wrong-icon">Veuillez changer votre icon</p>
+                            <p ref="errorInputId" className="error-input wrong-id">ID de compte invalide</p>
                             <DotsLoader loading={this.state.loading} />
                         </>
                     }

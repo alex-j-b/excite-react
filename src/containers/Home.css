@@ -27,23 +27,15 @@
     margin-top: -40px;
 }
 .home-1 div > p {
-    font-size: 85px; font-family: "Poppins", Arial; -webkit-text-stroke: 3px;
+    font-size: 85px; font-family: 'Poppins', Arial; -webkit-text-stroke: 3px;
     line-height: 134%;
     color: white;
 }
 .home-1 div > button {
-    width: fit-content;
     padding: 14px 60px 14px 60px;
     margin-top: 50px;
-    font-size: 36px; font-family: "Lato", Arial; -webkit-text-stroke: 0.5px;
-    color: white;
-    background-color: rgb(80, 0, 80);
+    font-size: 36px; -webkit-text-stroke: 0.5px;
     border: none; border-radius: 100px;
-    -webkit-transition-duration: 0.45s; transition-duration: 0.45s;
-}
-.home-1 div > button:hover, .home-1 div > button:active {
-    color: rgb(80, 0, 80);
-    background-color: white;
 }
 
 /* //////////////////////////////////////// HOME 2 //////////////////////////////////////// */

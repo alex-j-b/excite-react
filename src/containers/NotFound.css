@@ -3,31 +3,31 @@
 /* /////////////////////////////////////////////// GENERAL DESKTOP //////////////////////////////////////////////// */
 /* //////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
 
-.NotFound {
+.not-found {
     display: flex; flex-direction: column; align-items: center;
     min-height: calc(100vh - 160px);
     background-position: center;
     font-family: 'Poppins', Arial; -webkit-text-stroke: 0.1px;
 }
 
-.NotFound span {
+.not-found span {
     font-size: 38px;
     color: white;
     margin-bottom: 60px;
     -webkit-text-stroke: 0.5px;
 }
-.NotFound span:first-child {
+.not-found span:first-child {
     font-size: 90px;
     color: white;
     margin: 80px 0 0 0;
 }
 
-.NotFound img {
+.not-found img {
     height: 250px;
     margin-bottom: 15px;
 }
 
-.NotFound a {
+.not-found a {
     font-size: 30px;
     color: white !important;
     text-decoration: underline !important;
@@ -35,31 +35,31 @@
 
 
 /* //////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
-/* ///////////////////////////////////////////// PLAY UNDER 750 /////////////////////////////////////////////// */
+/* ///////////////////////////////////////////// PLAY UNDER 700 /////////////////////////////////////////////// */
 /* //////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
 
 @media screen and (max-width: 700px) {
-    .NotFound {
+    .not-found {
         min-height: 650px;
         font-family: 'Poppins', Arial; -webkit-text-stroke: 0.1px;
     }
     
-    .NotFound span {
+    .not-found span {
         font-size: 30px;
         margin-bottom: 40px;
         -webkit-text-stroke: 0.5px;
     }
-    .NotFound span:first-child {
+    .not-found span:first-child {
         font-size: 75px;
         margin: 35px 0 0 0;
     }
     
-    .NotFound img {
+    .not-found img {
         height: 180px;
         margin-bottom: 15px;
     }
     
-    .NotFound a {
+    .not-found a {
         font-size: 22px;
     }
 }

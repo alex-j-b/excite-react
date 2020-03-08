@@ -9,7 +9,7 @@ import teemo from "../images/teemo.png";
 export default class Play extends Component {
     render() {
         return (
-            <div className="NotFound" style={{ backgroundImage: `url(${forestBG})` }}>
+            <div className="not-found" style={{ backgroundImage: `url(${forestBG})` }}>
                 <span>404</span>
                 <span>Page introuvable.</span>
                 <img src={teemo} alt="teemo"></img>

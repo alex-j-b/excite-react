@@ -57,7 +57,7 @@ class App extends Component {
                             >Jouer
                         </NavLink>
                         {this.props.isLogged && <NavLink to="/mon-compte" activeClassName="current-route">Mon Compte</NavLink>}
-                        <NavLink to="/connexion" activeClassName="current-route">Boutique</NavLink>
+                        <NavLink to="/boutique" activeClassName="current-route">Boutique</NavLink>
                         <NavLink to="/faq" activeClassName="current-route">FAQ</NavLink>
                         <NavLink to="/contact" activeClassName="current-route">Contact</NavLink>
                         <HamburgerSqueeze
