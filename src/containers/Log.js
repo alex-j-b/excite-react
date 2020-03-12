@@ -154,7 +154,7 @@ class Log extends Component {
                         <p className="error-input log-attempt">Mot de passe ou email invalide</p>
 
                         <div>
-                            <button>Connexion</button>
+                            <button className="e-button">Connexion</button>
                             <DotsLoader loading={this.state.loading}/>
                         </div>
                     </form>
@@ -218,7 +218,7 @@ class Log extends Component {
                         }
 
                         <div>
-                            <button>Envoyer</button>
+                            <button className="e-button">Envoyer</button>
                             <DotsLoader loading={this.state.loading}/>
                         </div>
                     </form>

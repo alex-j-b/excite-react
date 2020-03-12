@@ -62,6 +62,7 @@ class App extends Component {
                         <NavLink to="/contact" activeClassName="current-route">Contact</NavLink>
                         <HamburgerSqueeze
                             className="hamburger"
+                            style={{ height: 'auto' }}
                             isActive={this.state.phoneMenuActive}
                             toggleButton={this.toggleButton}
                             buttonColor="transparent"

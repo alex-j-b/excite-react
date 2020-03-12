@@ -230,7 +230,7 @@ class LeagueOfLegends extends Component {
                                 <span className="goal-price">Gagne une partie classée : <span className="number">{this.state.ecoinOption * 2}</span></span>
                                 <img className="ecoin" src={ecoin} alt="ecoin"></img>
                             </div>
-                            <button ref="buttonLolBet" onClick={this.addLolBet}>Parier</button>
+                            <button className="e-button" ref="buttonLolBet" onClick={this.addLolBet}>Parier</button>
                             <p ref="notifLolBet" className="notif">
                                 Pari en cours... il vous reste&nbsp;
                                 <span ref="countDown"></span>&nbsp;
@@ -276,7 +276,7 @@ class LeagueOfLegends extends Component {
                                 <p>Veuillez changer votre icon afin de valider votre compte</p>
                             </div>
 
-                            <button onClick={this.confirmLolAccount}>Valider</button>
+                            <button className="e-button" onClick={this.confirmLolAccount}>Valider</button>
                             <p ref="errorInputPseudo" className="error-input wrong-pseudo-region">Nom d'invocateur ou région invalide</p>
                             <p ref="errorInputIcon" className="error-input wrong-icon">Veuillez changer votre icon</p>
                             <DotsLoader loading={this.state.loading} />

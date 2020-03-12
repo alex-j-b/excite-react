@@ -4,7 +4,13 @@ import {
     CONFIRM_FORTNITE_ACCOUNT,
     CONFIRM_CSGO_ACCOUNT,
     GET_BETS,
-    ADD_BET
+    ADD_BET,
+    GET_SHOP_ARTICLES,
+    ADD_CART,
+    DELETE_CART,
+    GET_CART,
+    ADD_COMMAND,
+    GET_COMMAND
 } from './actions';
 
 const DEFAULT_STATE = {
@@ -13,7 +19,10 @@ const DEFAULT_STATE = {
     user: {},
     forceUpdate: 0,
     betsHistory: [],
-    pendingBets: {}
+    pendingBets: {},
+    shopArticles: [],
+    cartArticles: [],
+    commandArticles: []
 }
 
 export default function refresh(state = DEFAULT_STATE, action = {}) {
@@ -21,6 +30,7 @@ export default function refresh(state = DEFAULT_STATE, action = {}) {
     let newStateUser = Object.assign({}, newState.user);
     let newStateBetsHistory = [...newState.betsHistory];
     let newStatePendingBets = Object.assign({}, newState.pendingBets);
+    let newStateCart = [...newState.cartArticles];
 
     const displayGameFunc = (game) => {
         return ({
@@ -28,7 +38,21 @@ export default function refresh(state = DEFAULT_STATE, action = {}) {
             fortnite: 'Fortnite',
             counterstrikego: 'Counter Strike'
         })[action.actions.game] || 'undefined';
-    } 
+    }
+
+    const timestampToDate = (timestamp) => {
+        let date = new Date(timestamp);
+        let day = date.getDate() > 9 ? date.getDate() : '0' + (date.getDate()).toString();
+        let month = date.getMonth()+1 > 9 ? date.getMonth()+1 : '0' + (date.getMonth()+1).toString();
+        let min = date.getMinutes() > 9 ? date.getMinutes() : '0' + (date.getMinutes()).toString();
+        let year = date.getFullYear().toString().substr(2);
+
+        return `${day}/${month}/${year} à ${date.getHours()}h${min}`;
+    }
+
+
+
+
 
 
     switch(action.type) {
@@ -110,10 +134,7 @@ export default function refresh(state = DEFAULT_STATE, action = {}) {
             getBets.forEach(el => {
                 el.game = displayGame1;
                 el.message = ({win: 'Victoire +', lost: 'Défaite -'})[el.status] || 'En cours... ';
-                let date = new Date(el.timestamp);
-                let month = date.getMonth()+1 > 9 ? date.getMonth()+1 : '0' + (date.getMonth()+1).toString();
-                let min = date.getMinutes() > 9 ? date.getMinutes() : '0' + (date.getMinutes()).toString();
-                el.date = `${date.getFullYear()}/${month}/${date.getDate()} à ${date.getHours()}h${min}`;
+                el.date = timestampToDate(el.timestamp);
 
                 if (allTimestamps.includes(el.timestamp)) {
                     const oldIndex = newStateBetsHistory.findIndex(bet => bet.timestamp === el.timestamp);
@@ -151,9 +172,7 @@ export default function refresh(state = DEFAULT_STATE, action = {}) {
 
             newBet.game = displayGame2;
             newBet.message = ({win: 'Victoire +', lost: 'Défaite -'})[newBet.status] || 'En cours... ';
-            let date = new Date(newBet.timestamp);
-            let month = date.getMonth()+1 > 9 ? date.getMonth()+1 : '0' + (date.getMonth()+1).toString();
-            newBet.date = `${date.getFullYear()}/${month}/${date.getDate()} à ${date.getHours()}h${date.getMinutes()}`;
+            newBet.date = timestampToDate(newBet.timestamp);
 
             newStateBetsHistory.unshift(newBet);
             newStatePendingBets[action.actions.game] = newBet;
@@ -166,6 +185,85 @@ export default function refresh(state = DEFAULT_STATE, action = {}) {
                 betsHistory: newStateBetsHistory,
                 pendingBets: newStatePendingBets
             };
+
+
+        case GET_SHOP_ARTICLES:
+            const shopArticles = [action.body[0], action.body[1], action.body[0], action.body[1], action.body[0], action.body[1], action.body[0], action.body[1], action.body[0], action.body[1], action.body[0], action.body[1]];
+            return {
+                ...newState,
+                shopArticles: shopArticles
+            };
+
+
+        case ADD_CART:
+            const addCartArticle = action.body;
+            const addCartIndex = newStateCart.findIndex(el => {
+                return el.articleId === addCartArticle.articleId;
+            });
+
+            if (addCartIndex > -1) {
+                newStateCart[addCartIndex] = addCartArticle;
+            }
+            else {
+                newStateCart.push(addCartArticle);
+            }
+
+            return {
+                ...newState,
+                cartArticles: newStateCart
+            };
+
+
+        case DELETE_CART:
+            const deleteCartArticle = action.body;
+            const deleteCartIndex = newStateCart.findIndex(el => {
+                return el.articleId === deleteCartArticle.articleId;
+            });
+
+            if (deleteCartIndex > -1) {
+                newStateCart.splice(deleteCartIndex, 1);
+            }
+
+            return {
+                ...newState,
+                cartArticles: newStateCart
+            };
+
+
+        case GET_CART:
+            return {
+                ...newState,
+                cartArticles: action.body
+            };
+
+
+        case ADD_COMMAND:
+            let addCommandArticles = action.body;
+            addCommandArticles.date = timestampToDate(addCommandArticles.timestamp);
+            newState.commandArticles.unshift(addCommandArticles);
+
+            const userEcoin = Number(newStateUser['custom:ecoin']) - addCommandArticles.totalPrice;
+            newStateUser['custom:ecoin'] = userEcoin;
+
+            return {
+                ...newState,
+                user: newStateUser,
+                cartArticles: [],
+                commandArticles: newState.commandArticles
+            };
+
+
+        case GET_COMMAND:
+            let getCommandArticles = action.body;
+            getCommandArticles.forEach(elArticle => {
+                elArticle.date = timestampToDate(elArticle.timestamp);
+            });
+
+            return {
+                ...newState,
+                commandArticles: getCommandArticles
+            };
+
 
         default:
             return state;

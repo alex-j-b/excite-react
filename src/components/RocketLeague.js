@@ -78,7 +78,7 @@ export default class RocketLeague extends Component {
                         <span className="goal-price">Gagne une partie classée : {this.state.ecoinOption*2}</span>
                         <img className="ecoin" src={ecoin} alt="ecoin"></img>
                     </div>
-                    <button className="lol-bet" onClick={this.addLolBet}>Parier</button>
+                    <button className="e-button lol-bet" onClick={this.addLolBet}>Parier</button>
                     <p className="notif lol-bet">Pari en cours... il vous reste <span></span> pour lancer une partie classée</p>
                     <DotsLoader loading={this.state.loading}/>
                     </>
@@ -111,7 +111,7 @@ export default class RocketLeague extends Component {
                         <p>Veuillez changer votre icon afin de valider votre compte</p>
                     </div>
 
-                    <button onClick={this.steamUser}>Valider</button>
+                    <button className="e-button" onClick={this.steamUser}>Valider</button>
                     <p className="error-input wrong-pseudo-region">Nom d'invocateur ou région invalide</p>
                     <p className="error-input wrong-icon">Veuillez changer votre icon</p>
                     <DotsLoader loading={this.state.loading}/>

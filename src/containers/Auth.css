@@ -42,9 +42,9 @@
 
 /* -------------------- Form title -------------------- */
 .auth form > span {
-    width: 92vw; max-width: 460px;
+    width: fit-content;
     margin: 40px 0 0 0;
-    font-size: 24px; -webkit-text-stroke: 0.75px; text-align: center;
+    font-size: 22px; -webkit-text-stroke: 0.75px; text-align: center;
 }
 
 /* -------------------- Legal and Redirection -------------------- */
@@ -84,7 +84,7 @@
 .auth label {
     align-self: flex-start;
     margin: 10px 0 8px 0;
-    font-size: 18px; -webkit-text-stroke: 0.4px;
+    font-size: 16px; -webkit-text-stroke: 0.4px;
 }
 
 /* -------------------- Birth inputs -------------------- */
@@ -112,23 +112,8 @@
 }
 
 /* -------------------- Phone input -------------------- */
-.react-tel-input * {
-    background-color: white !important;
-}
-.react-tel-input {
-    margin: 0 0 5px -9%;
-}
-.phone-input {
-    border-color:#cdcdcd !important;
-}
-.react-tel-input .form-control {
-    width: 109% !important;
-    border-radius: 0px !important;
-    border-color:#cdcdcd !important;
-}
-#phone-form-control {
-    height: 40px;
-    font-size: 16px !important; font-family: 'Raleway', Arial !important;
+.auth .react-tel-input {
+    margin-left: -9%;
 }
 
 /* //////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
@@ -215,7 +200,8 @@
     border: 1px solid #e60000;
     background-color: transparent;
     color: #e60000;
-    font-size: 16px;
+    font-size: 16px; -webkit-text-stroke: 0.1px;
+    -webkit-transition-duration: 0.45s; transition-duration: 0.45s;
 }
 .auth.account .log-out:hover, .auth.account .log-out:active {
     color: white;

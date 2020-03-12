@@ -40,8 +40,9 @@ input, textarea, select, button, button:focus {
 /* ---------------------------------------- Buttons ---------------------------------------- */
 button {
     cursor: pointer;
+    font-family: 'Lato';
 }
-button:not([style]) {
+.e-button {
     width: fit-content;
     padding: 12px 26px 12px 26px;
     margin: 30px 0 10px 0;
@@ -51,7 +52,7 @@ button:not([style]) {
     color: white;
     -webkit-transition-duration: 0.45s; transition-duration: 0.45s;
 }
-button:not([style]):hover, button:not([style]):active {
+.e-button:hover, .e-button:active {
     color: rgb(100, 0, 100);
     background-color: white;
 }
@@ -76,6 +77,26 @@ input:focus {
     margin-left: 8px;
     font-size: 14px;
     color: red !important;
+}
+
+/* -------------------- Phone input -------------------- */
+.react-tel-input * {
+    background-color: white !important;
+}
+.react-tel-input {
+    margin-bottom: 5px;
+}
+.phone-input {
+    border-color:#cdcdcd !important;
+}
+.react-tel-input .form-control {
+    width: 109% !important;
+    border-radius: 0px !important;
+    border-color:#cdcdcd !important;
+}
+#phone-form-control {
+    height: 41px;
+    font-size: 16px !important; font-family: 'Raleway', Arial !important;
 }
 
 /* ---------------------------------------- Spans ---------------------------------------- */

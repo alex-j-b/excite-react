@@ -228,7 +228,7 @@ class Sign extends Component {
                 </div>
                 <p className="legal">En créant se compte vous acceptez les conditions générales d’utilisation.</p>
                 <div>
-                    <button>Démarrer</button>
+                    <button className="e-button">Démarrer</button>
                     <DotsLoader loading={this.state.loading}/>
                 </div>
             </>;
@@ -304,7 +304,7 @@ class Sign extends Component {
                     onLocationChange={this.onLocationChange}
                 />
                 <div>
-                    <button>Valider</button>
+                    <button className="e-button">Valider</button>
                     <DotsLoader loading={this.state.loading}/>
                 </div>
             </>;

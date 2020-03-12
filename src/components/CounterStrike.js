@@ -232,6 +232,7 @@ class CounterStrike extends Component {
                             <img className="ecoin" src={ecoin} alt="ecoin"></img>
                         </div>
                         <button 
+                            className="e-button"
                             ref="buttonCsgoBet"
                             onClick={this.addCsgoBet}
                             >Parier
@@ -291,7 +292,7 @@ class CounterStrike extends Component {
                                 </p>
                             </div>
 
-                            <button onClick={this.confirmCsgoAccount}>Valider</button>
+                            <button className="e-button" onClick={this.confirmCsgoAccount}>Valider</button>
                             <p ref="errorInputToken" className="error-input wrong-code-jeton">Code ou Jeton invalide</p>
                             <DotsLoader loading={this.state.loading}/>
                             </>

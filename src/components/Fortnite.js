@@ -202,7 +202,7 @@ class Fortnite extends Component {
                                     <img className="ecoin" src={ecoin} alt="ecoin"></img>
                                 </span>
                             </div>
-                            <button ref="buttonFortniteBet" onClick={this.addFortniteBet}>Parier</button>
+                            <button ref="buttonFortniteBet" className="e-button" onClick={this.addFortniteBet}>Parier</button>
                             <p ref="notifFortniteBet" className="notif">
                                 Pari en cours... il vous reste&nbsp;
                                 <span ref="countDown"></span>
@@ -236,7 +236,7 @@ class Fortnite extends Component {
                                 </p>
                             </div>
 
-                            <button onClick={this.confirmFortniteAccount}>Valider</button>
+                            <button className="e-button" onClick={this.confirmFortniteAccount}>Valider</button>
                             <p ref="errorInputId" className="error-input wrong-id">ID de compte invalide</p>
                             <DotsLoader loading={this.state.loading} />
                         </>

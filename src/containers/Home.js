@@ -37,7 +37,11 @@ export default class Home extends Component {
                     <div>
                         <p>Mise sur ton skill et</p>
                         <p>Gagne des cadeaux !</p>
-                        <button onClick={() => this.props.history.push(`/${this.props.isLogged ? 'jouer' : 'inscription'}`)}>Jouer</button>
+                        <button 
+                            className="e-button"
+                            onClick={() => this.props.history.push(`/${this.props.isLogged ? 'jouer' : 'inscription'}`)}
+                            >Jouer
+                        </button>
                     </div>
                 </div>
 

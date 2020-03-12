@@ -402,7 +402,7 @@ class Account extends Component {
                         </div>
 
                         <div>
-                            <button>Valider</button>
+                            <button className="e-button">Valider</button>
                             <DotsLoader loading={this.state.loading}/>
                         </div>
                     </div>
