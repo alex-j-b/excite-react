@@ -10,6 +10,7 @@ import { loggedInCheck } from "./actions";
 //Images
 import fbLogo from "./images/fb-logo.png";
 import twitterLogo from "./images/twitter-logo.svg";
+import ecoin from "./images/e-coin.png";
 
 class App extends Component {
     toggleButton = this.toggleButton.bind(this);
@@ -51,13 +52,16 @@ class App extends Component {
                         <Link className="logo-excite" to="/">
                             <span><span className="purple">E</span>xcite<b>.</b></span>
                         </Link>
-                        <NavLink 
-                            to={`/${this.props.isLogged ? 'jouer' : 'inscription'}`}
-                            activeClassName="current-route"
-                            >Jouer
-                        </NavLink>
-                        {this.props.isLogged && <NavLink to="/mon-compte" activeClassName="current-route">Mon Compte</NavLink>}
+
+                        {this.props.isLogged && 
+                            <NavLink to={`/ecoin?redirect=${window.location.pathname+window.location.search}`} activeClassName="current-route">
+                                <span className="number">{this.props.user['custom:ecoin']}</span>&nbsp;
+                                <img className="ecoin" src={ecoin} alt="ecoin"></img>
+                            </NavLink>
+                        }
+                        <NavLink to={`/${this.props.isLogged ? 'jouer' : 'inscription'}`} activeClassName="current-route">Jouer</NavLink>
                         <NavLink to="/boutique" activeClassName="current-route">Boutique</NavLink>
+                        {this.props.isLogged && <NavLink to="/mon-compte" activeClassName="current-route">Mon Compte</NavLink>}
                         <NavLink to="/faq" activeClassName="current-route">FAQ</NavLink>
                         <NavLink to="/contact" activeClassName="current-route">Contact</NavLink>
                         <HamburgerSqueeze
@@ -71,9 +75,15 @@ class App extends Component {
                     </div>
 
                     <div className="app-menu" ref="appMenu">
+                        {this.props.isLogged && 
+                            <NavLink to={`/ecoin?redirect=${window.location.pathname+window.location.search}`} onClick={this.toggleButton}>
+                                <span className="number">{this.props.user['custom:ecoin']}</span>&nbsp;
+                                <img className="ecoin" src={ecoin} alt="ecoin"></img>
+                            </NavLink>
+                        }
                         <Link to={`/${this.props.isLogged ? 'jouer' : 'inscription'}`} onClick={this.toggleButton}>Jouer</Link>
-                        {this.props.isLogged && <Link to="/mon-compte" onClick={this.toggleButton}>Mon Compte</Link>}
                         <Link to="/boutique" onClick={this.toggleButton}>Boutique</Link>
+                        {this.props.isLogged && <Link to="/mon-compte" onClick={this.toggleButton}>Mon Compte</Link>}
                         <Link to="/faq" onClick={this.toggleButton}>FAQ</Link>
                         <Link to="/contact" onClick={this.toggleButton}>Contact</Link>
                     </div>
@@ -92,8 +102,9 @@ class App extends Component {
                         </Link>
                         <div className="footer-links">
                             <Link to={`/${this.props.isLogged ? 'jouer' : 'inscription'}`}>Jouer</Link>
-                            {this.props.isLogged && <Link to="/mon-compte">Mon Compte</Link>}
                             <Link to="/boutique">Boutique</Link>
+                            <Link to={`/ecoin?redirect=${window.location.pathname+window.location.search}`}>Acheter des e-Coins</Link>
+                            {this.props.isLogged && <Link to="/mon-compte">Mon Compte</Link>}
                             <Link to="/faq">FAQ</Link>
                             <Link to="/contact">Contact</Link>
                             <Link to="/legal">Conditions d'utilisations</Link>

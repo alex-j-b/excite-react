@@ -1,6 +1,6 @@
 //React
 import React, { Component } from "react";
-import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "./Shop.css";
 //Redux
 import { connect } from "react-redux";
@@ -10,10 +10,10 @@ import Articles from '../components/Articles';
 import ArticleId from '../components/ArticleId';
 import Cart from '../components/Cart';
 import Commands from '../components/Commands';
+import CircleLoader from '../components/CircleLoader';
 //Images
 import ecoin from "../images/e-coin.png";
 import backArrow from "../images/back-arrow.png";
-
 import articlesIcon from "../images/articles.png";
 import commandesIcon from "../images/commandes.png";
 import panierIcon from "../images/panier.png";
@@ -21,6 +21,7 @@ import panierIcon from "../images/panier.png";
 
 class Shop extends Component {
     state = {
+        loading: true,
         tab: 'articles',
         id: false,
         currentUrl: document.location.href
@@ -55,9 +56,16 @@ class Shop extends Component {
             this.setState({ tab: 'articles' });
             this.props.history.push('/boutique?tab=articles');
         }
-        this.props.getShopArticles();
-        this.props.getCart();
-        this.props.getCommand();
+
+        this.props.getShopArticles().then(response => {
+            if(this.state.tab === 'articles') this.setState({ loading: false });
+        });
+        this.props.getCart().then(response => {
+            if(this.state.tab === 'panier') this.setState({ loading: false });
+        });
+        this.props.getCommand().then(response => {
+            if(this.state.tab === 'commandes') this.setState({ loading: false });
+        });
     }
 
     render() {
@@ -72,49 +80,53 @@ class Shop extends Component {
             <div className="shop">
 
                 <div className="shop-header">
-                    { this.state.id && <NavLink
+                    { this.state.id && <Link
                         to="/boutique?tab=articles"
                         className="back-button"
                         ><img src={backArrow} alt="backArrow"></img>
-                    </NavLink>}
+                    </Link>}
 
                     { this.props.isLogged && 
-                        <span className="wallet-ecoin">
+                        <Link 
+                            to={`/ecoin?redirect=${window.location.pathname+window.location.search}`}
+                            className="wallet-ecoin"
+                        >
                             <label>Mes e-Coins : </label><span className="number">{this.props.user['custom:ecoin']}</span>
                             <img className="ecoin" src={ecoin} alt="ecoin"></img>
-                        </span>
+                        </Link>
                     }
 
                     <div className="tabs">
-                        <NavLink 
+                        <Link 
                             to="/boutique?tab=articles"
                             className={this.state.tab === 'articles' ? 'current-shop-tab' : ''}
                             style={{ backgroundColor: `${this.state.tab === 'articles' ? 'white' : 'transparent'}` }}
                             ><span>Articles</span>
                             <img src={articlesIcon} alt="articlesIcon" style={{ filter: `${this.state.tab === 'articles' ? '' : 'invert(100%)'}` }}></img>
-                        </NavLink>
-                        <NavLink 
+                        </Link>
+                        <Link 
                             to="/boutique?tab=commandes"
                             className={this.state.tab === 'commandes' ? 'current-shop-tab' : ''}
                             style={{ backgroundColor: `${this.state.tab === 'commandes' ? 'white' : 'transparent'}` }}
                             ><span>Mes commandes</span>
                             <img src={commandesIcon} alt="commandesIcon" style={{ filter: `${this.state.tab === 'commandes' ? '' : 'invert(100%)'}` }}></img>
-                        </NavLink>
-                        <NavLink 
+                        </Link>
+                        <Link 
                             to="/boutique?tab=panier"
                             className={this.state.tab === 'panier' ? 'current-shop-tab' : ''}
                             style={{ backgroundColor: `${this.state.tab === 'panier' ? 'white' : 'transparent'}` }}
                             ><span>Mon panier</span>
                             <img src={panierIcon} alt="panierIcon" style={{ filter: `${this.state.tab === 'panier' ? '' : 'invert(100%)'}` }}></img>
                             {this.props.cartArticles.length > 0 && <span className="dot">{this.props.cartArticles.length}</span>}
-                        </NavLink>
+                        </Link>
                     </div>
                 </div>
 
-                { this.state.tab === 'articles' && !this.state.id && <Articles shopArticles={this.props.shopArticles}/>}
-                { articleIdObj && <ArticleId articleIdObj={articleIdObj}/>}
-                { this.state.tab === 'panier' && !this.state.id && <Cart history={this.props.history}/>}
-                { this.state.tab === 'commandes' && <Commands/>}
+                { this.state.tab === 'articles' && !this.state.id && <Articles shopArticles={this.props.shopArticles}/> }
+                { this.state.tab === 'panier' && <Cart cartArticles={this.props.cartArticles} userEcoin={this.props.user['custom:ecoin']} history={this.props.history}/> }
+                { this.state.tab === 'commandes' && <Commands commandArticles={this.props.commandArticles}/> }
+                { articleIdObj && <ArticleId articleIdObj={articleIdObj}/> }
+                <CircleLoader loading={this.state.loading}/>
 
             </div>
         );
@@ -124,13 +136,13 @@ class Shop extends Component {
 function mapDispatchToProps(dispatch) {
     return {
         getShopArticles: function () {
-            dispatch(getShopArticles());
+            return dispatch(getShopArticles());
         },
         getCart: function () {
-            dispatch(getCart());
+            return dispatch(getCart());
         },
         getCommand: function () {
-            dispatch(getCommand());
+            return dispatch(getCommand());
         }
     }
 }
@@ -139,7 +151,8 @@ function mapStateToProps(reduxState) {
         user: reduxState.user,
         isLogged: reduxState.isLogged,
         shopArticles: reduxState.shopArticles,
-        cartArticles: reduxState.cartArticles
+        cartArticles: reduxState.cartArticles,
+        commandArticles: reduxState.commandArticles
     };
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Shop);

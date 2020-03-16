@@ -1,5 +1,6 @@
 //React
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import "./Play.css";
 //Redux
 import { connect } from "react-redux";
@@ -8,12 +9,11 @@ import {
     getFortniteBets,
     getCsgoBets
 } from "../actions";
-//libs
-import CircleLoader from '../components/CircleLoader';
 //Components
 import LeagueOfLegends from '../components/LeagueOfLegends';
 import Fortnite from '../components/Fortnite';
 import CounterStrike from '../components/CounterStrike';
+import CircleLoader from '../components/CircleLoader';
 //Images
 import authBG from "../images/mystique-statue.jpg";
 import lolLogo from "../images/lol-logo.png";
@@ -142,10 +142,13 @@ class Play extends Component {
                         ></button>
 
                         { this.props.isLogged && 
-                            <div className="wallet-ecoin">
+                            <Link 
+                                to={`/ecoin?redirect=${window.location.pathname+window.location.search}`}
+                                className="wallet-ecoin"
+                            >
                                 <span><label>E-coins : </label><span className="number">{this.props.user['custom:ecoin']}</span></span>
                                 <img className="ecoin" src={ecoin} alt="ecoin"></img>
-                            </div>
+                            </Link>
                         }
 
                         <button

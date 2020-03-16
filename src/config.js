@@ -8,5 +8,8 @@ export default {
     apiGateway: {
         REGION: "eu-west-2",
         URL: "https://6ni09ep2i9.execute-api.eu-west-2.amazonaws.com/prod"
+    },
+    stripe: {
+        STRIPE_PUBLIC_KEY: "pk_test_Ua3dPWghEeL733J86S3Okzie00nTYcMZJC"
     }
 };

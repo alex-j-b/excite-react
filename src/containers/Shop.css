@@ -345,7 +345,7 @@
         width: 20px;
     }
     .shop-header > .wallet-ecoin {
-        margin: 0 20px 0 0;
+        margin: 0 auto 0 auto;
         order: 1;
         color: white;
     }
@@ -355,7 +355,7 @@
 
     /* -------------------- Tabs -------------------- */
     .shop-header > .tabs {
-        margin: 0 auto 0 0;
+        margin: 0;
         height: 60px;
     }
     .shop-header > .tabs > a {
@@ -456,7 +456,7 @@
         margin-bottom: 30px;
         align-items: flex-start;
     }
-    .shop-expedition form > div {
+    .shop-expedition form > div:first-of-type {
         flex-direction: column;
         width: calc(80% - 26px) !important;
         margin-left: 10% !important;

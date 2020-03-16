@@ -56,6 +56,9 @@ button {
     color: rgb(100, 0, 100);
     background-color: white;
 }
+.wallet-ecoin * {
+    cursor: pointer;
+}
 
 
 /* ---------------------------------------- Inputs ---------------------------------------- */
@@ -70,7 +73,8 @@ input::placeholder {
     font-size: 14px;
 }
 input:focus {
-    background-color: rgb(255, 251, 255);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6) !important;
+    border-color: #66AFE9;
 }
 .error-input {
     display: none;
@@ -113,4 +117,8 @@ input:focus {
 }
 span > .ecoin {
     margin-top: -3px;
+}
+.app-menu .ecoin {
+    margin-top: -5px;
+    height: 24px !important;
 }

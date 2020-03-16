@@ -15,6 +15,7 @@ export const DELETE_CART = 'DELETE_CART';
 export const GET_CART = 'GET_CART';
 export const ADD_COMMAND = 'ADD_COMMAND';
 export const GET_COMMAND = 'GET_COMMAND';
+export const BUY_ECOIN = 'BUY_ECOIN';
 
 
 const rmvEmptyValues = (obj) => {
@@ -407,11 +408,12 @@ export function setGetShopArticles(body) {
 }
 export function getShopArticles() {
     return dispatch => {
-        API.get('exciteAPI', '/shop/getArticles')
+        return API.get('exciteAPI', '/shop/getArticles')
         .then(response => {
             if (response.statusCode === 200) {
                 dispatch(setGetShopArticles(response.body));
             }
+            return response;
         });
     }
 }
@@ -473,12 +475,13 @@ export function setGetCart(body) {
 }
 export function getCart() {
     return dispatch => {
-        API.get('exciteAPI', '/shop/getCart')
+        return API.get('exciteAPI', '/shop/getCart')
         .then(response => {
             console.log(response)
             if (response.statusCode === 200) {
                 dispatch(setGetCart(response.body));
             }
+            return response;
         });
     }
 }
@@ -525,12 +528,37 @@ export function setGetCommand(body) {
 }
 export function getCommand() {
     return dispatch => {
-        API.get('exciteAPI', '/shop/getCommand')
+        return API.get('exciteAPI', '/shop/getCommand')
         .then(response => {
             console.log(response)
             if (response.statusCode === 200) {
                 dispatch(setGetCommand(response.body));
             }
+            return response;
+        });
+    }
+}
+
+/* -------------------- buyEcoin --------------------- */
+export function setBuyEcoin(ecoinAmount) {
+    return {
+        type: BUY_ECOIN,
+        ecoinAmount
+    };
+}
+export function buyEcoin(ecoinAmount, source) {
+    return dispatch => {
+        return API.post('exciteAPI', '/buyEcoin', {
+            'body': {
+                'ecoin': ecoinAmount,
+                'source': source
+            }
+        }).then(response => {
+            console.log(response)
+            if (response.statusCode === 200) {
+                dispatch(setBuyEcoin(ecoinAmount));
+            }
+            return response;
         });
     }
 }

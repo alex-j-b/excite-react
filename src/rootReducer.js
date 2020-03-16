@@ -10,7 +10,8 @@ import {
     DELETE_CART,
     GET_CART,
     ADD_COMMAND,
-    GET_COMMAND
+    GET_COMMAND,
+    BUY_ECOIN
 } from './actions';
 
 const DEFAULT_STATE = {
@@ -242,8 +243,7 @@ export default function refresh(state = DEFAULT_STATE, action = {}) {
             addCommandArticles.date = timestampToDate(addCommandArticles.timestamp);
             newState.commandArticles.unshift(addCommandArticles);
 
-            const userEcoin = Number(newStateUser['custom:ecoin']) - addCommandArticles.totalPrice;
-            newStateUser['custom:ecoin'] = userEcoin;
+            newStateUser['custom:ecoin'] = Number(newStateUser['custom:ecoin']) - addCommandArticles.totalPrice;
 
             return {
                 ...newState,
@@ -262,6 +262,15 @@ export default function refresh(state = DEFAULT_STATE, action = {}) {
             return {
                 ...newState,
                 commandArticles: getCommandArticles
+            };
+
+
+        case BUY_ECOIN:
+            newStateUser['custom:ecoin'] = Number(newStateUser['custom:ecoin']) + Number(action.ecoinAmount);
+
+            return {
+                ...newState,
+                user: newStateUser
             };
 
 

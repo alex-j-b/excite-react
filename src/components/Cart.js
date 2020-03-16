@@ -89,7 +89,7 @@ class Cart extends Component {
         let totalPrice = 0;
         this.props.cartArticles.forEach(el => totalPrice += el.price * el.quantity);
 
-        if (this.props.user['custom:ecoin'] > totalPrice) {
+        if (this.props.userEcoin > totalPrice) {
             this.setState({ step: 2 });
         }
         else {
@@ -370,11 +370,4 @@ function mapDispatchToProps(dispatch) {
         }
     }
 }
-function mapStateToProps(reduxState) {
-    return {
-        user: reduxState.user,
-        isLogged: reduxState.isLogged,
-        cartArticles: reduxState.cartArticles
-    };
-}
-export default connect(mapStateToProps, mapDispatchToProps)(Cart);
+export default connect(null, mapDispatchToProps)(Cart);

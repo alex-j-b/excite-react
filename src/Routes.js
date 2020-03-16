@@ -7,6 +7,7 @@ import Account from "./containers/Account";
 import Play from "./containers/Play";
 import NotFound from "./containers/NotFound";
 import Shop from "./containers/Shop";
+import BuyEcoin from "./containers/BuyEcoin";
 
 export default function Routes() {
     return (
@@ -14,9 +15,10 @@ export default function Routes() {
             <Route exact path="/" component={Home} />
             <Route exact path="/connexion" component={Log} />
             <Route exact path="/inscription" component={Sign} />
-            <Route exact path="/mon-compte" component={Account} />
             <Route exact path="/jouer" component={Play} />
             <Route exact path="/boutique" component={Shop} />
+            <Route exact path="/ecoin" component={BuyEcoin} />
+            <Route exact path="/mon-compte" component={Account} />
             <Route path="*" component={NotFound} />
         </Switch>
     );
