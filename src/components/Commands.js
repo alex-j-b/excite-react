@@ -102,7 +102,7 @@ class Commands extends Component {
 
         return (
             <div className="shop-cart">
-                <h1><span className="purple">M</span>es commandes</h1>
+                <p className="title"><span className="purple">M</span>es commandes</p>
                 { dataDesktop.length > 0 ?
                     <>
                     <Table className="desktop" columns={columnsDesktop} data={dataDesktop} />

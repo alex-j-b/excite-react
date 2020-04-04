@@ -43,6 +43,9 @@ class Play extends Component {
                 this.setState({ historyScrollBar: !this.state.historyScrollBar })
             }, 1)
         }
+        else {
+            localStorage.setItem('gameTab', e.target.name);
+        }
         this.props.history.push(`/jouer?game=${e.target.name}`);
     }
 
@@ -52,19 +55,13 @@ class Play extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        //Not Logged Redirection
-        if (!this.props.isLogged) {
-            this.props.history.push('/connexion');
-        }
-        else if (this.props.isLogged !== prevProps.isLogged) {
+        if (this.props.isLogged !== prevProps.isLogged) {
             let urlParams = (new URL(document.location)).searchParams;
-            if (urlParams.get('game') !== null) {
-                this.setState({ tab: urlParams.get('game') });
-            }
-            else {
-                this.setState({ tab: 'leagueoflegends' });
-                this.props.history.push('/jouer?game=leagueoflegends');
-            }
+            let tab = urlParams.get('game') !== null ? urlParams.get('game') : 'leagueoflegends';
+            tab = localStorage.getItem('gameTab') !== null ? localStorage.getItem('gameTab') : tab;
+            this.setState({ tab: tab });
+            this.props.history.push(`/jouer?game=${tab}`);
+
             this.props.getLolBets();
             this.props.getFortniteBets();
             this.props.getCsgoBets();
@@ -73,18 +70,13 @@ class Play extends Component {
     }
 
     componentDidMount() {
-        if (this.props.authStatus === 'deleteUser') {
-            this.props.history.push('/connexion');
-        }
-        else if (this.props.isLogged) {
+        if (this.props.isLogged) {
             let urlParams = (new URL(document.location)).searchParams;
-            if (urlParams.get('game') !== null) {
-                this.setState({ tab: urlParams.get('game') });
-            }
-            else {
-                this.setState({ tab: 'leagueoflegends' });
-                this.props.history.push('/jouer?game=leagueoflegends');
-            }
+            let tab = urlParams.get('game') !== null ? urlParams.get('game') : 'leagueoflegends';
+            tab = localStorage.getItem('gameTab') !== null ? localStorage.getItem('gameTab') : tab;
+            this.setState({ tab: tab });
+            this.props.history.push(`/jouer?game=${tab}`);
+
             this.props.getLolBets();
             this.props.getFortniteBets();
             this.props.getCsgoBets();
@@ -101,7 +93,7 @@ class Play extends Component {
                     </div>
                     <div className="wrap-bet-result">
                         <span>{el.goal}</span>
-                        <span className="number">{el.message + el.ecoinBet} <img className="ecoin" src={ecoin} alt="ecoin"></img></span>
+                        <span className="number">{el.message + el.ecoin} <img className="ecoin" src={ecoin} alt="ecoin"></img></span>
                     </div>
                 </div>
             );
@@ -146,7 +138,7 @@ class Play extends Component {
                                 to={`/ecoin?redirect=${window.location.pathname+window.location.search}`}
                                 className="wallet-ecoin"
                             >
-                                <span><label>E-coins : </label><span className="number">{this.props.user['custom:ecoin']}</span></span>
+                                <span><label>eCoins : </label><span className="number">{this.props.user['custom:ecoin']}</span></span>
                                 <img className="ecoin" src={ecoin} alt="ecoin"></img>
                             </Link>
                         }
@@ -191,7 +183,7 @@ class Play extends Component {
                                 width: this.state.historyScrollBar ? '99.25%' : '99.26%'
                             }}
                         >
-                            <h1><span className="purple">H</span>istorique</h1>
+                            <p className="title"><span className="purple">H</span>istorique</p>
                             {betsHistoryList}
                         </div>
                         </>

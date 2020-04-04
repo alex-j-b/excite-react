@@ -14,13 +14,11 @@ import ecoin from "../images/e-coin.png";
 import rocketCrash from "../images/rocket-crash.png";
 
 
-
-
 const ecoinOptions = [
-    { value: '5', label: '5' },
-    { value: '10', label: '10' },
-    { value: '20', label: '20' },
-    { value: '50', label: '50' }
+    { value: 5, label: '5' },
+    { value: 10, label: '10' },
+    { value: 20, label: '20' },
+    { value: 50, label: '50' }
 ]
 
 const CustomSingleValue = ({ data }) => (
@@ -37,7 +35,7 @@ export default class RocketLeague extends Component {
     onChange = this.onChange.bind(this);
     steamUser = this.steamUser.bind(this);
     state = {
-        ecoinOption: '5',
+        ecoinOption: 5,
         imageReady: true,
         loading: false
     }
@@ -61,7 +59,7 @@ export default class RocketLeague extends Component {
                     {this.props.imageReady && <ImageFadeIn src={rocketCrash} />}
                 </div>
                 <div className="right">
-                    <h1><span className="purple">R</span>ocket League</h1>
+                <p className="title"><span className="purple">R</span>ocket League</p>
 
                 { false /*'lol' in this.props.user['custom:games_account']*/ ?
                     <>

@@ -1,11 +1,17 @@
 
+
+/* -------------------- Background and center div -------------------- */
 .buy-ecoin {
     display: flex; flex-direction: column; align-items: center; justify-content: center;
-    min-height: calc(100vh - 161px);
+    height: fit-content; min-height: calc(100vh - 160px);
     background-position: center;
     border-top: 1px solid;
 }
-
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+    .buy-ecoin {
+        height: calc(100vh - 160px);
+    }
+}
 .buy-ecoin > div {
     display: flex; flex-direction: column; align-items: center;
     padding: 50px 90px 40px 90px;
@@ -13,19 +19,20 @@
     border: 1px solid black;
 }
 
-.buy-ecoin h1 {
-    width: fit-content;
-    margin: 0 0 50px 0;
-    font-family: 'Raleway', Arial; font-size: 24px; -webkit-text-stroke: 0px;
-    color: #4d4d4d;
-    text-align: center;
-}
-
+/* -------------------- Form -------------------- */
 .buy-ecoin form {
     display: flex; flex-direction: column;
     width: 100%; max-width: 300px;
 }
 
+/* -------------------- Elements -------------------- */
+.buy-ecoin .title {
+    width: fit-content;
+    margin: 0 0 50px 0;
+    font-family: 'Raleway', Arial; font-size: 24px; -webkit-text-stroke: 0.75px;
+    color: #333333;
+    text-align: center;
+}
 .buy-ecoin label {
     margin: 10px 0 8px 10px;
     font-size: 16px; -webkit-text-stroke: 0.3px;
@@ -33,21 +40,6 @@
 .buy-ecoin input {
     box-sizing: border-box;
 }
-.buy-ecoin .wrap-ecoin-price {
-    display: flex;
-    margin-bottom: 6px;
-}
-.buy-ecoin .wrap-ecoin-price > div {
-    display: flex; flex-direction: column;
-    width: 45%;
-}
-.buy-ecoin .wrap-ecoin-price > div:first-child {
-    margin-right: 10%;
-}
-.buy-ecoin .wrap-ecoin-price > div > .number {
-    margin: auto 0 auto 10px;
-}
-
 .buy-ecoin button {
     align-self: center;
 }
@@ -57,12 +49,73 @@
     text-align: center;
     color: grey;
 }
-.buy-ecoin .stripe-logo {
-    height: 26px; width: 119px;
+
+/* -------------------- Select method -------------------- */
+.buy-ecoin .select-method {
+    display: flex; justify-content: space-between;
+    margin-bottom: 30px;
+}
+.buy-ecoin .select-method > div {
+    display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
+    height: 75px; width: 125px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    text-align: center;
+}
+.buy-ecoin .select-method > div > * {
+    cursor: pointer;
+}
+.buy-ecoin .select-method input {
+    width: fit-content; min-width: 13px;
     margin-top: 5px;
-    align-self: center;
+}
+.buy-ecoin .select-method label {
+    display: flex; flex-direction: column; align-items: center;
+    margin: 0;
 }
 
+/* ---------- Method logos ---------- */
+.buy-ecoin .mastercard-logo {
+    height: 26px;
+    margin-bottom: 5px;
+}
+.buy-ecoin .visa-logo {
+    height: 26px;
+    margin-bottom: 5px;
+}
+.buy-ecoin .paypal-logo {
+    height: 45px;
+}
+.buy-ecoin .paysafecard-logo {
+    height: 40px;
+    margin-bottom: -1px;
+}
+
+/* -------------------- eCoins amount -------------------- */
+.buy-ecoin .ecoin-amount {
+    display: flex;
+    margin-bottom: 6px;
+}
+.buy-ecoin .ecoin-amount > div {
+    display: flex; flex-direction: column;
+    width: 45%;
+}
+.buy-ecoin .ecoin-amount > div:first-child {
+    margin-right: 10%;
+}
+.buy-ecoin .ecoin-amount > div > .number {
+    margin: auto 0 auto 10px;
+}
+
+/* -------------------- Methods -------------------- */
+.buy-ecoin .method {
+    display: flex; flex-direction: column;
+}
+.buy-ecoin .method.paypal {
+    padding-top: 30px;
+}
+
+/* -------------------- Stripe creditcard -------------------- */
 .buy-ecoin form .card-field {
     width: 100%; height: 41px;
     background-color: white;
@@ -74,6 +127,12 @@
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6);
     border-color: #66AFE9;
 }
+.buy-ecoin .stripe-logo {
+    height: 26px; width: 119px;
+    margin-top: 5px;
+    align-self: center;
+}
+
 
 /* //////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
 /* ///////////////////////////////////////////// BUY ECOIN UNDER 482 ////////////////////////////////////////////// */
@@ -85,7 +144,8 @@
     }
     .buy-ecoin > div {
         width: 100%;
-        padding: 50px 0 40px 0;
+        min-height: calc(100vh - 161px);
+        padding: 40px 0 40px 0;
         background-color: #f9f9f9 !important;
         border: none;
     }

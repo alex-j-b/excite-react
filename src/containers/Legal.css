@@ -1,0 +1,47 @@
+
+.legal {
+    display: flex;
+    width: 100%;
+    margin: 0 auto 0 auto;
+    background-color: white;
+    font-size: 16px; font-family: 'Raleway', Arial;
+    padding: 80px 0 50px 0;
+}
+.wrap-legal {
+    width: 70%;
+    margin: 0 auto 0 auto;
+}
+
+.wrap-legal ul {
+    list-style-type: disc;
+    font-family: 'Open Sans', Arial;
+}
+.wrap-legal li {
+    margin-bottom: 5px;
+}
+
+.wrap-legal > .title {
+    font-size: 30px; font-family: 'Raleway', Arial; -webkit-text-stroke: 1px;
+    text-align: center;
+    margin: 0 0 70px 0;
+}
+.wrap-legal > h3 {
+    font-size: 20px; -webkit-text-stroke: 0.05px;
+    margin: 40px 0 15px 0;
+}
+
+.wrap-legal > p {
+    font-family: 'Open Sans', Arial;
+    margin-bottom: 10px;
+}
+.wrap-legal a {
+    font-size: 16px;
+}
+
+
+@media screen and (max-width: 1460px) {
+    .wrap-legal {
+        width: calc(70vw + (1460px - 100vw));
+        max-width: 90vw;
+    }
+}

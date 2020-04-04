@@ -12,12 +12,13 @@
     min-height: calc(100vh - 161px);
 }
 
-.shop h1 {
-    width: 100%;
-    margin: 25px 0 50px 0;
-    font-family: 'Raleway', Arial; font-size: 24px; -webkit-text-stroke: 0px;
-    color: #4d4d4d;
-    text-align: center;
+.shop .title {
+    width: 100% !important;
+    margin: 25px 0 50px 0 !important;
+    font-family: 'Raleway', Arial; font-size: 24px; -webkit-text-stroke: 0.75px;
+    color: #333333;
+    text-align: center !important;
+    align-self: center;
 }
 
 /* ---------------------------------------- Header ---------------------------------------- */
@@ -139,7 +140,7 @@
 /* -------------------- Infos -------------------- */
 .shop-article-id > div > .article-infos {
     display: flex; flex-direction: column; justify-content: space-between;
-    height: 200px; width: 50%;
+    height: 300px; width: 50%;
     padding: 20px 32px 20px 70px;
 }
 .shop-article-id > div > .article-infos h3 {
@@ -284,6 +285,9 @@
     margin-top: 10px;
     -webkit-text-stroke: 0.2px;
 }
+.error-input.command-invalid {
+    align-self: center;
+}
 
 /* ---------------------------------------- Address ---------------------------------------- */
 .shop-expedition {
@@ -327,7 +331,7 @@
         min-height: 100vh;
         border: none;
     }
-    .shop h1 {
+    .shop .title {
         font-size: 22px;
         margin: 40px 0 30px 0;
     }

@@ -15,10 +15,10 @@ class BuyEcoin extends Component {
         return (
             <div className="buy-ecoin" style={{ backgroundImage: `url(${authBG})` }}>
                 <div>
-                    <h1>
-                        <span className="purple">A</span>cheter des e-Coins&nbsp;
+                    <p className="title">
+                        <span className="purple">A</span>cheter des eCoins&nbsp;
                         <img className="ecoin" src={ecoin} alt="ecoin"></img>
-                    </h1>
+                    </p>
                     <StripeProvider apiKey={config.stripe.STRIPE_PUBLIC_KEY}>
                         <Elements>
                             <BuyEcoinForm history={this.props.history} />

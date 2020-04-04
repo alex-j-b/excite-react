@@ -6,9 +6,15 @@
 /* -------------------- Background -------------------- */
 .play {
     display: flex; align-items: center; justify-content: center;
-    min-height: calc(100vh - 160px);
+    height: fit-content; min-height: calc(100vh - 160px);
     background-position: center;
     font-size: 16px; font-family: 'Raleway', Arial;
+}
+
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+    .play {
+        height: calc(100vh - 160px);
+    }
 }
 
 /* -------------------- Central square -------------------- */
@@ -47,6 +53,11 @@
     height: 60px; width: 60px;
     border: none;
     background-size: 36px 36px; background-repeat: no-repeat; background-position: center;
+}
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+    .play .header > button {
+        background-color: white !important;
+    }
 }
 
 /* -------------------- E-coin wallet -------------------- */
@@ -94,6 +105,14 @@
     height: 95%;
     margin: 0 40px -25px 0;
 }
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+    .play .wrap-games .left > img {
+        width: 100%;
+    }
+    .play .wrap-games .left {
+        width: 370px;
+    }
+}
 
 /* -------------------- Right column -------------------- */
 .play .wrap-games .right {
@@ -103,9 +122,9 @@
     margin: 0;
     padding: 0 10px 0 10px;
 }
-.play .wrap-games .right > h1 {
+.play .wrap-games .right > .title {
     margin: 0 0 30px 0;
-    font-size: 26px;
+    font-size: 26px; -webkit-text-stroke: 0.75px;
 }
 
 /*------------ Place bet ---------- */
@@ -118,29 +137,25 @@
     vertical-align: middle;
     margin: 20px 2px 20px 0;
 }
-.play .right button {
-    width: fit-content;
+.play .right .e-button {
     padding: 10px 26px 10px 26px;
-    margin: 10px 0 10px 0;
-    border: 1px solid;
-    background-color: rgb(80, 0, 80);
-    font-size: 22px; font-family: "Lato", Arial; -webkit-text-stroke: 0.1px;
-    color: white;
-    -webkit-transition-duration: 0.45s; transition-duration: 0.45s;
+    margin: 10px 0 0 0;
 }
-.play .right button:hover, .play .right button:active {
-    color: rgb(100, 0, 100);
-    background-color: white;
-}
-.play .right button[disabled] {
+.play .right .e-button[disabled] {
     color: rgb(100, 0, 100);
     background-color: white;
     cursor: not-allowed;
 }
 
+.play .right .grey-link {
+    display: none;
+    margin-top: 20px;
+}
+
 /*------------ Notif Pending Bet ---------- */
 .play .wrap-games .right .notif {
     display: none;
+    margin-top: 10px;
     font-size: 16px; font-style: italic; text-align: center; line-height: 22px;
 }
 .play .wrap-leagueoflegends .right .notif {
@@ -152,10 +167,21 @@
 .play .wrap-counterstrikego .right .notif {
     max-width: 270px;
 }
+.error-input.unconfirmed-game-account {
+    display: none;
+    max-width: 310px;
+    margin-top: 20px !important;
+    text-align: center;
+    font-style: italic;
+}
+.error-input.not-enough-ecoin {
+    display: none;
+    margin: 10px 0 0 0 !important;
+}
 
 /* ---------- Confirm account ---------- */
 .play .wrap-games .right .confirm-inputs {
-    display: flex;
+    display: flex; align-items: flex-end;
 }
 .play .wrap-games .right .confirm-inputs > div {
     display: flex; flex-direction: column;
@@ -175,9 +201,10 @@
 }
 .play .wrap-games .right .confirm-inputs .select-region {
     font-size: 14px;
+    margin-bottom: 5px;
+    width: 95px;
 }
 .play .wrap-games .right .confirm-inputs .select-region input {
-    width: 38px;
     padding: 0;
 }
 .play .wrap-games .right .confirm-instructions {
@@ -201,7 +228,7 @@
     margin-right: 20px;
 }
 .play .wrap-leagueoflegends .right .confirm-instructions > p {
-    max-width: 180px;
+    max-width: 183px;
 }
 
 /* --- fortnite --- */
@@ -244,6 +271,7 @@
 }
 .play .wrap-counterstrikego .right .confirm-instructions > p {
     max-width: 358px;
+    text-align: center;
 }
 
 /* ---------- History ---------- */
@@ -260,9 +288,9 @@
     border-radius: 10px;
     background-color: #999999;
 }
-.history h1 {
-    margin-top: 25px;
-    font-size: 26px;
+.history .title {
+    margin: 30px 0 30px 0;
+    font-size: 26px; -webkit-text-stroke: 0.75px;
 }
 .history > span {
     margin-top: 110px;
@@ -346,15 +374,16 @@
     /* ---------- Left column ---------- */
     .play .wrap-games .left {
         height: auto; width: 100%;
+        align-items: flex-end;
         overflow: hidden;
         order: 2;
     }
     .play .wrap-games .left > img {
-        width: 100%;
+        width: 100%; height: auto !important;
     }
     .play .wrap-games .left > img[src*="riven"] {
         max-width: 275px;
-        margin: 20px 0 20px 15px !important;
+        margin: 25px 0 20px 15px !important;
     }
     .play .wrap-games .left > img[src*="fortnite"] {
         max-width: 200px;
@@ -376,9 +405,9 @@
         margin: 0; padding: 0;
         order: 1;
     }
-    .play .wrap-games .right > h1 {
+    .play .wrap-games .right > .title {
         margin: 30px 0 30px 0;
-        font-size: 22px;
+        font-size: 22px; -webkit-text-stroke: 0.75px;
     }
     .play .right button {
         margin: 5px 0 10px 0;
@@ -399,8 +428,8 @@
         height: auto; min-height: 600px; width: 100%;
         overflow: hidden;
     }
-    .history h1 {
-        margin-top: 30px;
-        font-size: 22px;
+    .history .title {
+        margin: 30px 0 30px 0;
+        font-size: 22px; -webkit-text-stroke: 0.75px;
     }
 }

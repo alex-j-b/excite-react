@@ -22,7 +22,7 @@ export default class Articles extends Component {
 
         return (
             <div>
-                <h1><span className="purple">A</span>rticles</h1>
+                <p className="title"><span className="purple">A</span>rticles</p>
                 <div className="shop-articles">
                     {shopArticles}
                 </div>

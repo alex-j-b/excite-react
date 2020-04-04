@@ -26,10 +26,15 @@ class ArticleId extends Component {
     }
 
     addCart() {
-        this.setState({ loading: true });
-        this.props.addCart(this.props.articleIdObj.articleId, this.state.quantity).then(response => {
-            this.setState({ loading: false });
-        });
+        if (this.props.isLogged) {
+            this.setState({ loading: true });
+            this.props.addCart(this.props.articleIdObj.articleId, this.state.quantity).then(response => {
+                this.setState({ loading: false });
+            });
+        }
+        else {
+            this.props.history.push('/inscription');
+        }
     }
 
     render() {
@@ -76,11 +81,7 @@ class ArticleId extends Component {
                                 ></input>
                             </div>
                             <div>
-                                <button 
-                                    className="e-button"
-                                    onClick={this.addCart}
-                                    >Ajouter au panier
-                                </button>
+                                <button className="e-button" onClick={this.addCart}>Ajouter au panier</button>
                                 <DotsLoader loading={this.state.loading} />
                             </div>
                         </div>
@@ -91,6 +92,11 @@ class ArticleId extends Component {
     }
 }
 
+function mapStateToProps(reduxState) {
+    return {
+        isLogged: reduxState.isLogged
+    };
+}
 function mapDispatchToProps(dispatch) {
     return {
         addCart: function (articleId, quantity, changeQuantity) {
@@ -98,4 +104,4 @@ function mapDispatchToProps(dispatch) {
         }
     }
 }
-export default connect(null, mapDispatchToProps)(ArticleId);
+export default connect(mapStateToProps, mapDispatchToProps)(ArticleId);

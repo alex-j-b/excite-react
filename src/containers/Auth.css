@@ -6,10 +6,16 @@
 /* -------------------- Background -------------------- */
 .auth {
     display: flex; align-items: center; justify-content: center;
-    min-height: calc(100vh - 160px);
+    height: fit-content; min-height: calc(100vh - 160px);
     background-position: center;
     font-size: 16px; font-family: 'Raleway', Arial;
     overflow: hidden;
+}
+
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+    .auth {
+        height: calc(100vh - 160px);
+    }
 }
 
 /* -------------------- Form Log & Sign -------------------- */
@@ -36,8 +42,9 @@
     height: 34px;
     margin-right: 20px;
 }
-.auth .games-icons > .rocket-logo {
+.auth .games-icons > .csgo-logo {
     height: 34px;
+    filter: invert(100%);
 }
 
 /* -------------------- Form title -------------------- */
@@ -47,34 +54,10 @@
     font-size: 22px; -webkit-text-stroke: 0.75px; text-align: center;
 }
 
-/* -------------------- Legal and Redirection -------------------- */
-.auth .manual-redirection {
-    margin: 10px 0 0 0;
-    font-size: 14px; text-align: center;
-    color: grey;
-}
-
-.auth .manual-redirection a {
-    color: grey !important;
-    text-decoration: underline !important;
-}
-.auth .manual-redirection.forgot a {
-    text-decoration: none !important;
-}
-.auth .manual-redirection a:hover {
-    color: black !important;
-    text-decoration: underline !important;
-}
-
 /* -------------------- Notifs -------------------- */
 .error-input.log-attempt {
+    margin: 6px 0 -22px 0;
     -webkit-text-stroke: 0.2px;
-}
-.confirmation-modif {
-    display: none;
-    margin-left: 8px;
-    font-size: 14px;
-    color: #00AD3F;
 }
 
 /* -------------------- Inputs -------------------- */
@@ -93,12 +76,12 @@
     width: 100%;
 }
 .day {
-    flex-basis: 15%;
+    flex-basis: 15%; max-width: 15%;
     margin-right: 2%;
     text-align: center;
 }
 .month {
-    flex-basis: 58%;
+    flex-basis: 58%; max-width: 58%;
     padding-left: 8px;
     margin: 0 2% 6px 0;
     border: 1px solid #cdcdcd;
@@ -107,7 +90,7 @@
     color: grey;
 }
 .year {
-    flex-basis: 23%;
+    flex-basis: 23%; max-width: 23%;
     text-align: center;
 }
 
@@ -167,15 +150,15 @@
     padding: 0 45px 0 75px;
 }
 
-/* -------------------- email & delete link -------------------- */
+/* -------------------- email & grey-link -------------------- */
 .auth.account form cite {
     font-style: normal;
 }
-.auth.account form p > a {
+.auth.account form p.grey-link {
     font-size: 12px;
     text-decoration: none !important;
 }
-.auth.account form p > a:hover {
+.auth.account form p.grey-link:hover {
     text-decoration: underline !important;
 }
 
@@ -207,54 +190,6 @@
     color: white;
     border: 1px solid;
     background-color: #e60000;
-}
-
-/* ----------------- Pop up delete account ----------------- */
-.delete-popup {
-    display: flex; flex-direction: column; align-items: center;
-    padding: 16px;
-}
-.delete-popup p {
-    margin: 10px 0 0 0 !important;
-    font-size: 16px; font-family: 'Raleway', Arial, Helvetica; -webkit-text-stroke: 0.2px;
-    color: #333333;
-}
-
-.delete-popup > .close {
-    position: absolute; display: block;
-    top: -10px; right: -10px;
-    padding: 2px 5px;
-    font-size: 24px;
-    line-height: 20px;
-    background: #ffffff;
-    border: 1px solid #cfcece; border-radius: 18px;
-}
-
-.delete-popup > .wrap-buttons > button {
-    padding: 4px 12px 4px 12px;
-    background: none;
-    font-size: 18px; font-family: 'Raleway', Arial, Helvetica; -webkit-text-stroke: 0.6px;
-    transition-duration: 0.4s; -webkit-transition-duration: 0.4s;
-}
-
-.delete-popup > .wrap-buttons > button[class="no"] {
-    margin-left: 12px;
-    border: 2px solid #e60000;
-    color: #e60000;
-    
-}
-.delete-popup > .wrap-buttons > button[class="no"]:hover {
-    background-color: #e60000;
-    color: white;
-}
-
-.delete-popup > .wrap-buttons > button[class="yes"] {
-    color: #00AD3F;
-    border: 2px solid #00AD3F;
-}
-.delete-popup > .wrap-buttons > button[class="yes"]:hover {
-    background-color: #00AD3F;
-    color: white;
 }
 
 /* //////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
@@ -323,14 +258,5 @@
         color: white;
         border: 1px solid;
         background-color: #e60000;
-    }
-
-    /* -------------------- Popup -------------------- */
-    .delete-popup {
-        max-width: 80vw;
-    }
-    .delete-popup > .wrap-buttons > button {
-        padding: 4px 12px 4px 12px;
-        font-size: 18px;
     }
 }

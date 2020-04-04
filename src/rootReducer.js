@@ -5,6 +5,7 @@ import {
     CONFIRM_CSGO_ACCOUNT,
     GET_BETS,
     ADD_BET,
+    UPDATE_BET_LOST,
     GET_SHOP_ARTICLES,
     ADD_CART,
     DELETE_CART,
@@ -16,6 +17,7 @@ import {
 
 const DEFAULT_STATE = {
     isLogged: false,
+    isLogging: true,
     authStatus: '',
     user: {},
     forceUpdate: 0,
@@ -52,10 +54,6 @@ export default function refresh(state = DEFAULT_STATE, action = {}) {
     }
 
 
-
-
-
-
     switch(action.type) {
 
         case SET_USER:
@@ -89,6 +87,7 @@ export default function refresh(state = DEFAULT_STATE, action = {}) {
                 ...newState,
                 forceUpdate: newState.forceUpdate + 1,
                 isLogged: isLogged,
+                isLogging: false,
                 authStatus: authStatus,
                 user: user
             };
@@ -178,8 +177,26 @@ export default function refresh(state = DEFAULT_STATE, action = {}) {
             newStateBetsHistory.unshift(newBet);
             newStatePendingBets[action.actions.game] = newBet;
 
+            newStateUser['custom:ecoin'] = Number(newStateUser['custom:ecoin']) - newBet.ecoin;
+
             console.log('betsHistory: ', newStateBetsHistory)
             console.log('pendingBets: ', newStatePendingBets)
+
+            return {
+                ...newState,
+                user: newStateUser,
+                betsHistory: newStateBetsHistory,
+                pendingBets: newStatePendingBets
+            };
+
+
+        case UPDATE_BET_LOST:
+            const betUpdated = action.actions.body;
+
+            const oldIndex = newStateBetsHistory.findIndex(bet => bet.betId === betUpdated.betId);
+            newStateBetsHistory[oldIndex].status = 'lost';
+            newStateBetsHistory[oldIndex].message = 'Défaite -';
+            delete newStatePendingBets[action.actions.game];
 
             return {
                 ...newState,

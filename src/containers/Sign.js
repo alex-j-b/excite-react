@@ -15,7 +15,7 @@ import 'react-phone-input-2/lib/style.css'
 import authBG from "../images/mystique-statue.jpg";
 import lolLogo from "../images/lol-logo.png";
 import fortniteLogo from "../images/fortnite-logo.png";
-import rocketLogo from "../images/rocket-logo.png";
+import csgoLogo from "../images/csgo-logo.png";
 
 
 class Sign extends Component {
@@ -33,6 +33,7 @@ class Sign extends Component {
         familyName: '',
         phoneNumber: '',
         address: '',
+        emailVerified: false,
         stepTwo: false,
         loading: false
     }
@@ -68,7 +69,8 @@ class Sign extends Component {
     async onSubmit(e) {
         e.preventDefault();
         if (!this.state.stepTwo) {
-            const { email, password, bd_day, bd_month, bd_year } = this.state;
+            const { email, password, bd_month, bd_year } = this.state;
+            let bd_day = this.state.bd_day.length === 1 ? '0' + this.state.bd_day : this.state.bd_day;
 
             const mailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
             const validMail = mailRegex.test(email.toLowerCase());
@@ -85,6 +87,8 @@ class Sign extends Component {
             errorDate.style.display = validDate ? "none" : "inline";
 
             if (validMail && validPassword & validDate){
+                this.refs.errorMailExist.style.display = "none";
+                this.refs.errorUnknown.style.display = "none";
                 this.setState({ loading: true });
                 try {
                     await Auth.signUp({
@@ -101,6 +105,13 @@ class Sign extends Component {
                     this.setState({ loading: false, stepTwo: true });
                 } catch (e) {
                     this.setState({ loading: false });
+                    if (e.code === 'UsernameExistsException') {
+                        this.refs.errorMailExist.style.display = "inline";
+                    }
+                    else {
+                        this.refs.errorUnknown.innerHTML = e.message;
+                        this.refs.errorUnknown.style.display = "inline";
+                    }
                 }
             }
         }
@@ -118,11 +129,13 @@ class Sign extends Component {
                 this.setState({ loading: true });
                 Auth.verifyCurrentUserAttributeSubmit('email', confCode)
                 .then(() => {
-                    this.props.updateUser({
-                        'given_name': givenName,
-                        'family_name': familyName,
-                        'phone_number': phoneNumber,
-                        'address': address
+                    this.setState({ emailVerified: true }, () => {
+                        this.props.updateUser({
+                            'given_name': givenName,
+                            'family_name': familyName,
+                            'phone_number': phoneNumber,
+                            'address': address
+                        });
                     });
                 }).catch(e => {
                     this.setState({ loading: false });
@@ -133,20 +146,8 @@ class Sign extends Component {
     }
 
     componentWillUnmount() {
-        if (this.props.user.email_verified !== 'true') {
+        if (!this.state.emailVerified && !this.props.isLogged) {
             this.props.deleteUser();
-        }
-    }
-
-    componentDidUpdate() {
-        if (this.props.isLogged) {
-            this.props.history.push('/jouer');
-        }
-    }
-
-    componentDidMount() {
-        if (this.props.isLogged) {
-            this.props.history.push('/jouer');
         }
     }
 
@@ -154,7 +155,7 @@ class Sign extends Component {
         const firstStep =
             <>
                 <span><span className="purple">C</span>réez un compte</span>
-                <p className="manual-redirection">Déjà inscrit ? <Link to="/connexion">Connectez-vous</Link></p>
+                <p className="grey-element connexion">Déjà inscrit ?&nbsp;<Link className="grey-link" to="/connexion">Connectez-vous</Link></p>
 
                 <label htmlFor="email">
                     <span><span className="purple">E</span>-mail</span>
@@ -226,11 +227,14 @@ class Sign extends Component {
                         spellCheck={false}
                     ></input>
                 </div>
-                <p className="legal">En créant se compte vous acceptez les conditions générales d’utilisation.</p>
+                <p className="grey-element">En créant ce compte vous acceptez les <a className="grey-link" title="https://excite.world/conditions" href="https://excite.world/conditions" target="_blank" rel="noopener noreferrer">conditions générales d’utilisation</a>.</p>
+                
                 <div>
                     <button className="e-button">Démarrer</button>
                     <DotsLoader loading={this.state.loading}/>
                 </div>
+                <p ref="errorMailExist" className="error-input log-attempt">Cet email existe déjà</p>
+                <p ref="errorUnknown" className="error-input log-attempt"></p>
             </>;
 
 
@@ -316,7 +320,7 @@ class Sign extends Component {
                     <div className="games-icons">
                         <img className="lol-logo" src={lolLogo} alt="lolLogo"></img>
                         <img className="fortnite-logo" src={fortniteLogo} alt="fortniteLogo"></img>
-                        <img className="rocket-logo" src={rocketLogo} alt="rocketLogo"></img>
+                        <img className="csgo-logo" src={csgoLogo} alt="csgoLogo"></img>
                     </div>
                     {this.state.stepTwo ? secondStep : firstStep}
                 </form>

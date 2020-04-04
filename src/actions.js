@@ -5,6 +5,7 @@ export const SET_USER = 'SET_USER';
 
 export const GET_BETS = 'GET_BETS';
 export const ADD_BET = 'ADD_BET';
+export const UPDATE_BET_LOST = 'UPDATE_BET_LOST';
 export const CONFIRM_LOL_ACCOUNT = 'CONFIRM_LOL_ACCOUNT';
 export const CONFIRM_FORTNITE_ACCOUNT = 'CONFIRM_FORTNITE_ACCOUNT';
 export const CONFIRM_CSGO_ACCOUNT = 'CONFIRM_CSGO_ACCOUNT';
@@ -236,11 +237,11 @@ export function setAddLolBet(body) {
         }
     };
 }
-export function addLolBet(ecoinBet) {
+export function addLolBet(ecoin) {
     return dispatch => {
         API.post('exciteAPI', '/lol/addBet', {
             'body': {
-                'ecoinBet': ecoinBet
+                'ecoin': ecoin
             }
         }).then(response => {
             if (response.statusCode === 200) {
@@ -307,11 +308,11 @@ export function setAddFortniteBet(body) {
         }
     };
 }
-export function addFortniteBet(ecoinBet) {
+export function addFortniteBet(ecoin) {
     return dispatch => {
         API.post('exciteAPI', '/fortnite/addBet', {
             'body': {
-                'ecoinBet': ecoinBet
+                'ecoin': ecoin
             }
         }).then(response => {
             if (response.statusCode === 200) {
@@ -380,11 +381,11 @@ export function setAddCsgoBet(body) {
         }
     };
 }
-export function addCsgoBet(ecoinBet) {
+export function addCsgoBet(ecoin) {
     return dispatch => {
         API.post('exciteAPI', '/csgo/addBet', {
             'body': {
-                'ecoinBet': ecoinBet
+                'ecoin': ecoin
             }
         }).then(response => {
             if (response.statusCode === 200) {
@@ -546,10 +547,11 @@ export function setBuyEcoin(ecoinAmount) {
         ecoinAmount
     };
 }
-export function buyEcoin(ecoinAmount, source) {
+export function buyEcoin(method, ecoinAmount, source) {
     return dispatch => {
         return API.post('exciteAPI', '/buyEcoin', {
             'body': {
+                'method': method,
                 'ecoin': ecoinAmount,
                 'source': source
             }
@@ -557,6 +559,30 @@ export function buyEcoin(ecoinAmount, source) {
             console.log(response)
             if (response.statusCode === 200) {
                 dispatch(setBuyEcoin(ecoinAmount));
+            }
+            return response;
+        });
+    }
+}
+
+/* -------------------- updateBetLost --------------------- */
+export function setUpdateBetLost(body) {
+    return {
+        type: UPDATE_BET_LOST,
+        actions: {
+            body: body,
+            game: 'fortnite'
+        }
+    };
+}
+export function updateBetLost(game) {
+    return dispatch => {
+        return API.post('exciteAPI', '/updateBetLost', {
+            'body': { 'game': game }
+        }).then(response => {
+            console.log(response)
+            if (response.statusCode === 200) {
+                dispatch(setUpdateBetLost(response.body));
             }
             return response;
         });

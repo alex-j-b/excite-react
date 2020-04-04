@@ -1,6 +1,5 @@
 //React
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
 import "./Auth.css";
 //Redux
 import { connect } from "react-redux";
@@ -24,9 +23,9 @@ class Account extends Component {
         nickname: '',
         givenName: '',
         familyName: '',
-        bdDay: '01',
-        bdMonth: '05',
-        bdYear: '1997',
+        bdDay: '',
+        bdMonth: '01',
+        bdYear: '',
         phoneNumber: '',
         address: '',
         currentPassword: '',
@@ -53,7 +52,6 @@ class Account extends Component {
         e.preventDefault();
         const {
             nickname,
-            bdDay,
             bdMonth,
             bdYear,
             address,
@@ -63,6 +61,7 @@ class Account extends Component {
             givenName,
             familyName,
         } = this.state;
+        let bdDay = this.state.bdDay.length === 1 ? '0' + this.state.bdDay : this.state.bdDay;
         let phoneNumber = this.state.phoneNumber.replace(/\s/g, '');
 
         const currentNickname = this.props.user.nickname;
@@ -73,6 +72,11 @@ class Account extends Component {
         const currentBdYear = this.props.user.bdYear;
         const currentPhoneNumber = this.props.user.phone_number;
         const currentAddress = this.props.user.address;
+
+        const attributesKeys = ['nickname', 'given_name', 'family_name', 'birthdate', 'phone_number', 'address']
+        attributesKeys.forEach(key => {
+            document.querySelector(`.confirmation-modif.${key}`).style.display = "none";
+        })
 
         let errorNickname = document.querySelector('.error-input.nickname');
         errorNickname.style.display = nickname.length >= 3 ? "none" : "inline";
@@ -136,12 +140,7 @@ class Account extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        //Not Logged Redirection
-        if (!this.props.isLogged) {
-            this.props.history.push('/connexion');
-        }
-        //App first load
-        else if (!this.state.userLoaded) {
+        if (!this.state.userLoaded) {
             this.setState({
                 userLoaded: true,
                 nickname: this.props.user.nickname || '',
@@ -192,10 +191,7 @@ class Account extends Component {
     }
     
     componentDidMount() {
-        if (this.props.authStatus === 'deleteUser') {
-            this.props.history.push('/connexion');
-        }
-        else if (this.props.isLogged) {
+        if (this.props.isLogged) {
             this.setState({
                 userLoaded: true,
                 nickname: this.props.user.nickname || '',
@@ -379,18 +375,16 @@ class Account extends Component {
                                 >Déconnexion
                             </button>
 
-                            <p className="manual-redirection" onClick={this.togglePopUp}>
-                                <Link to="#">Supprimer mon compte</Link>
-                            </p>
+                            <p className="grey-link" onClick={this.togglePopUp}>Supprimer mon compte</p>
                             <Popup
                                 open={this.state.popUpDeleteAccount}
                                 contentStyle={{ width: 'fit-content' }}
                                 closeOnDocumentClick
                             >
-                                <div className="delete-popup">
-                                    <Link to="#" className="close" onClick={this.togglePopUp}>
+                                <div className="yes-no-popup">
+                                    <div className="close" onClick={this.togglePopUp}>
                                         &times;
-                                    </Link>
+                                    </div>
                                     <p>Voulez-vous vraiment supprimer <b>définitivement</b> votre compte Excite ?</p>
                                     <p>⚠ Vous ne pourrez plus recréer de compte avec cet email et vos comptes de jeux seront bloqués.</p>
                                     <div className="wrap-buttons">

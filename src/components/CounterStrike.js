@@ -22,10 +22,10 @@ import steamLogo from "../images/steam-logo.png";
 
 
 const ecoinOptions = [
-    { value: '5', label: '5' },
-    { value: '10', label: '10' },
-    { value: '20', label: '20' },
-    { value: '50', label: '50' }
+    { value: 5, label: '5' },
+    { value: 10, label: '10' },
+    { value: 20, label: '20' },
+    { value: 50, label: '50' }
 ]
 
 const CustomSingleValue = ({ data }) => (
@@ -46,7 +46,7 @@ class CounterStrike extends Component {
     confirmCsgoAccount = this.confirmCsgoAccount.bind(this);
     addCsgoBet = this.addCsgoBet.bind(this);
     state = {
-        ecoinOption: '5',
+        ecoinOption: 5,
         steamId64: false,
         authenticationCode: '',
         lastMatchToken: '',
@@ -64,7 +64,7 @@ class CounterStrike extends Component {
     }
 
     steamLogin() {
-        const openIdUrl = `https://steamcommunity.com/openid/login?openid.ns=http://specs.openid.net/auth/2.0&openid.mode=checkid_setup&openid.return_to=http://192.168.1.47:3000/jouer?game=counterstrikego&openid.realm=http://192.168.1.47:3000/&openid.claimed_id=http://specs.openid.net/auth/2.0/identifier_select&openid.identity=http://specs.openid.net/auth/2.0/identifier_select`;
+        const openIdUrl = `https://steamcommunity.com/openid/login?openid.ns=http://specs.openid.net/auth/2.0&openid.mode=checkid_setup&openid.return_to=http://192.168.1.90:3000/jouer?game=counterstrikego&openid.realm=http://192.168.1.90:3000/&openid.claimed_id=http://specs.openid.net/auth/2.0/identifier_select&openid.identity=http://specs.openid.net/auth/2.0/identifier_select`;
         window.open(openIdUrl, '_self');
     }
 
@@ -106,7 +106,7 @@ class CounterStrike extends Component {
         const thisBets = this.props.pendingBets;
         if (!isEqual(prevBets, thisBets)) {
             if ("counterstrikego" in thisBets && !isEqual(prevBets.counterstrikego, thisBets.counterstrikego)) {
-                const ecoinValue = this.props.pendingBets.counterstrikego.ecoinBet.toString();
+                const ecoinValue = this.props.pendingBets.counterstrikego.ecoin.toString();
                 const optionIndex = ecoinOptions.findIndex(option => option.value === ecoinValue);
                 this.setState({
                     loading: false,
@@ -164,7 +164,7 @@ class CounterStrike extends Component {
 
         const thisBets = this.props.pendingBets;
         if ("counterstrikego" in thisBets) {
-            const ecoinValue = this.props.pendingBets.counterstrikego.ecoinBet.toString();
+            const ecoinValue = this.props.pendingBets.counterstrikego.ecoin.toString();
             const optionIndex = ecoinOptions.findIndex(option => option.value === ecoinValue);
             this.setState({
                 loading: false,
@@ -212,7 +212,7 @@ class CounterStrike extends Component {
                     {this.props.imageReady && <ImageFadeIn src={csgoPolice} />}
                 </div>
                 <div className="right">
-                    <h1><span className="purple">C</span>ounter Strike GO</h1>
+                    <p className="title"><span className="purple">C</span>ounter Strike GO</p>
 
                     { this.props.accountConfirmed ?
                         <>
@@ -247,7 +247,7 @@ class CounterStrike extends Component {
                         :
                         ( !this.state.steamId64 ?
                             <button 
-                                className="steam-login"
+                                className="e-button steam-login"
                                 onClick={this.steamLogin}
                                 >Connexion Steam
                                 <img src={steamLogo} alt="steamLogo"></img>
@@ -309,8 +309,8 @@ function mapDispatchToProps(dispatch) {
         confirmCsgoAccount: function (steamId64, authenticationCode, lastMatchToken) {
             return dispatch(confirmCsgoAccount(steamId64, authenticationCode, lastMatchToken));
         },
-        addCsgoBet: function (ecoinBet) {
-            dispatch(addCsgoBet(ecoinBet));
+        addCsgoBet: function (ecoin) {
+            dispatch(addCsgoBet(ecoin));
         },
         getCsgoBets: function () {
             dispatch(getCsgoBets());

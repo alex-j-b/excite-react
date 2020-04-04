@@ -1,0 +1,74 @@
+
+/* //////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
+/* /////////////////////////////////////////////// GENERAL DESKTOP //////////////////////////////////////////////// */
+/* //////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
+
+.contact {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    height: fit-content; min-height: calc(100vh - 160px);
+    background-position: center;
+}
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+    .contact {
+        height: calc(100vh - 160px);
+    }
+}
+.contact > form {
+    display: flex; flex-direction: column; align-items: center;
+    max-width: 800px;
+    padding: 40px 90px 40px 90px;
+    border: 1px solid black;
+    background-color: #f9f9f9 !important;
+    overflow: hidden;
+}
+
+.contact .title {
+    margin: 0;
+    font-family: 'Raleway', Arial; font-size: 24px; -webkit-text-stroke: 0.75px;
+    text-align: center;
+}
+.contact h5 {
+    width: 110%;
+    margin: 50px 0 40px 0;
+    font-size: 20px; font-family: 'Raleway', Arial; font-weight: normal; -webkit-text-stroke: 0.3px;
+    text-align: center;
+}
+.contact label {
+    margin: 10px 0 10px 0;
+    align-self: flex-start;
+    font-size: 18px; font-family: 'Raleway', Arial; -webkit-text-stroke: 0.3px;
+}
+.contact textarea {
+    width: 100%;
+    min-height: 200px;
+    padding: 10px 12px;
+    border: 1px solid #cdcdcd;
+    font-size: 14px; font-family: 'Raleway', Arial;
+}
+
+.error-input.email-notsent {
+    margin: 0 0 -18px 0;
+}
+.confirmation-modif.email-sent {
+    margin: 0 0 -18px 0;
+}
+
+
+/* //////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
+/* ///////////////////////////////////////////// UNDER 1000 /////////////////////////////////////////////////////// */
+/* //////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
+
+@media screen and (max-width: 1000px) {
+    .contact {
+        min-height: 0;
+    }
+    .contact > form {
+        min-height: calc(100vh - 161px);
+        padding: 40px 10vw 40px 10vw !important;
+    }
+    .contact h5 {
+        width: 110%;
+        margin: 30px 0 20px 0;
+        font-size: 16px; -webkit-text-stroke: 0.3px;
+    }
+}

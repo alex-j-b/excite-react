@@ -19,10 +19,10 @@ import riven from "../images/lol-riven.png";
 import lolPotion from "../images/lol-potion.png";
 
 const ecoinOptions = [
-    { value: '5', label: '5' },
-    { value: '10', label: '10' },
-    { value: '20', label: '20' },
-    { value: '50', label: '50' }
+    { value: 5, label: '5' },
+    { value: 10, label: '10' },
+    { value: 20, label: '20' },
+    { value: 50, label: '50' }
 ]
 
 const lolRegionsOptions = [
@@ -55,7 +55,7 @@ class LeagueOfLegends extends Component {
     confirmLolAccount = this.confirmLolAccount.bind(this);
     addLolBet = this.addLolBet.bind(this);
     state = {
-        ecoinOption: '5',
+        ecoinOption: 5,
         summonerName: '',
         region: 'euw1',
         defaultEcoinOption: undefined,
@@ -115,7 +115,7 @@ class LeagueOfLegends extends Component {
         const thisBets = this.props.pendingBets;
         if (this.props.accountConfirmed && !isEqual(prevBets, thisBets)) {
             if ("leagueoflegends" in thisBets && !isEqual(prevBets.leagueoflegends, thisBets.leagueoflegends)) {
-                const ecoinValue = this.props.pendingBets.leagueoflegends.ecoinBet.toString();
+                const ecoinValue = this.props.pendingBets.leagueoflegends.ecoin.toString();
                 const optionIndex = ecoinOptions.findIndex(option => option.value === ecoinValue);
                 this.setState({
                     loading: false,
@@ -160,7 +160,7 @@ class LeagueOfLegends extends Component {
     componentDidMount() {
         const thisBets = this.props.pendingBets;
         if ("leagueoflegends" in thisBets) {
-            const ecoinValue = this.props.pendingBets.leagueoflegends.ecoinBet.toString();
+            const ecoinValue = this.props.pendingBets.leagueoflegends.ecoin.toString();
             const optionIndex = ecoinOptions.findIndex(option => option.value === ecoinValue);
             this.setState({
                 loading: false,
@@ -211,7 +211,7 @@ class LeagueOfLegends extends Component {
                     {this.props.imageReady && <ImageFadeIn src={riven} />}
                 </div>
                 <div className="right">
-                    <h1><span className="purple">L</span>eague of legends</h1>
+                <p className="title"><span className="purple">L</span>eague of legends</p>
 
                     { this.props.accountConfirmed ?
                         <>
@@ -293,8 +293,8 @@ function mapDispatchToProps(dispatch) {
         confirmLolAccount: function (summonerName, region) {
             return dispatch(confirmLolAccount(summonerName, region));
         },
-        addLolBet: function (ecoinBet) {
-            dispatch(addLolBet(ecoinBet));
+        addLolBet: function (ecoin) {
+            dispatch(addLolBet(ecoin));
         },
         getLolBets: function () {
             dispatch(getLolBets());

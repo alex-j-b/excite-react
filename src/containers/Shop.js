@@ -20,27 +20,30 @@ import panierIcon from "../images/panier.png";
 
 
 class Shop extends Component {
+    switchTab = this.switchTab.bind(this);
     state = {
-        loading: true,
+        loading: false,
         tab: 'articles',
-        id: false,
-        currentUrl: document.location.href
+        id: false
     }
 
-    componentDidUpdate() {
-        if (this.state.currentUrl !== document.location.href) {
-            let urlParams = (new URL(document.location)).searchParams;
-            if (urlParams.get('tab') !== null) {
-                this.setState({ 
-                    tab: urlParams.get('tab'),
-                    id: urlParams.get('id')
-                });
-            }
-            else {
-                this.setState({ tab: 'articles' });
-                this.props.history.push('/boutique?tab=articles');
-            }
-            this.setState({ currentUrl: document.location.href });
+    switchTab(tab) {
+        this.setState({ tab: tab });
+    }
+
+    componentDidUpdate(prevProps) {
+        if (this.props.isLogged !== prevProps.isLogged) {
+            this.props.getCart().then(response => {
+                if (this.state.tab === 'panier') this.setState({ loading: false });
+            });
+            this.props.getCommand().then(response => {
+                if (this.state.tab === 'commandes') this.setState({ loading: false });
+            });
+        }
+
+        let urlParams = (new URL(document.location)).searchParams;
+        if ((urlParams.get('id') !== this.state.id)) {
+            this.setState({ id: urlParams.get('id') });
         }
     }
 
@@ -57,15 +60,22 @@ class Shop extends Component {
             this.props.history.push('/boutique?tab=articles');
         }
 
+        if ((this.state.tab !== 'articles') || (this.state.tab === 'articles' && this.props.shopArticles.length === 0)) {
+            this.setState({ loading: true });
+        }
+
         this.props.getShopArticles().then(response => {
-            if(this.state.tab === 'articles') this.setState({ loading: false });
+            if (this.state.tab === 'articles') this.setState({ loading: false });
         });
-        this.props.getCart().then(response => {
-            if(this.state.tab === 'panier') this.setState({ loading: false });
-        });
-        this.props.getCommand().then(response => {
-            if(this.state.tab === 'commandes') this.setState({ loading: false });
-        });
+
+        if (this.props.isLogged) {
+            this.props.getCart().then(response => {
+                if (this.state.tab === 'panier') this.setState({ loading: false });
+            });
+            this.props.getCommand().then(response => {
+                if (this.state.tab === 'commandes') this.setState({ loading: false });
+            });
+        }
     }
 
     render() {
@@ -91,7 +101,7 @@ class Shop extends Component {
                             to={`/ecoin?redirect=${window.location.pathname+window.location.search}`}
                             className="wallet-ecoin"
                         >
-                            <label>Mes e-Coins : </label><span className="number">{this.props.user['custom:ecoin']}</span>
+                            <label>Mes eCoins : </label><span className="number">{this.props.user['custom:ecoin']}</span>
                             <img className="ecoin" src={ecoin} alt="ecoin"></img>
                         </Link>
                     }
@@ -101,6 +111,7 @@ class Shop extends Component {
                             to="/boutique?tab=articles"
                             className={this.state.tab === 'articles' ? 'current-shop-tab' : ''}
                             style={{ backgroundColor: `${this.state.tab === 'articles' ? 'white' : 'transparent'}` }}
+                            onClick={() => this.switchTab('articles')}
                             ><span>Articles</span>
                             <img src={articlesIcon} alt="articlesIcon" style={{ filter: `${this.state.tab === 'articles' ? '' : 'invert(100%)'}` }}></img>
                         </Link>
@@ -108,6 +119,7 @@ class Shop extends Component {
                             to="/boutique?tab=commandes"
                             className={this.state.tab === 'commandes' ? 'current-shop-tab' : ''}
                             style={{ backgroundColor: `${this.state.tab === 'commandes' ? 'white' : 'transparent'}` }}
+                            onClick={() => this.switchTab('commandes')}
                             ><span>Mes commandes</span>
                             <img src={commandesIcon} alt="commandesIcon" style={{ filter: `${this.state.tab === 'commandes' ? '' : 'invert(100%)'}` }}></img>
                         </Link>
@@ -115,6 +127,7 @@ class Shop extends Component {
                             to="/boutique?tab=panier"
                             className={this.state.tab === 'panier' ? 'current-shop-tab' : ''}
                             style={{ backgroundColor: `${this.state.tab === 'panier' ? 'white' : 'transparent'}` }}
+                            onClick={() => this.switchTab('panier')}
                             ><span>Mon panier</span>
                             <img src={panierIcon} alt="panierIcon" style={{ filter: `${this.state.tab === 'panier' ? '' : 'invert(100%)'}` }}></img>
                             {this.props.cartArticles.length > 0 && <span className="dot">{this.props.cartArticles.length}</span>}
@@ -123,9 +136,9 @@ class Shop extends Component {
                 </div>
 
                 { this.state.tab === 'articles' && !this.state.id && <Articles shopArticles={this.props.shopArticles}/> }
-                { this.state.tab === 'panier' && <Cart cartArticles={this.props.cartArticles} userEcoin={this.props.user['custom:ecoin']} history={this.props.history}/> }
+                { this.state.tab === 'panier' && <Cart switchTab={this.switchTab} cartArticles={this.props.cartArticles} history={this.props.history}/> }
                 { this.state.tab === 'commandes' && <Commands commandArticles={this.props.commandArticles}/> }
-                { articleIdObj && <ArticleId articleIdObj={articleIdObj}/> }
+                { articleIdObj && <ArticleId articleIdObj={articleIdObj} history={this.props.history} /> }
                 <CircleLoader loading={this.state.loading}/>
 
             </div>

@@ -6,7 +6,7 @@ import forestBG from "../images/forest.jpg";
 import teemo from "../images/teemo.png";
 
 
-export default class Play extends Component {
+export default class NotFound extends Component {
     render() {
         return (
             <div className="not-found" style={{ backgroundImage: `url(${forestBG})` }}>

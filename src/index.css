@@ -10,37 +10,35 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 a, a:link, a:visited, a:hover, a:active {
-    color: #333333;
+    color: inherit;
     text-decoration: none;
-    outline: none !important;
-    box-shadow: none !important;
+    outline: none;
+    box-shadow: none;
     -webkit-tap-highlight-color: transparent;
-    -webkit-touch-callout: none !important;
-    -webkit-user-select: none !important;
-    -khtml-user-select: none !important;
-    -moz-user-select: none !important;
-    -ms-user-select: none !important;
-    user-select: none !important;
+    -webkit-touch-callout: none;
 }
 p {
     margin: 0;
 }
-input, textarea, select, button, button:focus {
+input, textarea, select, button, button:focus, button:active {
     outline: none !important;
     box-shadow: none !important;
     -webkit-tap-highlight-color: transparent;
-    -webkit-touch-callout: none !important;
-    -webkit-user-select: none !important;
-    -khtml-user-select: none !important;
-    -moz-user-select: none !important;
-    -ms-user-select: none !important;
-    user-select: none !important;
+    -webkit-touch-callout: none;
+}
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+    .title {
+        font-weight: bold;
+    }
 }
 
 /* ---------------------------------------- Buttons ---------------------------------------- */
 button {
     cursor: pointer;
     font-family: 'Lato';
+}
+button::-moz-focus-inner {
+    border: 0;
 }
 .e-button {
     width: fit-content;
@@ -76,11 +74,26 @@ input:focus {
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6) !important;
     border-color: #66AFE9;
 }
+input[type="radio"] {
+    padding: 0;
+    margin: 0;
+}
+input[type="radio"]:focus {
+    box-shadow: none !important;
+    border-color: none;
+}
+
 .error-input {
     display: none;
     margin-left: 8px;
-    font-size: 14px;
+    font-size: 14px; -webkit-text-stroke: 0.1px;
     color: red !important;
+}
+.confirmation-modif {
+    display: none;
+    margin-left: 8px;
+    font-size: 14px; -webkit-text-stroke: 0.1px;
+    color: #00AD3F;
 }
 
 /* -------------------- Phone input -------------------- */
@@ -103,6 +116,19 @@ input:focus {
     font-size: 16px !important; font-family: 'Raleway', Arial !important;
 }
 
+/* -------------------- Phone input -------------------- */
+.select-ecoin {
+    z-index: 999;
+}
+.select-ecoin * {
+    cursor: pointer;
+}
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+    .select-ecoin {
+        min-width: 105px;
+    }
+}
+
 /* ---------------------------------------- Spans ---------------------------------------- */
 .purple {
     color: purple;
@@ -121,4 +147,99 @@ span > .ecoin {
 .app-menu .ecoin {
     margin-top: -5px;
     height: 24px !important;
+}
+
+/* ---------------------------------------- Links ---------------------------------------- */
+.grey-link {
+    margin: 10px 0 0 0;
+    font-size: 14px; text-align: center;
+    color: grey !important;
+    text-decoration: underline !important;
+    cursor: pointer;
+}
+.grey-link.not-underline {
+    text-decoration: none !important;
+}
+.grey-link:hover {
+    color: #333333 !important;
+    text-decoration: underline !important;
+}
+
+p.grey-element {
+    max-width: 100%;
+    font-size: 14px; text-align: center;
+    color: grey;
+}
+p.grey-element.connexion {
+    display: flex; align-items: flex-end;
+}
+.grey-link.forgot {
+    text-decoration: none !important;
+}
+
+/* ---------------------------------------- Pop Ups ---------------------------------------- */
+.yes-no-popup {
+    display: flex; flex-direction: column; align-items: center;
+    max-height: 300px !important;
+    z-index: 9997;
+    padding: 16px;
+}
+.yes-no-popup p {
+    margin: 10px 0 0 0 !important;
+    font-size: 16px; font-family: 'Raleway', Arial, Helvetica; -webkit-text-stroke: 0.2px;
+    text-align: center;
+    color: #333333;
+}
+
+.yes-no-popup > .close {
+    position: absolute; display: block;
+    top: -10px; right: -10px;
+    padding: 2px 5px;
+    font-size: 24px;
+    line-height: 20px;
+    background: #ffffff;
+    border: 1px solid #cfcece; border-radius: 18px;
+    cursor: pointer;
+}
+
+.yes-no-popup > .wrap-buttons {
+    margin-top: 20px;
+}
+
+.yes-no-popup > .wrap-buttons > button {
+    padding: 4px 12px 4px 12px;
+    background: none;
+    font-size: 18px; font-family: 'Raleway', Arial, Helvetica; -webkit-text-stroke: 0.6px;
+    transition-duration: 0.4s; -webkit-transition-duration: 0.4s;
+}
+
+.yes-no-popup > .wrap-buttons > button[class="no"] {
+    margin-left: 12px;
+    border: 2px solid #e60000;
+    color: #e60000;
+    
+}
+.yes-no-popup > .wrap-buttons > button[class="no"]:hover {
+    background-color: #e60000;
+    color: white;
+}
+
+.yes-no-popup > .wrap-buttons > button[class="yes"] {
+    color: #00AD3F;
+    border: 2px solid #00AD3F;
+}
+.yes-no-popup > .wrap-buttons > button[class="yes"]:hover {
+    background-color: #00AD3F;
+    color: white;
+}
+
+/* -------------------- Pop Ups under 780 -------------------- */
+@media screen and (max-width: 780px) {
+    .yes-no-popup {
+        max-width: 80vw;
+    }
+    .yes-no-popup > .wrap-buttons > button {
+        padding: 4px 12px 4px 12px;
+        font-size: 18px;
+    }
 }

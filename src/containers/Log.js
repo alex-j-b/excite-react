@@ -1,18 +1,19 @@
 //React
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import DotsLoader from '../components/DotsLoader';
 import "./Auth.css";
 //Redux
 import { connect } from "react-redux";
 import { logIn } from "../actions";
+//Components
+import DotsLoader from '../components/DotsLoader';
 //Libs
 import { Auth } from "aws-amplify";
 //Images
 import authBG from "../images/mystique-statue.jpg";
 import lolLogo from "../images/lol-logo.png";
 import fortniteLogo from "../images/fortnite-logo.png";
-import rocketLogo from "../images/rocket-logo.png";
+import csgoLogo from "../images/csgo-logo.png";
 
 
 class Log extends Component {
@@ -95,16 +96,9 @@ class Log extends Component {
 
     componentDidUpdate() {
         let errorAttempt = document.querySelector('.error-input.log-attempt');
-        if (this.props.isLogged) {
-            this.props.history.push('/jouer');
-        }
-        else if (this.props.authStatus === 'errorPassword' && errorAttempt.style.display !== "inline") {
+    if (this.props.authStatus === 'errorPassword' && errorAttempt.style.display !== "inline") {
             this.setState({ loading: false }, () => errorAttempt.style.display = "inline");
         }
-    }
-
-    componentDidMount() {
-        if (this.props.isLogged) this.props.history.push('/jouer');
     }
 
     render() {
@@ -115,11 +109,11 @@ class Log extends Component {
                         <div className="games-icons">
                             <img className="lol-logo" src={lolLogo} alt="lolLogo"></img>
                             <img className="fortnite-logo" src={fortniteLogo} alt="fortniteLogo"></img>
-                            <img className="rocket-logo" src={rocketLogo} alt="rocketLogo"></img>
+                            <img className="csgo-logo" src={csgoLogo} alt="csgoLogo"></img>
                         </div>
                         
                         <span><span className="purple">C</span>onnexion</span>
-                        <p className="manual-redirection"><Link to="/inscription">Créer un compte</Link></p>
+                        <p className="grey-link"><Link to="/inscription">Créer un compte</Link></p>
 
                         <label htmlFor="email">
                             <span><span className="purple">E</span>-mail</span>
@@ -147,16 +141,16 @@ class Log extends Component {
                         ></input>
                         
                         <p 
-                            className="manual-redirection forgot"
+                            className="grey-link forgot"
                             onClick={() => this.setState({ forgotForm: 1 })}
-                            ><Link to="#">Mot de passe oublié ?</Link>
+                            >Mot de passe oublié ?
                         </p>
-                        <p className="error-input log-attempt">Mot de passe ou email invalide</p>
-
+                        
                         <div>
                             <button className="e-button">Connexion</button>
                             <DotsLoader loading={this.state.loading}/>
                         </div>
+                        <p className="error-input log-attempt">Mot de passe ou email invalide</p>
                     </form>
                 }
                 {this.state.forgotForm &&
@@ -164,7 +158,7 @@ class Log extends Component {
                         <div className="games-icons">
                             <img className="lol-logo" src={lolLogo} alt="lolLogo"></img>
                             <img className="fortnite-logo" src={fortniteLogo} alt="fortniteLogo"></img>
-                            <img className="rocket-logo" src={rocketLogo} alt="rocketLogo"></img>
+                            <img className="csgo-logo" src={csgoLogo} alt="csgoLogo"></img>
                         </div>
                         
                         <span><span className="purple">M</span>ot de passe oublié</span>

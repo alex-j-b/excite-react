@@ -89,8 +89,29 @@ class Cart extends Component {
         let totalPrice = 0;
         this.props.cartArticles.forEach(el => totalPrice += el.price * el.quantity);
 
-        if (this.props.userEcoin > totalPrice) {
-            this.setState({ step: 2 });
+        if (this.props.user['custom:ecoin'] > totalPrice) {
+            const addressParts = this.props.user['address'].split(',');
+            let address1, city, country;
+            if (addressParts.length === 3) {
+                address1 = addressParts[0];
+                city = addressParts[1];
+                country = addressParts[2];
+            }
+            else {
+                address1 = '';
+                city = '';
+                country = '';
+            }
+
+            this.setState({
+                step: 2,
+                givenName: this.props.user['given_name'],
+                familyName: this.props.user['family_name'],
+                address1: address1,
+                city: city,
+                country: country,
+                phoneNumber: this.props.user['phone_number']
+            });
         }
         else {
             this.refs.errorCart.style.display = 'block';
@@ -111,8 +132,9 @@ class Cart extends Component {
         let promoCode = this.state.promoCode === '' ? 'X' : this.state.promoCode;
         let phoneNumber = this.state.phoneNumber.replace(/\s/g, '');
 
-        this.refs.errorAddress1.style.display = address1.length >= 10 ? "none" : "inline";
-        this.refs.errorPhoneNumber.style.display = phoneNumber.length === 12 ? "none" : "inline";
+        this.refs.errorAddress1.style.display = address1.length >= 10 ? 'none' : 'inline';
+        this.refs.errorPhoneNumber.style.display = phoneNumber.length === 12 ? 'none' : 'inline';
+        this.refs.errorGameAccounts.style.display = 'none';
 
         if (address1.length >= 10 && phoneNumber.length === 12) {
             this.setState({ loading: true });
@@ -134,8 +156,15 @@ class Cart extends Component {
                 phoneNumber,
                 promoCode
             ).then(response => {
+                if (response.statusCode === 200) {
+                    this.props.history.push('/boutique?tab=commandes');
+                    this.props.switchTab('commandes');
+                }
+                else {
+                    this.refs.errorGameAccounts.style.display = 'inline';
+                    this.refs.errorGameAccounts.innerHTML = response.body.error;
+                }
                 this.setState({ loading: false });
-                this.props.history.push('/boutique?tab=commandes');
             });
         }
     }
@@ -184,7 +213,7 @@ class Cart extends Component {
             <>
             { this.state.step === 1 &&
                 <div className="shop-cart">
-                    <h1><span className="purple">M</span>on Panier</h1>
+                    <p className="title"><span className="purple">M</span>on Panier</p>
                     { dataDesktop.length > 0 ?
                         <>
                         <Table className="desktop" columns={columnsDesktop} data={dataDesktop} />
@@ -210,7 +239,7 @@ class Cart extends Component {
                                 Passer commande
                             </button>
                         </div>
-                        <span ref="errorCart" className="error-input cart">e-Coins insuffisant</span>
+                        <span ref="errorCart" className="error-input cart">eCoins insuffisant</span>
                         </>
                         :
                         <span className="empty-cart">Panier vide ¯\_(ツ)_/¯</span>
@@ -219,7 +248,7 @@ class Cart extends Component {
             }
             { this.state.step === 2 && 
                 <div className="shop-expedition">
-                    <h1><span className="purple">A</span>dresse d'expédition</h1>
+                    <p className="title"><span className="purple">A</span>dresse d'expédition</p>
                     <form className="account-form" onSubmit={this.onSubmit}>
                         <div>
                             <div className="label-input">
@@ -348,6 +377,7 @@ class Cart extends Component {
                         </div>
 
                         <button className="e-button">Valider</button>
+                        <p ref="errorGameAccounts" className="error-input command-invalid"></p>
                         <DotsLoader loading={this.state.loading}/>
                     </form>
                 </div>
@@ -370,4 +400,10 @@ function mapDispatchToProps(dispatch) {
         }
     }
 }
-export default connect(null, mapDispatchToProps)(Cart);
+function mapStateToProps(reduxState) {
+    return {
+        user: reduxState.user,
+        isLogged: reduxState.isLogged,
+    };
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Cart);

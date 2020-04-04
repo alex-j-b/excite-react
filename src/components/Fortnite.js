@@ -6,22 +6,24 @@ import {
     loggedInCheck,
     confirmFortniteAccount,
     addFortniteBet,
-    getFortniteBets
+    getFortniteBets,
+    updateBetLost
 } from "../actions";
 //libs
 import { isEqual } from 'lodash';
 import Select from 'react-select';
 import ImageFadeIn from 'react-image-fade-in';
+import Popup from "reactjs-popup";
 import DotsLoader from '../components/DotsLoader';
 //Images
 import ecoin from "../images/e-coin.png";
 import fortniteChar from "../images/fortnite-char.png";
 
 const ecoinOptions = [
-    { value: '5', label: '5' },
-    { value: '10', label: '10' },
-    { value: '20', label: '20' },
-    { value: '50', label: '50' }
+    { value: 5, label: '5' },
+    { value: 10, label: '10' },
+    { value: 20, label: '20' },
+    { value: 50, label: '50' }
 ]
 
 const CustomSingleValue = ({ data }) => (
@@ -40,8 +42,10 @@ class Fortnite extends Component {
     selectChange = this.selectChange.bind(this);
     confirmFortniteAccount = this.confirmFortniteAccount.bind(this);
     addFortniteBet = this.addFortniteBet.bind(this);
+    togglePopUp = this.togglePopUp.bind(this);
+    betLost = this.betLost.bind(this);
     state = {
-        ecoinOption: '5',
+        ecoinOption: 5,
         fortniteId: '',
         defaultEcoinOption: undefined,
         betIsPending: false,
@@ -72,8 +76,28 @@ class Fortnite extends Component {
     }
 
     addFortniteBet() {
-        this.setState({ loading: true });
-        this.props.addFortniteBet(this.state.ecoinOption);
+        this.refs.errorEcoin.style.display = 'none';
+        if (Number(this.props.user['custom:ecoin']) >= this.state.ecoinOption) {
+            this.setState({ loading: true });
+            this.props.addFortniteBet(this.state.ecoinOption);
+        }
+        else {
+            this.refs.errorEcoin.style.display = 'inline';
+        }
+    }
+
+    togglePopUp() {
+        this.setState({ popUpBetLost: !this.state.popUpBetLost });
+    }
+
+    betLost() {
+        this.setState({
+            loading: true,
+            popUpBetLost: false
+        });
+        this.props.updateBetLost('fortnite').then(response => {
+            this.setState({ loading: false });
+        });
     }
 
     handleEnter(e) {
@@ -92,7 +116,7 @@ class Fortnite extends Component {
         const thisBets = this.props.pendingBets;
         if (!isEqual(prevBets, thisBets)) {
             if ("fortnite" in thisBets && !isEqual(prevBets.fortnite, thisBets.fortnite)) {
-                const ecoinValue = this.props.pendingBets.fortnite.ecoinBet.toString();
+                const ecoinValue = this.props.pendingBets.fortnite.ecoin.toString();
                 const optionIndex = ecoinOptions.findIndex(option => option.value === ecoinValue);
                 this.setState({
                     loading: false,
@@ -101,6 +125,7 @@ class Fortnite extends Component {
                 });
                 this.refs.buttonFortniteBet.disabled = true;
                 this.refs.notifFortniteBet.style.display = 'inline';
+                this.refs.lostBetLink.style.display = 'inline';
                 const countDown = () => {
                     const timestamp = thisBets.fortnite.timestamp;
                     const timeRemaining = 600 - ((Date.now() - timestamp) / 1000);
@@ -126,6 +151,7 @@ class Fortnite extends Component {
                 this.props.loggedInCheck();
                 this.refs.buttonFortniteBet.disabled = false;
                 this.refs.notifFortniteBet.style.display = 'none';
+                this.refs.lostBetLink.style.display = 'none';
                 clearInterval(window.intervalFortniteBet);
             }
         }
@@ -134,7 +160,7 @@ class Fortnite extends Component {
     componentDidMount() {
         const thisBets = this.props.pendingBets;
         if ("fortnite" in thisBets) {
-            const ecoinValue = this.props.pendingBets.fortnite.ecoinBet.toString();
+            const ecoinValue = this.props.pendingBets.fortnite.ecoin.toString();
             const optionIndex = ecoinOptions.findIndex(option => option.value === ecoinValue);
             this.setState({
                 loading: false,
@@ -143,6 +169,7 @@ class Fortnite extends Component {
             });
             this.refs.buttonFortniteBet.disabled = true;
             this.refs.notifFortniteBet.style.display = 'inline';
+            this.refs.lostBetLink.style.display = 'inline';
             const countDown = () => {
                 const timestamp = thisBets.fortnite.timestamp;
                 const timeRemaining = 600 - ((Date.now() - timestamp) / 1000);
@@ -170,6 +197,7 @@ class Fortnite extends Component {
         if (this.props.accountConfirmed) {
             this.refs.buttonFortniteBet.disabled = false;
             this.refs.notifFortniteBet.style.display = 'none';
+            this.refs.lostBetLink.style.display = 'none';
             clearInterval(window.intervalFortniteBet);
         }
         document.removeEventListener("keydown", this.handleEnter, false);
@@ -182,7 +210,7 @@ class Fortnite extends Component {
                     { this.props.imageReady && <ImageFadeIn src={fortniteChar} /> }
                 </div>
                 <div className="right">
-                    <h1><span className="purple">F</span>ortnite</h1>
+                <p className="title"><span className="purple">F</span>ortnite</p>
 
                     { this.props.accountConfirmed ?
                         <>
@@ -202,13 +230,41 @@ class Fortnite extends Component {
                                     <img className="ecoin" src={ecoin} alt="ecoin"></img>
                                 </span>
                             </div>
+
                             <button ref="buttonFortniteBet" className="e-button" onClick={this.addFortniteBet}>Parier</button>
+                            <DotsLoader loading={this.state.loading} />
+
+                            <p ref="errorEcoin" className="error-input not-enough-ecoin">eCoins insuffisant</p>
+                            <p ref="lostBetLink" className="grey-link" onClick={this.togglePopUp}>Pari perdu ?</p>
+                            <Popup
+                                open={this.state.popUpBetLost}
+                                contentStyle={{ width: 'fit-content' }}
+                                closeOnDocumentClick
+                            >
+                                <div className="yes-no-popup">
+                                    <div className="close" onClick={this.togglePopUp}>
+                                        &times;
+                                    </div>
+                                    <p>Voulez-vous vraiment confirmer votre <b>défaite</b> ?</p>
+                                    <p>Cela vous permet de relancer un pari avant que la partie précédente soit terminée</p>
+                                    <div className="wrap-buttons">
+                                        <button className="yes" type="button" onClick={this.betLost}>Oui</button>
+                                        <button className="no" type="button" onClick={this.togglePopUp}>Non</button>
+                                    </div>
+                                </div>
+                            </Popup>
+                            
                             <p ref="notifFortniteBet" className="notif">
                                 Pari en cours... il vous reste&nbsp;
                                 <span ref="countDown"></span>
                                 &nbsp;pour rejoindre une partie
                             </p>
-                            <DotsLoader loading={this.state.loading} />
+                            <p 
+                                ref="unconfirmedGameAccount"
+                                className="error-input unconfirmed-game-account"
+                                style={{ display: `${this.props.isLogged && this.props.user.game_accounts.fortnite.confirmed === 'false' ? 'inline' : 'none'}` }}
+                                >Pour commander dans la boutique Excite, ajoutez en ami DarjGG sur Fortnite afin de confirmer votre compte
+                            </p>
                         </>
                         :
                         <>
@@ -237,8 +293,8 @@ class Fortnite extends Component {
                             </div>
 
                             <button className="e-button" onClick={this.confirmFortniteAccount}>Valider</button>
-                            <p ref="errorInputId" className="error-input wrong-id">ID de compte invalide</p>
                             <DotsLoader loading={this.state.loading} />
+                            <p ref="errorInputId" className="error-input wrong-id">ID de compte invalide</p>
                         </>
                     }
                 </div>
@@ -249,23 +305,28 @@ class Fortnite extends Component {
 
 function mapDispatchToProps(dispatch) {
     return {
-        confirmFortniteAccount: function (summonerName, region) {
+        confirmFortniteAccount: function(summonerName, region) {
             return dispatch(confirmFortniteAccount(summonerName, region));
         },
-        addFortniteBet: function (ecoinBet) {
-            dispatch(addFortniteBet(ecoinBet));
+        addFortniteBet: function(ecoin) {
+            dispatch(addFortniteBet(ecoin));
         },
-        getFortniteBets: function () {
+        getFortniteBets: function() {
             dispatch(getFortniteBets());
         },
-        loggedInCheck: function () {
+        updateBetLost: function(game) {
+            return dispatch(updateBetLost(game));
+        },
+        loggedInCheck: function() {
             dispatch(loggedInCheck());
         }
     }
 }
 function mapStateToProps(reduxState) {
     return {
-        pendingBets: reduxState.pendingBets
+        pendingBets: reduxState.pendingBets,
+        user: reduxState.user,
+        isLogged: reduxState.isLogged
     };
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Fortnite);

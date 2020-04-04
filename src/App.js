@@ -59,8 +59,8 @@ class App extends Component {
                                 <img className="ecoin" src={ecoin} alt="ecoin"></img>
                             </NavLink>
                         }
-                        <NavLink to={`/${this.props.isLogged ? 'jouer' : 'inscription'}`} activeClassName="current-route">Jouer</NavLink>
-                        <NavLink to="/boutique" activeClassName="current-route">Boutique</NavLink>
+                        <NavLink to="/jouer" activeClassName="current-route">Jouer</NavLink>
+                        <NavLink to="/boutique?tab=articles" activeClassName="current-route">Boutique</NavLink>
                         {this.props.isLogged && <NavLink to="/mon-compte" activeClassName="current-route">Mon Compte</NavLink>}
                         <NavLink to="/faq" activeClassName="current-route">FAQ</NavLink>
                         <NavLink to="/contact" activeClassName="current-route">Contact</NavLink>
@@ -81,14 +81,14 @@ class App extends Component {
                                 <img className="ecoin" src={ecoin} alt="ecoin"></img>
                             </NavLink>
                         }
-                        <Link to={`/${this.props.isLogged ? 'jouer' : 'inscription'}`} onClick={this.toggleButton}>Jouer</Link>
-                        <Link to="/boutique" onClick={this.toggleButton}>Boutique</Link>
+                        <Link to="/jouer" onClick={this.toggleButton}>Jouer</Link>
+                        <Link to="/boutique?tab=articles" onClick={this.toggleButton}>Boutique</Link>
                         {this.props.isLogged && <Link to="/mon-compte" onClick={this.toggleButton}>Mon Compte</Link>}
                         <Link to="/faq" onClick={this.toggleButton}>FAQ</Link>
                         <Link to="/contact" onClick={this.toggleButton}>Contact</Link>
                     </div>
 
-                    <Routes />
+                    <Routes authProps={{ isLogging: this.props.isLogging, isLogged: this.props.isLogged }} />
 
                     <div className="app-footer">
                         <Link className="logo-excite" to="/">
@@ -101,15 +101,14 @@ class App extends Component {
                             <img src={fbLogo} alt="fb-logo"></img>
                         </Link>
                         <div className="footer-links">
-                            <Link to={`/${this.props.isLogged ? 'jouer' : 'inscription'}`}>Jouer</Link>
-                            <Link to="/boutique">Boutique</Link>
-                            <Link to={`/ecoin?redirect=${window.location.pathname+window.location.search}`}>Acheter des e-Coins</Link>
+                            <Link to="/jouer">Jouer</Link>
+                            <Link to="/boutique?tab=articles">Boutique</Link>
+                            <Link to={`/ecoin?redirect=${window.location.pathname+window.location.search}`}>Acheter des eCoins</Link>
                             {this.props.isLogged && <Link to="/mon-compte">Mon Compte</Link>}
                             <Link to="/faq">FAQ</Link>
                             <Link to="/contact">Contact</Link>
-                            <Link to="/legal">Conditions d'utilisations</Link>
-                            <Link to="/legal">Politique de cookies</Link>
-                            <Link to="/legal">Politique de confidentialité</Link>
+                            <Link to="/conditions">Conditions d'utilisations</Link>
+                            <Link to="/mentions">Mentions légales</Link>
                         </div>
                     </div>
                 </div>
@@ -128,7 +127,8 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps(reduxState) {
     return {
         user: reduxState.user,
-        isLogged: reduxState.isLogged
+        isLogged: reduxState.isLogged,
+        isLogging: reduxState.isLogging
     };
 }
 App = withRouter(App);

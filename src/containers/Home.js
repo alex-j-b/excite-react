@@ -1,21 +1,18 @@
+//React
 import React, { Component } from "react";
 import "./Home.css";
-
+//Images
 import frame1BG from "../images/esport-background-frame1.png";
 import esportBG from "../images/esport-background.mp4";
-
 import oneIcon from "../images/one.png";
 import twoIcon from "../images/two.png";
 import threeIcon from "../images/three.png";
-
 import eCoinIcon from "../images/e-coin.png";
 import controlerIcon from "../images/controler.png";
 import giftIcon from "../images/gift.png";
-
 import lolImage from "../images/lol-image.png";
 import fortniteImage from "../images/fortnite-image.png";
-import rocketImage from "../images/rocket-image.jpg";
-
+import csgoImage from "../images/counter-strike-image.jpg";
 import separator from "../images/separator.png";
 
 
@@ -31,7 +28,7 @@ export default class Home extends Component {
             <div className="home">
 
                 <div className="home-1">
-                    <video id="videoBG" poster={frame1BG} playbackRate="3.0" autoPlay muted loop>
+                    <video id="videoBG" poster={frame1BG} playbackrate="3.0" autoPlay playsInline muted loop>
                         <source src={esportBG} type="video/mp4"></source>
                     </video>
                     <div>
@@ -39,7 +36,7 @@ export default class Home extends Component {
                         <p>Gagne des cadeaux !</p>
                         <button 
                             className="e-button"
-                            onClick={() => this.props.history.push(`/${this.props.isLogged ? 'jouer' : 'inscription'}`)}
+                            onClick={() => this.props.history.push('/jouer')}
                             >Jouer
                         </button>
                     </div>
@@ -50,7 +47,7 @@ export default class Home extends Component {
                         <img className="number" src={oneIcon} alt="oneIcon"></img>
                         <div>
                             <img className="icon" src={eCoinIcon} alt="eCoinIcon"></img>
-                            <p>Mise des E-coins (gratuit)</p>
+                            <p>Mise des eCoins (gratuit)</p>
                         </div>
                     </div>
                     <div className="step second">
@@ -75,7 +72,7 @@ export default class Home extends Component {
                     <div>
                         <img className="image" src={lolImage} alt="lolImage"></img>
                         <img className="image" src={fortniteImage} alt="fortniteImage"></img>
-                        <img className="image" src={rocketImage} alt="rocketImage"></img>
+                        <img className="image" src={csgoImage} alt="csgoImage"></img>
                     </div>
                 </div>
 
