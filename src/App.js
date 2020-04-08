@@ -8,9 +8,10 @@ import "./App.css";
 import { connect } from "react-redux";
 import { loggedInCheck } from "./actions";
 //Images
+import ecoin from "./images/e-coin.png";
 import fbLogo from "./images/fb-logo.png";
 import twitterLogo from "./images/twitter-logo.svg";
-import ecoin from "./images/e-coin.png";
+
 
 class App extends Component {
     toggleButton = this.toggleButton.bind(this);
@@ -42,6 +43,13 @@ class App extends Component {
         this.props.history.listen(() => {
             window.scrollTo(0, 0);
         });
+
+        if (!localStorage.getItem('firstVisit')) {
+            localStorage.setItem('firstVisit', 'true');
+        }
+        else {
+            localStorage.setItem('firstVisit', 'false');
+        }
     }
 
     render() {

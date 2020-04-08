@@ -121,11 +121,10 @@
     justify-content: space-around;
     justify-content: space-evenly;
     width: 100%;
-    margin-top: 30px;
+    margin-top: 40px;
 }
 .home-3 div > a {
-    width: 480px; max-width: 95.5%;
-    margin-top: 8px;
+    width: 475px; max-width: 95.5%;
 }
 .home-3 div > a > img {
     width: 100%;
@@ -201,7 +200,10 @@
 
     /* -------------------- Wrap all games image -------------------- */
     .home-3 div {
-        margin-top: 15px;
+        margin-top: 25px;
+    }
+    .home-3 div > a {
+        margin-bottom: 2px;
     }
 }
 

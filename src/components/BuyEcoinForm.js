@@ -12,7 +12,6 @@ import { PayPalButton } from "react-paypal-button-v2";
 //Images
 import stripeLogo from "../images/stripe-logo.png";
 import ecoin from "../images/e-coin.png";
-
 import mastercardLogo from "../images/mastercard-logo.png";
 import visaLogo from "../images/visa-logo.jpg";
 import paypalLogo from "../images/paypal-logo.png";

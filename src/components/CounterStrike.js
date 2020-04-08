@@ -14,7 +14,6 @@ import { isEqual } from 'lodash';
 import Select from 'react-select';
 import ImageFadeIn from 'react-image-fade-in';
 import DotsLoader from '../components/DotsLoader';
-
 //Images
 import ecoin from "../images/e-coin.png";
 import csgoPolice from "../images/csgo-police.png";

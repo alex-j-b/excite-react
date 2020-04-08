@@ -82,7 +82,6 @@ class Play extends Component {
     componentDidMount() {
         if (this.props.isLogged) {
             let urlParams = (new URL(document.location)).searchParams;
-            console.log(urlParams.get('game'))
             let tab = urlParams.get('game') ? urlParams.get('game') : 'leagueoflegends';
             tab = localStorage.getItem('gameTab') && !urlParams.get('game') ? localStorage.getItem('gameTab') : tab;
             this.setState({ tab: tab });
