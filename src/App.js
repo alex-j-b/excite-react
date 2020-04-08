@@ -42,6 +42,11 @@ class App extends Component {
         this.props.loggedInCheck();
         this.props.history.listen(() => {
             window.scrollTo(0, 0);
+            if (window.swUpdateReady) {
+                window.swUpdateReady = false;
+                window.stop();
+                window.location.reload();
+            }
         });
 
         if (!localStorage.getItem('firstVisit')) {
