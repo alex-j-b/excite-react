@@ -15,29 +15,6 @@ import lolImage from "../images/lol-image.png";
 import fortniteImage from "../images/fortnite-image.png";
 import csgoImage from "../images/counter-strike-image.jpg";
 import separator from "../images/separator.png";
-//Preload
-import authBG from "../images/mystique-statue.jpg";
-import lolLogo from "../images/lol-logo.png";
-import fortniteLogo from "../images/fortnite-logo.png";
-import csgoLogo from "../images/csgo-logo.png";
-import historyBlack from "../images/history-black.png";
-import stripeLogo from "../images/stripe-logo.png";
-import mastercardLogo from "../images/mastercard-logo.png";
-import visaLogo from "../images/visa-logo.jpg";
-import paypalLogo from "../images/paypal-logo.png";
-import paysafecardLogo from "../images/paysafecard-logo.jpg";
-import csgoPolice from "../images/csgo-police.png";
-import steamLogo from "../images/steam-logo.png";
-import riven from "../images/lol-riven.png";
-import lolPotion from "../images/lol-potion.png";
-import fortniteChar from "../images/fortnite-char.png";
-import rocketCrash from "../images/rocket-crash.png";
-import backArrow from "../images/back-arrow.png";
-import articlesIcon from "../images/articles.png";
-import commandesIcon from "../images/commandes.png";
-import panierIcon from "../images/panier.png";
-import forestBG from "../images/forest.jpg";
-import teemo from "../images/teemo.png";
 
 
 export default class Home extends Component {
@@ -48,16 +25,6 @@ export default class Home extends Component {
 
         let title = document.querySelector('head > title');
         title.innerHTML = 'Excite | Pariez sur vous';
-
-        if (localStorage.getItem('firstVisit') === 'true') {
-            const imagesPreload = [authBG, lolLogo, fortniteLogo, csgoLogo, historyBlack, stripeLogo, mastercardLogo, visaLogo, paypalLogo, paysafecardLogo, csgoPolice, steamLogo, riven, lolPotion, fortniteChar, rocketCrash, backArrow, articlesIcon, commandesIcon, panierIcon, forestBG, teemo];
-            imagesPreload.forEach((image) => {
-                const newImage = new Image();
-                newImage.src = image;
-                window[image] = newImage;
-            });
-            localStorage.setItem('firstVisit', 'false');
-        }
     }
 
     render() {

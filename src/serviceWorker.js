@@ -11,69 +11,69 @@
 // opt-in, read http://bit.ly/CRA-PWA
 
 export function register(config) {
-  if ('serviceWorker' in navigator) {
-      // The URL constructor is available in all browsers that support SW.
-      const publicUrl = new URL(process.env.PUBLIC_URL, window.location.href);
-      if (publicUrl.origin !== window.location.origin) {
-          // Our service worker won't work if PUBLIC_URL is on a different origin
-          // from what our page is served on. This might happen if a CDN is used to
-          // serve assets; see https://github.com/facebook/create-react-app/issues/2374
-          return;
-      }
-      window.addEventListener('load', () => {
-          const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`;
-          //Register service worker
-          registerValidSW(swUrl, config);
-      });
-  }
+    if ('serviceWorker' in navigator) {
+            // The URL constructor is available in all browsers that support SW.
+            const publicUrl = new URL(process.env.PUBLIC_URL, window.location.href);
+            if (publicUrl.origin !== window.location.origin) {
+                // Our service worker won't work if PUBLIC_URL is on a different origin
+                // from what our page is served on. This might happen if a CDN is used to
+                // serve assets; see https://github.com/facebook/create-react-app/issues/2374
+                return;
+            }
+            window.addEventListener('load', () => {
+                const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`;
+                //Register service worker
+                registerValidSW(swUrl, config);
+            });
+    }
 }
 
 function registerValidSW(swUrl, config) {
-  navigator.serviceWorker.getRegistration('https://excite.world/')
-      .then(swReg => {
-          if (swReg) {
-              navigator.serviceWorker.addEventListener('controllerchange', () => {
-                  window.swUpdateReady = true;
-              });
-          }
-      });
-  navigator.serviceWorker
-      .register(swUrl)
-      .then(registration => {
-          registration.onupdatefound = () => {
-              const installingWorker = registration.installing;
-              if (installingWorker == null) {
-                  return;
-              }
-              installingWorker.onstatechange = () => {
-                  if (installingWorker.state === 'installed') {
-                      if (navigator.serviceWorker.controller) {
-                          // At this point, the updated precached content has been fetched,
-                          // but the previous service worker will still serve the older
-                          // content until all client tabs are closed.
-                          console.log(
-                              'New content is available and will be used when all ' +
-                                  'tabs for this page are closed. See http://bit.ly/CRA-PWA.'
-                          );
-                      } else {
-                          // At this point, everything has been precached.
-                          // It's the perfect time to display a
-                          // "Content is cached for offline use." message.
-                          console.log('Content is cached for offline use.');
-                      }
-                  }
-              };
-          };
-      })
-      .catch(error => {
-          console.error('Error during service worker registration:', error);
-      });
+    navigator.serviceWorker.getRegistration('https://excite.world/')
+        .then(swReg => {
+            if (swReg) {
+                navigator.serviceWorker.addEventListener('controllerchange', () => {
+                    window.swUpdateReady = true;
+                });
+            }
+        });
+    navigator.serviceWorker
+        .register(swUrl)
+        .then(registration => {
+            registration.onupdatefound = () => {
+                const installingWorker = registration.installing;
+                if (installingWorker == null) {
+                    return;
+                }
+                installingWorker.onstatechange = () => {
+                    if (installingWorker.state === 'installed') {
+                        if (navigator.serviceWorker.controller) {
+                            // At this point, the updated precached content has been fetched,
+                            // but the previous service worker will still serve the older
+                            // content until all client tabs are closed.
+                            console.log(
+                                'New content is available and will be used when all ' +
+                                    'tabs for this page are closed. See http://bit.ly/CRA-PWA.'
+                            );
+                        } else {
+                            // At this point, everything has been precached.
+                            // It's the perfect time to display a
+                            // "Content is cached for offline use." message.
+                            console.log('Content is cached for offline use.');
+                        }
+                    }
+                };
+            };
+        })
+        .catch(error => {
+            console.error('Error during service worker registration:', error);
+        });
 }
 
 export function unregister() {
-  if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.ready.then(registration => {
-          registration.unregister();
-      });
-  }
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.ready.then(registration => {
+            registration.unregister();
+        });
+    }
 }

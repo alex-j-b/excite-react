@@ -48,13 +48,6 @@ class App extends Component {
                 window.location.reload();
             }
         });
-
-        if (!localStorage.getItem('firstVisit')) {
-            localStorage.setItem('firstVisit', 'true');
-        }
-        else {
-            localStorage.setItem('firstVisit', 'false');
-        }
     }
 
     render() {
