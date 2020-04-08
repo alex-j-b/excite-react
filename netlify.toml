@@ -6,7 +6,7 @@
 
 
 [context.production]
-    command = "REACT_APP_STAGE=prod npm run build"
+    command = "REACT_APP_STAGE=prod npm run build && echo 'self.addEventListener(\"install\", function() { self.skipWaiting(); });' >> ./build/service-worker.js"
 
 
 [context.deploy-preview]
