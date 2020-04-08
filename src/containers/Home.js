@@ -1,5 +1,6 @@
 //React
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import "./Home.css";
 //Images
 import frame1BG from "../images/esport-background-frame1.png";
@@ -21,6 +22,9 @@ export default class Home extends Component {
     componentDidMount() {
         let videoBG = document.getElementById("videoBG");
         videoBG.playbackRate = 0.75;
+
+        let title = document.querySelector('head > title');
+        title.innerHTML = 'Excite | Pariez sur vous';
     }
 
     render() {
@@ -67,12 +71,18 @@ export default class Home extends Component {
                 </div>
     
                 <div className="home-3">
-                    <img className="image" src={separator} alt="separator"></img>
+                    <img src={separator} alt="separator"></img>
                     <p>Jeux disponibles</p>
                     <div>
-                        <img className="image" src={lolImage} alt="lolImage"></img>
-                        <img className="image" src={fortniteImage} alt="fortniteImage"></img>
-                        <img className="image" src={csgoImage} alt="csgoImage"></img>
+                        <Link to="/jouer?game=leagueoflegends">
+                            <img src={lolImage} alt="lolImage"></img>
+                        </Link>
+                        <Link to="/jouer?game=fortnite">
+                            <img src={fortniteImage} alt="fortniteImage"></img>
+                        </Link>
+                        <Link to="/jouer?game=counterstrikego">
+                            <img src={csgoImage} alt="csgoImage"></img>
+                        </Link>
                     </div>
                 </div>
 

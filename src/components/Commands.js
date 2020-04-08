@@ -48,6 +48,12 @@ function Table({ columns, data }) {
 
 
 class Commands extends Component {
+
+    componentDidMount() {
+        let title = document.querySelector('head > title');
+        title.innerHTML = 'Excite | Commandes';
+    }
+
     render() {
         let dataDesktop = [];
         this.props.commandArticles.forEach(elCommand => {

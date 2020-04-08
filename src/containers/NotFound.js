@@ -7,6 +7,12 @@ import teemo from "../images/teemo.png";
 
 
 export default class NotFound extends Component {
+
+    componentDidMount() {
+        let title = document.querySelector('head > title');
+        title.innerHTML = 'Excite | Page introuvable';
+    }
+
     render() {
         return (
             <div className="not-found" style={{ backgroundImage: `url(${forestBG})` }}>

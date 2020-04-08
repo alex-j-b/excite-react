@@ -53,12 +53,17 @@ class Contact extends Component {
         this.refs.emailSent.style.display = 'inline';
     }
 
+    componentDidMount() {
+        let title = document.querySelector('head > title');
+        title.innerHTML = 'Excite | Contact';
+    }
+
     render() {
         return (
             <div className="contact" style={{ backgroundImage: `url(${forestBG})` }}>
 
                 <form onSubmit={this.onSubmit}>
-                    <p className="title"><span className="purple">C</span>ontact</p>
+                    <p className="title"><span className="purple">C</span>ontactez-nous</p>
                     <h5>Si vous avez une question, n'hésitez pas à nous écrire, nous vous répondrons rapidement.</h5>
 
                     { !(this.props.isLogging || this.props.isLogged) &&

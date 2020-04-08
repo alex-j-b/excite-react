@@ -57,10 +57,20 @@ class Play extends Component {
     componentDidUpdate(prevProps) {
         if (this.props.isLogged !== prevProps.isLogged) {
             let urlParams = (new URL(document.location)).searchParams;
-            let tab = urlParams.get('game') !== null ? urlParams.get('game') : 'leagueoflegends';
-            tab = localStorage.getItem('gameTab') !== null ? localStorage.getItem('gameTab') : tab;
+            let tab = urlParams.get('game') ? urlParams.get('game') : 'leagueoflegends';
+            tab = localStorage.getItem('gameTab') && !urlParams.get('game') ? localStorage.getItem('gameTab') : tab;
             this.setState({ tab: tab });
-            this.props.history.push(`/jouer?game=${tab}`);
+            if (!urlParams.get('game')) {
+                this.props.history.push(`/jouer?game=${tab}`);
+            }
+            
+            const displayGameFunc = ({
+                leagueoflegends: 'League of legends',
+                fortnite: 'Fortnite',
+                counterstrikego: 'Counter Strike'
+            })[tab] || 'undefined';
+            let title = document.querySelector('head > title');
+            title.innerHTML = `Excite | ${displayGameFunc}`;
 
             this.props.getLolBets();
             this.props.getFortniteBets();
@@ -72,10 +82,22 @@ class Play extends Component {
     componentDidMount() {
         if (this.props.isLogged) {
             let urlParams = (new URL(document.location)).searchParams;
-            let tab = urlParams.get('game') !== null ? urlParams.get('game') : 'leagueoflegends';
-            tab = localStorage.getItem('gameTab') !== null ? localStorage.getItem('gameTab') : tab;
+            console.log(urlParams.get('game'))
+            let tab = urlParams.get('game') ? urlParams.get('game') : 'leagueoflegends';
+            tab = localStorage.getItem('gameTab') && !urlParams.get('game') ? localStorage.getItem('gameTab') : tab;
             this.setState({ tab: tab });
-            this.props.history.push(`/jouer?game=${tab}`);
+            if (!urlParams.get('game')) {
+                this.props.history.push(`/jouer?game=${tab}`);
+            }
+
+            const displayGameFunc = ({
+                leagueoflegends: 'League of legends',
+                fortnite: 'Fortnite',
+                counterstrikego: 'Counter Strike'
+            })[tab] || 'undefined';
+
+            let title = document.querySelector('head > title');
+            title.innerHTML = `Excite | ${displayGameFunc}`;
 
             this.props.getLolBets();
             this.props.getFortniteBets();

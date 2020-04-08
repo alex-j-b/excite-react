@@ -3,6 +3,12 @@ import "./Legal.css";
 
 
 export default class Conditions extends Component {
+
+    componentDidMount() {
+        let title = document.querySelector('head > title');
+        title.innerHTML = "Excite | Conditions générales d'utilisation";
+    }
+
     render() {
         return (
             <div className="legal">

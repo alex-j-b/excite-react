@@ -96,9 +96,14 @@ class Log extends Component {
 
     componentDidUpdate() {
         let errorAttempt = document.querySelector('.error-input.log-attempt');
-    if (this.props.authStatus === 'errorPassword' && errorAttempt.style.display !== "inline") {
+        if (errorAttempt && this.props.authStatus === 'errorPassword' && errorAttempt.style.display !== "inline") {
             this.setState({ loading: false }, () => errorAttempt.style.display = "inline");
         }
+    }
+
+    componentDidMount() {
+        let title = document.querySelector('head > title');
+        title.innerHTML = 'Excite | Connexion';
     }
 
     render() {

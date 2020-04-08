@@ -11,6 +11,12 @@ import authBG from "../images/mystique-statue.jpg";
 import ecoin from "../images/e-coin.png";
 
 class BuyEcoin extends Component {
+
+    componentDidMount() {
+        let title = document.querySelector('head > title');
+        title.innerHTML = 'Excite | Acheter des eCoins';
+    }
+
     render() {
         return (
             <div className="buy-ecoin" style={{ backgroundImage: `url(${authBG})` }}>

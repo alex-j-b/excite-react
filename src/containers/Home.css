@@ -123,12 +123,12 @@
     width: 100%;
     margin-top: 30px;
 }
-.home-3 div > img {
+.home-3 div > a {
     width: 480px; max-width: 95.5%;
     margin-top: 8px;
 }
-.home-3 div:last-child {
-    margin-bottom: 8px;
+.home-3 div > a > img {
+    width: 100%;
 }
 
 

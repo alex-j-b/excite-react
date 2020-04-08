@@ -169,6 +169,11 @@ class Cart extends Component {
         }
     }
 
+    componentDidMount() {
+        let title = document.querySelector('head > title');
+        title.innerHTML = 'Excite | Panier';
+    }
+
     render() {
         let totalPrice = 0;
         const dataDesktop = this.props.cartArticles.map(el => {

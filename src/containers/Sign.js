@@ -145,6 +145,11 @@ class Sign extends Component {
         }
     }
 
+    componentDidMount() {
+        let title = document.querySelector('head > title');
+        title.innerHTML = 'Excite | Inscription';
+    }
+
     componentWillUnmount() {
         if (!this.state.emailVerified && !this.props.isLogged) {
             this.props.deleteUser();
@@ -247,7 +252,7 @@ class Sign extends Component {
                     <span className="error-input conf-code">incorrect</span>
                 </label>
                 <input
-                    type="text"
+                    type="number"
                     placeholder="Vérifiez votre adresse email"
                     name="confCode"
                     spellCheck={false}

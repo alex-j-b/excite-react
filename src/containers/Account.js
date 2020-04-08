@@ -204,6 +204,9 @@ class Account extends Component {
                 address: this.props.user.address || ''
             })
         }
+
+        let title = document.querySelector('head > title');
+        title.innerHTML = 'Excite | Mon Compte';
     }
 
     render() {
