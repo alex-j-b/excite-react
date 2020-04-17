@@ -117,15 +117,16 @@ class Sign extends Component {
         }
         else {
             const { confCode, givenName, familyName, address } = this.state;
-            let phoneNumber = this.state.phoneNumber.replace(/\s/g, '');
+            let phoneNumber = this.state.phoneNumber.replace(/\s+/g, '');
+            phoneNumber = phoneNumber.startsWith('+') ? phoneNumber : '+' + phoneNumber;
 
             let errorPhone = document.querySelector('.error-input.phone');
-            errorPhone.style.display = phoneNumber.length === 12 ? "none" : "inline";
+            errorPhone.style.display = phoneNumber.length >= 11 ? "none" : "inline";
             let errorAddress = document.querySelector('.error-input.address');
             errorAddress.style.display = address.length >= 10 ? "none" : "inline";
             document.querySelector('.error-input.conf-code').style.display = "none";
 
-            if (phoneNumber.length === 12 && address.length >= 10){
+            if (phoneNumber.length >= 11 && address.length >= 10){
                 this.setState({ loading: true });
                 Auth.verifyCurrentUserAttributeSubmit('email', confCode)
                 .then(() => {

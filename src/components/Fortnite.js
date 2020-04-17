@@ -6,7 +6,6 @@ import {
     loggedInCheck,
     confirmFortniteAccount,
     addFortniteBet,
-    getFortniteBets,
     updateBetLost
 } from "../actions";
 //libs
@@ -14,6 +13,8 @@ import { isEqual } from 'lodash';
 import Select from 'react-select';
 import ImageFadeIn from 'react-image-fade-in';
 import Popup from "reactjs-popup";
+//Components
+import SwitchPlay from '../components/SwitchPlay';
 import DotsLoader from '../components/DotsLoader';
 //Images
 import ecoin from "../images/e-coin.png";
@@ -40,6 +41,7 @@ class Fortnite extends Component {
     onChange = this.onChange.bind(this);
     handleEnter = this.handleEnter.bind(this);
     selectChange = this.selectChange.bind(this);
+    onSwitch = this.onSwitch.bind(this);
     confirmFortniteAccount = this.confirmFortniteAccount.bind(this);
     addFortniteBet = this.addFortniteBet.bind(this);
     togglePopUp = this.togglePopUp.bind(this);
@@ -60,17 +62,24 @@ class Fortnite extends Component {
         this.setState({ [name]: value });
     }
 
+    onSwitch() {
+        this.setState({ multiplayer: !this.state.multiplayer });
+    }
+
     confirmFortniteAccount() {
         const { fortniteId } = this.state;
-        this.refs.errorInputId.style.display = "none";
+        this.refs.errorInputId.style.display = 'none';
         if (fortniteId === '') {
-            this.refs.errorInputId.style.display = "inline";
+            this.refs.errorInputId.style.display = 'inline';
         }
         else {
             this.setState({ loading: true });
             this.props.confirmFortniteAccount(fortniteId).then(response => {
                 this.setState({ loading: false });
-                if (response.statusCode === 500) this.refs.errorInputId.style.display = "inline";
+                if (response.statusCode === 500) {
+                    this.refs.errorInputId.style.display = 'inline';
+                    this.refs.errorInputId.innerHTML = response.body.error;
+                }
             });
         }
     }
@@ -143,7 +152,6 @@ class Fortnite extends Component {
                 countDown();
                 window.intervalFortniteBet = setInterval(() => {
                     countDown();
-                    this.props.getFortniteBets();
                 }, 60000);
             }
             else if ("fortnite" in prevBets && !("fortnite" in thisBets)) {
@@ -187,7 +195,6 @@ class Fortnite extends Component {
             countDown();
             window.intervalFortniteBet = setInterval(() => {
                 countDown();
-                this.props.getFortniteBets();
             }, 60000);
         }
         document.addEventListener("keydown", this.handleEnter, false);
@@ -210,7 +217,13 @@ class Fortnite extends Component {
                     { this.props.imageReady && <ImageFadeIn src={fortniteChar} /> }
                 </div>
                 <div className="right">
-                <p className="title"><span className="purple">F</span>ortnite</p>
+                    <SwitchPlay
+                        display={this.props.accountConfirmed}
+                        disabled={true}
+                        multiplayer={false}
+                        onSwitch={this.onSwitch}
+                    />
+                    <p className="title"><span className="purple">F</span>ortnite</p>
 
                     { this.props.accountConfirmed ?
                         <>
@@ -310,9 +323,6 @@ function mapDispatchToProps(dispatch) {
         },
         addFortniteBet: function(ecoin) {
             dispatch(addFortniteBet(ecoin));
-        },
-        getFortniteBets: function() {
-            dispatch(getFortniteBets());
         },
         updateBetLost: function(game) {
             return dispatch(updateBetLost(game));

@@ -5,14 +5,16 @@ import { connect } from "react-redux";
 import {
     loggedInCheck,
     confirmLolAccount,
-    addLolBet,
-    getLolBets
+    addLolBet
 } from "../actions";
 //libs
+import { WebSocketContext } from '../WebSocket';
 import { isEqual } from 'lodash';
 import Select from 'react-select';
 import ImageFadeIn from 'react-image-fade-in';
+//Components
 import DotsLoader from '../components/DotsLoader';
+import SwitchPlay from '../components/SwitchPlay';
 //Images
 import ecoin from "../images/e-coin.png";
 import riven from "../images/lol-riven.png";
@@ -52,13 +54,17 @@ class LeagueOfLegends extends Component {
     onChange = this.onChange.bind(this);
     handleEnter = this.handleEnter.bind(this);
     selectChange = this.selectChange.bind(this);
+    onSwitch = this.onSwitch.bind(this);
     confirmLolAccount = this.confirmLolAccount.bind(this);
     addLolBet = this.addLolBet.bind(this);
+    static contextType = WebSocketContext;
     state = {
         ecoinOption: 5,
         summonerName: '',
         region: 'euw1',
         defaultEcoinOption: undefined,
+        multiplayer: false,
+        searching: false,
         betIsPending: false,
         loading: false
     }
@@ -69,6 +75,10 @@ class LeagueOfLegends extends Component {
 
     selectChange(name, value) {
         this.setState({ [name]: value });
+    }
+
+    onSwitch() {
+        this.setState({ multiplayer: !this.state.multiplayer });
     }
 
     confirmLolAccount() {
@@ -95,8 +105,65 @@ class LeagueOfLegends extends Component {
     }
 
     addLolBet() {
-        this.setState({ loading: true });
-        this.props.addLolBet(this.state.ecoinOption);
+        if (!this.state.multiplayer) {
+            this.setState({ loading: true });
+            this.props.addLolBet(this.state.ecoinOption);
+        }
+        else {
+            if (!this.state.searching) {
+                this.setState({ searching: true });
+                this.refs.notifLolSearch.style.display = 'inline';
+                this.refs.notifLolEstimation.style.display = 'inline';
+                this.refs.buttonLolBet.innerHTML = 'Annuler';
+                this.refs.buttonLolBet.classList.add('grey');
+                let start;
+                window.intervalLolBet = setInterval(() => {
+                    if (!start) {
+                        start = new Date();
+                        start.setSeconds(start.getSeconds() - 1);
+                    }
+                    const now = new Date();
+                    const diff = new Date(now - start);
+                    let min = diff.getMinutes();
+                    min = min > 9 ? min : '0' + min;
+                    let sec = diff.getSeconds();
+                    sec = sec > 9 ? sec : '0' + sec;
+                    this.refs.chrono.innerHTML = `${min}:${sec}`;
+                }, 1000);
+            }
+            else {
+                if (false) {
+                    this.setState({ searching: false });
+                    this.refs.notifLolSearch.style.display = 'none';
+                    this.refs.notifLolEstimation.style.display = 'none';
+                    this.refs.buttonLolBet.innerHTML = 'Parier';
+                    this.refs.buttonLolBet.classList.remove('grey');
+                    this.refs.chrono.innerHTML = '00:00';
+                    clearInterval(window.intervalLolBet);
+                }
+                else {
+                    this.setState({
+                        searching: false,
+                        betIsPending: true
+                    });
+                    this.refs.notifLolSearch.style.display = 'none';
+                    this.refs.notifLolEstimation.style.display = 'none';
+                    this.refs.buttonLolBet.innerHTML = 'Parier';
+                    this.refs.buttonLolBet.classList.remove('grey');
+                    this.refs.buttonLolBet.disabled = true;
+                    this.refs.chrono.innerHTML = '00:00';
+                    clearInterval(window.intervalLolBet);
+
+                    this.refs.notifGameFound.style.display = 'inline';
+                    this.refs.notifLolTournCode.style.display = 'inline';
+                    this.refs.notifLolJoin.style.display = 'inline';
+                    this.refs.linkLolHelp.style.display = 'inline';
+                    this.refs.notifDiscord.style.display = 'inline';
+                    this.refs.discordLink.style.display = 'inline';
+                    
+                }
+            }
+        }
     }
 
     handleEnter(e) {
@@ -144,7 +211,6 @@ class LeagueOfLegends extends Component {
                 countDown();
                 window.intervalLolBet = setInterval(() => {
                     countDown();
-                    this.props.getLolBets();
                 }, 60000);
             }
             else if ("leagueoflegends" in prevBets && !("leagueoflegends" in thisBets)) {
@@ -189,10 +255,9 @@ class LeagueOfLegends extends Component {
             countDown();
             window.intervalLolBet = setInterval(() => {
                 countDown();
-                this.props.getLolBets();
             }, 60000);
         }
-        document.addEventListener("keydown", this.handleEnter, false);
+        document.addEventListener('keydown', this.handleEnter, false);
     }
 
     componentWillUnmount() {
@@ -201,17 +266,24 @@ class LeagueOfLegends extends Component {
             this.refs.notifLolBet.style.display = 'none';
             clearInterval(window.intervalLolBet);
         }
-        document.removeEventListener("keydown", this.handleEnter, false);
+        document.removeEventListener('keydown', this.handleEnter, false);
     }
 
     render() {
+        const cote = this.state.multiplayer ? 2 : 1.8;
         return (
             <div className="wrap-leagueoflegends" style={{ display: this.props.display ? 'flex' : 'none' }}>
                 <div className="left">
                     {this.props.imageReady && <ImageFadeIn src={riven} />}
                 </div>
                 <div className="right">
-                <p className="title"><span className="purple">L</span>eague of legends</p>
+                    <SwitchPlay
+                        display={this.props.accountConfirmed}
+                        disabled={this.state.searching || this.state.betIsPending}
+                        multiplayer={this.state.multiplayer}
+                        onSwitch={this.onSwitch}
+                    />
+                    <p className="title"><span className="purple">L</span>eague of legends</p>
 
                     { this.props.accountConfirmed ?
                         <>
@@ -227,16 +299,48 @@ class LeagueOfLegends extends Component {
                                 onChange={obj => this.selectChange('ecoinOption', obj.value)}
                             />
                             <div>
-                                <span className="goal-price">Gagne une partie classée : <span className="number">{this.state.ecoinOption * 2}</span></span>
-                                <img className="ecoin" src={ecoin} alt="ecoin"></img>
+                                <span className="goal-price">
+                                    { !this.state.multiplayer && 'Gagne une partie classée :' }
+                                    { this.state.multiplayer && 'Gagne une partie privée entre joueurs Excite :' }
+                                    &nbsp;<span className="number">{this.state.ecoinOption * cote}</span>
+                                    <img className="ecoin" src={ecoin} alt="ecoin"></img>
+                                </span>
                             </div>
                             <button className="e-button" ref="buttonLolBet" onClick={this.addLolBet}>Parier</button>
+                            <DotsLoader loading={this.state.loading} />
                             <p ref="notifLolBet" className="notif">
                                 Pari en cours... il vous reste&nbsp;
                                 <span ref="countDown"></span>&nbsp;
                                 pour rejoindre une partie classée
                             </p>
-                            <DotsLoader loading={this.state.loading} />
+                            <p ref="notifLolEstimation" className="notif">Estimation : 05:21</p>
+                            <p ref="notifLolSearch" className="notif search">Recherche d'une partie...<span ref="chrono">00:00</span></p>
+
+                            <p ref="notifGameFound" className="notif">Partie trouvée ! Entrez le code&nbsp;
+                                <a 
+                                    ref="linkLolHelp"
+                                    className="grey-link"
+                                    title="Où cà ?"
+                                    href="https://static.developer.riotgames.com/img/docs/lol/tournament-client.png"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    >ici
+                                </a>
+                            </p>
+                            <p ref="notifLolTournCode" className="notif">EUW5043-TOURNAMENTCODE0001</p>
+                            <p ref="notifLolJoin" className="notif">Puis rejoignez l'équipe de gauche</p>
+
+                            <p ref="notifDiscord" className="notif">Une question ? venez sur&nbsp;
+                                <a 
+                                    ref="discordLink"
+                                    className="grey-link"
+                                    title="Où cà ?"
+                                    href="https://static.developer.riotgames.com/img/docs/lol/tournament-client.png"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    >Discord
+                                </a>
+                            </p>
                         </>
                         :
                         <>
@@ -295,9 +399,6 @@ function mapDispatchToProps(dispatch) {
         },
         addLolBet: function (ecoin) {
             dispatch(addLolBet(ecoin));
-        },
-        getLolBets: function () {
-            dispatch(getLolBets());
         },
         loggedInCheck: function () {
             dispatch(loggedInCheck());

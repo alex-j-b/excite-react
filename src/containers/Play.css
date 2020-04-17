@@ -89,21 +89,21 @@
 
 /* -------------------- Left column -------------------- */
 .play .wrap-games .left {
-    display: flex; align-items: center; justify-content: center;
-    height: 100%; width: fit-content;
-    overflow: hidden;
+    display: flex; align-items: center;
+    height: 100%; width: 42%;
 }
 .play .wrap-games .left > img[src*="lol"] {
     height: 87%;
-    margin-right: 50px;
+    margin-left: 90px;
 }
 .play .wrap-games .left > img[src*="fortnite"] {
     height: 90%;
-    margin-right: 80px;
+    margin-left: 110px;
 }
 .play .wrap-games .left > img[src*="csgo"] {
     height: 95%;
-    margin: 0 40px -25px 0;
+    margin: 0 0 -25px 80px;
+
 }
 @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
     .play .wrap-games .left > img {
@@ -118,12 +118,10 @@
 .play .wrap-games .right {
     display: flex; flex-direction: column; align-items: center;
     align-self: center;
-    height: fit-content; width: fit-content;
-    margin: 0;
-    padding: 0 10px 0 10px;
+    height: 100%; width: 58%;
 }
 .play .wrap-games .right > .title {
-    margin: 0 0 30px 0;
+    margin: 45px 0 30px 0;
     font-size: 26px; -webkit-text-stroke: 0.75px;
 }
 
@@ -134,12 +132,19 @@
 }
 .play .right .goal-price {
     display: inline-block;
-    vertical-align: middle;
+    max-width: 300px;
+    vertical-align: middle; text-align: center;
     margin: 20px 2px 20px 0;
 }
+.play .wrap-fortnite .right .goal-price {
+    max-width: none;
+}
+
 .play .right .e-button {
-    padding: 10px 26px 10px 26px;
-    margin: 10px 0 0 0;
+    margin: 5px 0 20px 0;
+}
+.play .right .e-button + div {
+    margin: -20px 0 20px 0 !important;
 }
 .play .right .e-button[disabled] {
     color: rgb(100, 0, 100);
@@ -148,15 +153,20 @@
 }
 
 .play .right .grey-link {
+    margin-top: 0 !important;
     display: none;
-    margin-top: 20px;
 }
 
 /*------------ Notif Pending Bet ---------- */
 .play .wrap-games .right .notif {
     display: none;
-    margin-top: 10px;
-    font-size: 16px; font-style: italic; text-align: center; line-height: 22px;
+    margin-top: 0px;
+    font-size: 14px; font-style: italic; text-align: center; line-height: 22px;
+}
+.play .wrap-games .right .notif.search {
+    min-width: 195px;
+    margin-top: 0;
+    text-align: left;
 }
 .play .wrap-leagueoflegends .right .notif {
     max-width: 260px;
@@ -168,15 +178,16 @@
     max-width: 270px;
 }
 .error-input.unconfirmed-game-account {
-    display: none;
     max-width: 310px;
-    margin-top: 20px !important;
+    margin-top: 0 !important;
     text-align: center;
-    font-style: italic;
+    font-size: 14px; font-style: italic; -webkit-text-stroke: 0;
 }
 .error-input.not-enough-ecoin {
-    display: none;
-    margin: 10px 0 0 0 !important;
+    margin: 0 !important;
+}
+.error-input.wrong-id {
+    margin: 0 !important;
 }
 
 /* ---------- Confirm account ---------- */
@@ -374,7 +385,7 @@
     /* ---------- Left column ---------- */
     .play .wrap-games .left {
         height: auto; width: 100%;
-        align-items: flex-end;
+        align-items: flex-end; justify-content: center;
         overflow: hidden;
         order: 2;
     }
@@ -391,7 +402,13 @@
     }
     .play .wrap-games .left > img[src*="csgo"] {
         max-width: 270px;
-        margin: 8px 0 0 0 !important;
+        margin: 16px 0 0 0 !important;
+    }
+    .play .right .goal-price {
+        max-width: 260px;
+    }
+    .play .right .goal-price .ecoin {
+        margin-left: 1px;
     }
     .play .right div > span {
         margin-right: 2px;
@@ -409,9 +426,11 @@
         margin: 30px 0 30px 0;
         font-size: 22px; -webkit-text-stroke: 0.75px;
     }
-    .play .right button {
-        margin: 5px 0 10px 0;
+    .play .right .e-button {
         font-size: 20px;
+    }
+    .play .right .e-button.grey {
+        font-size: 16px;
     }
     .play .wrap-games .right .confirm-instructions {
         margin-bottom: 20px;

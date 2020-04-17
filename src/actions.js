@@ -18,6 +18,9 @@ export const ADD_COMMAND = 'ADD_COMMAND';
 export const GET_COMMAND = 'GET_COMMAND';
 export const BUY_ECOIN = 'BUY_ECOIN';
 
+export const SET_MESSAGE_SENT = 'SET_MESSAGE_SENT';
+export const SET_MESSAGE_RECEIVED = 'SET_MESSAGE_RECEIVED';
+
 
 const rmvEmptyValues = (obj) => {
     Object.keys(obj).forEach((key) => (obj[key]==='') && delete obj[key]);
@@ -173,6 +176,24 @@ export function disableUser() {
             console.log(e);
         }
     }
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////// WEBSOCKET //////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export function setMessageSent(body) {
+    return {
+        type: SET_MESSAGE_SENT,
+        body
+    };
+}
+
+export function setMessageReceived(body) {
+    return {
+        type: SET_MESSAGE_RECEIVED,
+        body
+    };
 }
 
 

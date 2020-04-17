@@ -6,13 +6,14 @@ import { connect } from "react-redux";
 import {
     loggedInCheck,
     confirmCsgoAccount,
-    addCsgoBet,
-    getCsgoBets
+    addCsgoBet
 } from "../actions";
 //libs
 import { isEqual } from 'lodash';
 import Select from 'react-select';
 import ImageFadeIn from 'react-image-fade-in';
+//Components
+import SwitchPlay from '../components/SwitchPlay';
 import DotsLoader from '../components/DotsLoader';
 //Images
 import ecoin from "../images/e-coin.png";
@@ -41,6 +42,7 @@ class CounterStrike extends Component {
     onChange = this.onChange.bind(this);
     handleEnter = this.handleEnter.bind(this);
     selectChange = this.selectChange.bind(this);
+    onSwitch = this.onSwitch.bind(this);
     steamLogin = this.steamLogin.bind(this);
     confirmCsgoAccount = this.confirmCsgoAccount.bind(this);
     addCsgoBet = this.addCsgoBet.bind(this);
@@ -50,6 +52,7 @@ class CounterStrike extends Component {
         authenticationCode: '',
         lastMatchToken: '',
         defaultEcoinOption: undefined,
+        multiplayer: false,
         betIsPending: false,
         loading: false
     }
@@ -60,6 +63,10 @@ class CounterStrike extends Component {
 
     selectChange(name, value) {
         this.setState({ [name]: value });
+    }
+
+    onSwitch() {
+        this.setState({ multiplayer: !this.state.multiplayer });
     }
 
     steamLogin() {
@@ -132,7 +139,6 @@ class CounterStrike extends Component {
                 countDown();
                 window.intervalCsgoBet = setInterval(() => {
                     countDown();
-                    this.props.getCsgoBets();
                 }, 60000);
             }
             else if ("counterstrikego" in prevBets && !("counterstrikego" in thisBets)) {
@@ -189,7 +195,6 @@ class CounterStrike extends Component {
             countDown();
             window.intervalCsgoBet = setInterval(() => {
                 countDown();
-                this.props.getCsgoBets();
             }, 60000);
         }
         document.addEventListener("keydown", this.handleEnter, false);
@@ -205,12 +210,18 @@ class CounterStrike extends Component {
     }
 
     render() {
+        const cote = this.state.multiplayer ? 2 : 1.8;
         return (
             <div className="wrap-counterstrikego" style={{ display: this.props.display ? 'flex' : 'none' }}>
                 <div className="left">
                     {this.props.imageReady && <ImageFadeIn src={csgoPolice} />}
                 </div>
                 <div className="right">
+                    <SwitchPlay
+                        display={this.props.accountConfirmed}
+                        multiplayer={this.state.multiplayer}
+                        onSwitch={this.onSwitch}
+                    />
                     <p className="title"><span className="purple">C</span>ounter Strike GO</p>
 
                     { this.props.accountConfirmed ?
@@ -227,8 +238,12 @@ class CounterStrike extends Component {
                             onChange={obj => this.selectChange('ecoinOption', obj.value)}
                         />
                         <div>
-                            <span className="goal-price">Gagne un match compétitif : <span className="number">{this.state.ecoinOption * 2}</span></span>
-                            <img className="ecoin" src={ecoin} alt="ecoin"></img>
+                            <span className="goal-price">
+                                { !this.state.multiplayer && 'Gagne un match compétitif :' }
+                                { this.state.multiplayer && 'Gagne une match privée entre joueurs Excite :' }
+                                &nbsp;<span className="number">{this.state.ecoinOption * cote}</span>
+                                <img className="ecoin" src={ecoin} alt="ecoin"></img>
+                            </span>
                         </div>
                         <button 
                             className="e-button"
@@ -236,12 +251,12 @@ class CounterStrike extends Component {
                             onClick={this.addCsgoBet}
                             >Parier
                         </button>
+                        <DotsLoader loading={this.state.loading} />
                         <p ref="notifCsgoBet" className="notif">
                             Pari en cours... il vous reste&nbsp;
                             <span ref="countDown"></span>&nbsp;
                             pour rejoindre un match compétitif
                         </p>
-                        <DotsLoader loading={this.state.loading}/>
                         </>
                         :
                         ( !this.state.steamId64 ?
@@ -310,9 +325,6 @@ function mapDispatchToProps(dispatch) {
         },
         addCsgoBet: function (ecoin) {
             dispatch(addCsgoBet(ecoin));
-        },
-        getCsgoBets: function () {
-            dispatch(getCsgoBets());
         },
         loggedInCheck: function () {
             dispatch(loggedInCheck());

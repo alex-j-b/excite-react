@@ -14,7 +14,7 @@ class BuyEcoin extends Component {
 
     componentDidMount() {
         let title = document.querySelector('head > title');
-        title.innerHTML = 'Excite | Acheter des eCoins';
+        title.innerHTML = 'Excite | Obtenir des eCoins';
     }
 
     render() {
@@ -22,7 +22,7 @@ class BuyEcoin extends Component {
             <div className="buy-ecoin" style={{ backgroundImage: `url(${authBG})` }}>
                 <div>
                     <p className="title">
-                        <span className="purple">A</span>cheter des eCoins&nbsp;
+                        <span className="purple">O</span>btenir des eCoins&nbsp;
                         <img className="ecoin" src={ecoin} alt="ecoin"></img>
                     </p>
                     <StripeProvider apiKey={config.stripe.STRIPE_PUBLIC_KEY}>

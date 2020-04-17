@@ -188,7 +188,6 @@
 }
 .auth.account .log-out:hover, .auth.account .log-out:active {
     color: white;
-    border: 1px solid;
     background-color: #e60000;
 }
 
@@ -254,9 +253,12 @@
         color: #e60000;
         font-size: 14px;
     }
-    .auth.account .log-out:hover, .auth.account .log-out:active {
-        color: white;
-        border: 1px solid;
-        background-color: #e60000;
+    .auth.account .log-out:hover {
+        color: #e60000;
+        background-color: transparent;
+    }
+    .auth.account .log-out:active {
+        color: white !important;
+        background-color: #e60000 !important;
     }
 }

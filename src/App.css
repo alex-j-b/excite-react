@@ -25,7 +25,9 @@
 .app-header .logo-excite {
     padding: 0 20px 0 25px;
     margin-right: 50px;
-    font-size: 30px; font-family: "Raleway", Arial; -webkit-text-stroke: 0.75px;
+}
+.app-header .logo-excite > img {
+    height: 38px;
 }
 
 /* -------------------- Sections links -------------------- */
@@ -69,7 +71,9 @@
 
 .app-footer .logo-excite {
     padding: 0 20px 0 20px;
-    font-size: 28px; font-family: "Raleway", Arial; -webkit-text-stroke: 0.5px;
+}
+.app-footer .logo-excite > img {
+    height: 38px;
 }
 
 /* -------------------- Footer links and socials -------------------- */

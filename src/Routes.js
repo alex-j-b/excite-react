@@ -17,6 +17,7 @@ import Contact from "./containers/Contact";
 import Conditions from "./containers/Conditions";
 import Mentions from "./containers/Mentions";
 
+const reload = () => window.location.reload();
 
 export default function Routes({ authProps }) {
     return (
@@ -31,6 +32,7 @@ export default function Routes({ authProps }) {
             <LoggedRoute exact path="/jouer" component={Play} authProps={authProps} />
             <LoggedRoute exact path="/ecoin" component={BuyEcoin} authProps={authProps} />
             <LoggedRoute exact path="/mon-compte" component={Account} authProps={authProps} />
+            <Route exact path="/riot.txt" onEnter={reload} />
             <Route path="*" component={NotFound} />
         </Switch>
     );

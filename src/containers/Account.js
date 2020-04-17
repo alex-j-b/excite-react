@@ -63,6 +63,7 @@ class Account extends Component {
         } = this.state;
         let bdDay = this.state.bdDay.length === 1 ? '0' + this.state.bdDay : this.state.bdDay;
         let phoneNumber = this.state.phoneNumber.replace(/\s/g, '');
+        phoneNumber = phoneNumber.startsWith('+') ? phoneNumber : '+' + phoneNumber;
 
         const currentNickname = this.props.user.nickname;
         const currentGivenName = this.props.user.given_name;
@@ -86,7 +87,7 @@ class Account extends Component {
         errorDate.style.display = validDate ? "none" : "inline";
 
         let errorPhoneNumber = document.querySelector('.error-input.phone_number');
-        errorPhoneNumber.style.display = phoneNumber.length === 12 ? "none" : "inline";
+        errorPhoneNumber.style.display = phoneNumber.length >= 11 ? "none" : "inline";
 
         let errorAddress = document.querySelector('.error-input.address');
         errorAddress.style.display = address.length >= 10 ? "none" : "inline";
@@ -122,7 +123,7 @@ class Account extends Component {
         const updateGivenName = (givenName!=='' && givenName!==currentGivenName);
         const updateFamilyName = (familyName!=='' && familyName!==currentFamilyName);
         const updateDate = (validDate && (bdDay!==currentBdDay || bdMonth!==currentBdMonth || bdYear!==currentBdYear));
-        const updatePhoneNumber = (phoneNumber.length === 12 && phoneNumber!==currentPhoneNumber);
+        const updatePhoneNumber = (phoneNumber.length >= 11 && phoneNumber!==currentPhoneNumber);
         const updateAddress = (address.length >= 10 && address!==currentAddress);
 
         if (updateNickname || updateGivenName || updateFamilyName || updateDate || updatePhoneNumber || updateAddress) {
@@ -131,7 +132,7 @@ class Account extends Component {
                 'given_name': updateGivenName ? givenName : '',
                 'family_name': updateFamilyName ? familyName : '',
                 'birthdate': updateDate ? `${bdYear}-${bdMonth}-${bdDay}` : '',
-                'phone_number': updatePhoneNumber ? phoneNumber.replace(/\s/g, '') : '',
+                'phone_number': updatePhoneNumber ? phoneNumber : '',
                 'address': updateAddress ? address : ''
             });
             this.setState({ loading: true });

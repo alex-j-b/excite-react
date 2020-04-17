@@ -2,13 +2,14 @@
 const dev = {
     cognito: {
         REGION: "eu-west-2",
-        USER_POOL_ID: "eu-west-2_EozqvNMMe",
-        APP_CLIENT_ID: "7s6giaugde857gs388ksjl7j30",
-        IDENTITY_POOL_ID: "eu-west-2:8e8bce6b-10f5-4b61-a5b5-464baa463b26"
+        USER_POOL_ID: "eu-west-2_DGt9kaq7d",
+        APP_CLIENT_ID: "2kndbsh83hbb0sl48hu9fkth3",
+        IDENTITY_POOL_ID: "eu-west-2:18ba67a2-2c61-4bec-a883-a420b8c9dd8c"
     },
     apiGateway: {
         REGION: "eu-west-2",
-        URL: "https://api.excite.world/dev"
+        URL: "https://api.excite.world/dev",
+        WS_ENDPOINT: "wss://oz1g5a3t82.execute-api.eu-west-2.amazonaws.com/dev"
     },
     stripe: {
         STRIPE_PUBLIC_KEY: "pk_test_Ua3dPWghEeL733J86S3Okzie00nTYcMZJC"
@@ -18,13 +19,14 @@ const dev = {
 const prod = {
     cognito: {
         REGION: "eu-west-2",
-        USER_POOL_ID: "eu-west-2_q2DvraEur",
-        APP_CLIENT_ID: "2hgm217jl13o4jbvoq5o18hbvm",
-        IDENTITY_POOL_ID: "eu-west-2:0d128db5-9640-4d0f-a362-9d23747d8ceb"
+        USER_POOL_ID: "eu-west-2_oYWMp5IcS",
+        APP_CLIENT_ID: "12sll7nrfj4eqsnmed52n0asvs",
+        IDENTITY_POOL_ID: "eu-west-2:1a5451f6-83a9-46fb-9c19-9fd5676128bb"
     },
     apiGateway: {
         REGION: "eu-west-2",
-        URL: "https://api.excite.world/prod"
+        URL: "https://api.excite.world/prod",
+        WS_ENDPOINT: "wss://p1wtmwcvea.execute-api.eu-west-2.amazonaws.com/prod"
     },
     stripe: {
         STRIPE_PUBLIC_KEY: "pk_test_Ua3dPWghEeL733J86S3Okzie00nTYcMZJC"

@@ -7,10 +7,13 @@ import "./App.css";
 //Redux
 import { connect } from "react-redux";
 import { loggedInCheck } from "./actions";
+//WebSocket
+import WebSocketProvider from './WebSocket';
 //Images
 import ecoin from "./images/e-coin.png";
 import fbLogo from "./images/fb-logo.png";
 import twitterLogo from "./images/twitter-logo.svg";
+import logoExcite from "./images/logo-excite.png";
 
 
 class App extends Component {
@@ -52,11 +55,12 @@ class App extends Component {
 
     render() {
         return (
+            <WebSocketProvider userId={this.props.isLogged ? this.props.user.sub : null}>
             <div className="app-background">
                 <div className="app-main">
                     <div className="app-header">
                         <Link className="logo-excite" to="/">
-                            <span><span className="purple">E</span>xcite<b>.</b></span>
+                            <img src={logoExcite} alt="logoExcite"></img>
                         </Link>
 
                         {this.props.isLogged && 
@@ -98,7 +102,7 @@ class App extends Component {
 
                     <div className="app-footer">
                         <Link className="logo-excite" to="/">
-                            <span><span className="purple">E</span>xcite<b>.</b></span>
+                            <img src={logoExcite} alt="logoExcite"></img>
                         </Link>
                         <Link className="footer-social twitter" to="/">
                             <img src={twitterLogo} alt="twitter-logo"></img>
@@ -109,7 +113,7 @@ class App extends Component {
                         <div className="footer-links">
                             <Link to="/jouer">Jouer</Link>
                             <Link to="/boutique?tab=articles">Boutique</Link>
-                            <Link to={`/ecoin?redirect=${window.location.pathname+window.location.search}`}>Acheter des eCoins</Link>
+                            <Link to={`/ecoin?redirect=${window.location.pathname+window.location.search}`}>Obtenir des eCoins</Link>
                             {this.props.isLogged && <Link to="/mon-compte">Mon Compte</Link>}
                             <Link to="/faq">FAQ</Link>
                             <Link to="/contact">Contact</Link>
@@ -119,6 +123,7 @@ class App extends Component {
                     </div>
                 </div>
             </div>
+            </WebSocketProvider>
         )
     }
 }

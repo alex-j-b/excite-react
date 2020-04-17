@@ -12,7 +12,9 @@ import {
     GET_CART,
     ADD_COMMAND,
     GET_COMMAND,
-    BUY_ECOIN
+    BUY_ECOIN,
+    SET_MESSAGE_SENT,
+    SET_MESSAGE_RECEIVED
 } from './actions';
 
 const DEFAULT_STATE = {
@@ -56,6 +58,8 @@ export default function refresh(state = DEFAULT_STATE, action = {}) {
 
     switch(action.type) {
 
+        ////////////////////////////////////////////////////////////// USER COGNITO ///////////////////////////////////////////////////////////
+
         case SET_USER:
             let user = action.user;
             let isLogged, authStatus;
@@ -92,6 +96,42 @@ export default function refresh(state = DEFAULT_STATE, action = {}) {
                 user: user
             };
 
+        //////////////////////////////////////////////////////////////////// WEBSOCKET /////////////////////////////////////////////////////////////
+
+        case SET_MESSAGE_SENT:
+            const messageSent = action.body;
+            console.log(messageSent)
+
+            return {
+                ...newState
+            };
+
+        case SET_MESSAGE_RECEIVED:
+            const messageReceived = action.body;
+
+            if (messageReceived.action === 'updatePendingBet') {
+                const betTimeStamp = Number(messageReceived.timestamp.N);
+                const betIndex = newStateBetsHistory.findIndex(el => el.timestamp === betTimeStamp);
+                if (betIndex > -1) {
+                    const betFound = newStateBetsHistory[betIndex];
+                    betFound.status = messageReceived.status.S;
+                    betFound.message = ({win: 'Victoire +', lost: 'Défaite -'})[messageReceived.status.S] || 'En cours... ';
+                    if (betFound.status === 'playing') {
+                        newStatePendingBets[messageReceived.game] = betFound;
+                    }
+                    else {
+                        delete newStatePendingBets[messageReceived.game];
+                    }
+                }
+            }
+
+            return {
+                ...newState,
+                betsHistory: newStateBetsHistory,
+                pendingBets: newStatePendingBets
+            };
+
+        ////////////////////////////////////////////////////////////// CONFIRM ACCOUNTS ///////////////////////////////////////////////////////////
 
         case CONFIRM_LOL_ACCOUNT:
             const lolAccount = action.body;
@@ -124,6 +164,7 @@ export default function refresh(state = DEFAULT_STATE, action = {}) {
                 user: newStateUser
             };
 
+        //////////////////////////////////////////////////////////////////// BETS /////////////////////////////////////////////////////////////////
 
         case GET_BETS:
             const getBets = action.actions.body;
@@ -204,6 +245,7 @@ export default function refresh(state = DEFAULT_STATE, action = {}) {
                 pendingBets: newStatePendingBets
             };
 
+        //////////////////////////////////////////////////////////////////// SHOP /////////////////////////////////////////////////////////////////
 
         case GET_SHOP_ARTICLES:
             const shopArticles = [action.body[0], action.body[1], action.body[0], action.body[1], action.body[0], action.body[1], action.body[0], action.body[1], action.body[0], action.body[1], action.body[0], action.body[1]];

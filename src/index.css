@@ -36,13 +36,17 @@ input, textarea, select, button, button:focus, button:active {
 button {
     cursor: pointer;
     font-family: 'Lato';
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 button::-moz-focus-inner {
     border: 0;
 }
 .e-button {
     width: fit-content;
-    padding: 12px 26px 12px 26px;
+    padding: 10px 26px 10px 26px;
     margin: 30px 0 10px 0;
     border: 1px solid;
     background-color: rgb(80, 0, 80);
@@ -50,10 +54,20 @@ button::-moz-focus-inner {
     color: white;
     -webkit-transition-duration: 0.45s; transition-duration: 0.45s;
 }
-.e-button:hover, .e-button:active {
+.e-button:hover {
     color: rgb(100, 0, 100);
     background-color: white;
 }
+.e-button.grey {
+    padding: 10px 20px 10px 20px;
+    background-color: grey;
+    font-size: 18px; font-family: 'Lato', Arial; -webkit-text-stroke: 0.1px;
+}
+.e-button.grey:hover {
+    color: grey;
+    background-color: white;
+}
+
 .wallet-ecoin * {
     cursor: pointer;
 }
@@ -107,12 +121,9 @@ input[type="radio"]:focus {
     border-color:#cdcdcd !important;
 }
 .react-tel-input .form-control {
-    width: 109% !important;
+    width: 109% !important; height: 41px !important;
     border-radius: 0px !important;
     border-color:#cdcdcd !important;
-}
-#phone-form-control {
-    height: 41px;
     font-size: 16px !important; font-family: 'Raleway', Arial !important;
 }
 
@@ -206,29 +217,28 @@ p.grey-element.connexion {
     margin-top: 20px;
 }
 
-.yes-no-popup > .wrap-buttons > button {
+.yes-no-popup button {
     padding: 4px 12px 4px 12px;
     background: none;
     font-size: 18px; font-family: 'Raleway', Arial, Helvetica; -webkit-text-stroke: 0.6px;
     transition-duration: 0.4s; -webkit-transition-duration: 0.4s;
 }
 
-.yes-no-popup > .wrap-buttons > button[class="no"] {
+.yes-no-popup button[class="no"] {
     margin-left: 12px;
     border: 2px solid #e60000;
     color: #e60000;
-    
 }
-.yes-no-popup > .wrap-buttons > button[class="no"]:hover {
+.yes-no-popup button[class="no"]:hover, .yes-no-popup button[class="no"]:active {
     background-color: #e60000;
     color: white;
 }
 
-.yes-no-popup > .wrap-buttons > button[class="yes"] {
+.yes-no-popup button[class="yes"] {
     color: #00AD3F;
     border: 2px solid #00AD3F;
 }
-.yes-no-popup > .wrap-buttons > button[class="yes"]:hover {
+.yes-no-popup button[class="yes"]:hover, .yes-no-popup button[class="yes"]:active {
     background-color: #00AD3F;
     color: white;
 }
@@ -238,8 +248,43 @@ p.grey-element.connexion {
     .yes-no-popup {
         max-width: 80vw;
     }
-    .yes-no-popup > .wrap-buttons > button {
+    .yes-no-popup button {
         padding: 4px 12px 4px 12px;
         font-size: 18px;
+    }
+
+    .yes-no-popup button[class="yes"]:hover {
+        background-color: white;
+        color: #00AD3F;
+    }
+    .yes-no-popup button[class="yes"]:active {
+        background-color: #00AD3F !important;
+        color: white !important;
+    }
+    .yes-no-popup button[class="no"]:hover {
+        background-color: white;
+        color: #e60000;
+    }
+    .yes-no-popup button[class="no"]:active {
+        background-color: #e60000 !important;
+        color: white !important;
+    }
+
+    .e-button:hover {
+        color: white;
+        background-color: rgb(80, 0, 80);
+    }
+    .e-button:active {
+        color: rgb(100, 0, 100) !important;
+        background-color: white !important;
+    }
+
+    .e-button.grey:hover {
+        color: white;
+        background-color: grey;
+    }
+    .e-button.grey:active {
+        color: grey !important;
+        background-color: white !important;
     }
 }

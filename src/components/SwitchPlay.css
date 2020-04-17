@@ -1,0 +1,31 @@
+.switch-play {
+    align-self: flex-end;
+    margin: 25px 25px 0 0;
+}
+
+.react-switch-bg {
+    padding: 0 0 0 1px;
+    border: 1px solid purple;
+}
+
+.react-switch-handle {
+    margin: 1px 0 0 1px;
+}
+
+.team-avatar {
+    height: 24px;
+    margin: 1px 0 0 5px;
+    filter: invert(100%);
+}
+
+.solo-avatar {
+    height: 19px;
+    margin: 3px 0 0 8px;
+    filter: invert(100%);
+}
+
+@media screen and (max-width: 750px) {
+    .switch-play {
+        margin: 15px 10px -15px 0;
+    }
+}
