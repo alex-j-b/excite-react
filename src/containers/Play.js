@@ -7,18 +7,24 @@ import { connect } from "react-redux";
 import {
     getLolBets,
     getFortniteBets,
-    getCsgoBets
+    getCsgoBets,
+    getFifa20Bets,
+    checkQueue
 } from "../actions";
+//Libs
+import { odds, goals, gameNames } from '../libs/infos';
 //Components
 import LeagueOfLegends from '../components/LeagueOfLegends';
 import Fortnite from '../components/Fortnite';
 import CounterStrike from '../components/CounterStrike';
+import Fifa20 from '../components/Fifa20.js';
 import CircleLoader from '../components/CircleLoader';
 //Images
 import authBG from "../images/mystique-statue.jpg";
 import lolLogo from "../images/lol-logo.png";
 import fortniteLogo from "../images/fortnite-logo.png";
 import csgoLogo from "../images/csgo-logo.png";
+import fifa20Logo from "../images/fifa20-logo.png";
 import historyBlack from "../images/history-black.png";
 import ecoin from "../images/e-coin.png";
 
@@ -29,7 +35,8 @@ class Play extends Component {
     state = {
         tab: '',
         historyScrollBar: false,
-        imageReady: true
+        imageReady: true,
+        queue: {}
     }
 
     onChange(e) {
@@ -54,7 +61,9 @@ class Play extends Component {
         return true;
     }
 
-    componentDidUpdate(prevProps) {
+    componentDidUpdate(prevProps, prevState) {
+        if (!this.state.imageReady) this.setState({ imageReady: true });
+
         if (this.props.isLogged !== prevProps.isLogged) {
             let urlParams = (new URL(document.location)).searchParams;
             let tab = urlParams.get('game') ? urlParams.get('game') : 'leagueoflegends';
@@ -63,20 +72,33 @@ class Play extends Component {
             if (!urlParams.get('game')) {
                 this.props.history.push(`/jouer?game=${tab}`);
             }
-            
-            const displayGameFunc = ({
-                leagueoflegends: 'League of legends',
-                fortnite: 'Fortnite',
-                counterstrikego: 'Counter Strike'
-            })[tab] || 'undefined';
-            let title = document.querySelector('head > title');
-            title.innerHTML = `Excite | ${displayGameFunc}`;
 
             this.props.getLolBets();
             this.props.getFortniteBets();
             this.props.getCsgoBets();
+            this.props.getFifa20Bets();
+            checkQueue().then(response => {
+                if (response.statusCode === 200) {
+                    this.setState({ queue: response.body.game });
+                    if (tab !== response.body.game) {
+                        this.setState({ tab: tab });
+                        this.props.history.push(`/jouer?game=${tab}`);
+                    }
+                }
+            })
         }
-        if (!this.state.imageReady) this.setState({ imageReady: true });
+
+        if (this.state.tab !== prevState.tab) {
+            const displayGameFunc = ({
+                leagueoflegends: 'League of legends',
+                fortnite: 'Fortnite',
+                counterstrikego: 'Counter Strike',
+                fifa20: 'Fifa 20',
+                history: 'Historique'
+            })[this.state.tab] || 'undefined';
+            let title = document.querySelector('head > title');
+            title.innerHTML = `Excite | ${displayGameFunc}`;
+        }
     }
 
     componentDidMount() {
@@ -92,7 +114,9 @@ class Play extends Component {
             const displayGameFunc = ({
                 leagueoflegends: 'League of legends',
                 fortnite: 'Fortnite',
-                counterstrikego: 'Counter Strike'
+                counterstrikego: 'Counter Strike',
+                fifa20: 'Fifa 20',
+                history: 'Historique'
             })[tab] || 'undefined';
 
             let title = document.querySelector('head > title');
@@ -101,20 +125,38 @@ class Play extends Component {
             this.props.getLolBets();
             this.props.getFortniteBets();
             this.props.getCsgoBets();
+            this.props.getFifa20Bets();
+            checkQueue().then(response => {
+                console.log('checkQueue(): ', response)
+                if (response.statusCode === 200) {
+                    const game = response.body.game;
+                    let newQueue = this.state.queue;
+                    newQueue[game] = response.body;
+                    this.setState({ queue: newQueue });
+                    if (tab !== game) {
+                        tab = game;
+                        this.setState({ tab: tab });
+                        this.props.history.push(`/jouer?game=${tab}`);
+                    }
+                }
+            })
         }
     }
 
     render() {
         let betsHistoryList = this.props.betsHistory.map(el => {
+            let goal = goals[el.type];
+            let netResult = (el.ecoin * odds[el.type]) - el.ecoin;
+            let game = gameNames[el.game];
             return (
                 <div className={`item ${el.status}`} key={el.betId}>
                     <div className="wrap-date-game">
                         <span className="number">{el.date}</span>
-                        <span>{el.game}</span>
+                        <span>{game}</span>
                     </div>
                     <div className="wrap-bet-result">
-                        <span>{el.goal}</span>
-                        <span className="number">{el.message + el.ecoin} <img className="ecoin" src={ecoin} alt="ecoin"></img></span>
+                        <span>{goal}</span>
+                        <span className="number">{el.message + netResult} <img className="ecoin" src={ecoin} alt="ecoin"></img></span>
                     </div>
                 </div>
             );
@@ -151,6 +193,17 @@ class Play extends Component {
                                 backgroundColor: `${this.state.tab === 'counterstrikego' ? '#f9f9f9' : 'transparent'}`
                             }}
                             name="counterstrikego"
+                            onClick={this.switchTab}
+                        ></button>
+
+                        <button
+                            className="fifa20-button" 
+                            style={{
+                                filter: `${this.state.tab === 'fifa20' ? '' : 'invert(100%)'}`,
+                                backgroundImage: `url(${fifa20Logo})`,
+                                backgroundColor: `${this.state.tab === 'fifa20' ? '#f9f9f9' : 'transparent'}`
+                            }}
+                            name="fifa20"
                             onClick={this.switchTab}
                         ></button>
 
@@ -194,6 +247,13 @@ class Play extends Component {
                                 display={this.state.tab === 'counterstrikego'}
                                 imageReady={this.state.imageReady}
                                 accountConfirmed={this.props.isLogged && 'counterstrikego' in this.props.user['game_accounts']}
+                                queue={this.state.queue.counterstrikego ? this.state.queue.counterstrikego : {}}
+                            />
+                            <Fifa20
+                                display={this.state.tab === 'fifa20'}
+                                imageReady={this.state.imageReady}
+                                accountConfirmed={this.props.isLogged && 'fifa20' in this.props.user['game_accounts']}
+                                queue={this.state.queue.fifa20 ? this.state.queue.fifa20 : {}}
                             />
                         </div>
 
@@ -225,6 +285,9 @@ function mapDispatchToProps(dispatch) {
         },
         getCsgoBets: function () {
             dispatch(getCsgoBets());
+        },
+        getFifa20Bets: function () {
+            dispatch(getFifa20Bets());
         }
     }
 }

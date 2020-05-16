@@ -8,7 +8,8 @@ import {
     addLolBet
 } from "../actions";
 //libs
-import { WebSocketContext } from '../WebSocket';
+import { onBetPending, offBetPending } from '../libs/betPending';
+import { odds } from '../libs/infos';
 import { isEqual } from 'lodash';
 import Select from 'react-select';
 import ImageFadeIn from 'react-image-fade-in';
@@ -50,6 +51,7 @@ const CustomSingleValue = ({ data }) => (
     </div>
 );
 
+
 class LeagueOfLegends extends Component {
     onChange = this.onChange.bind(this);
     handleEnter = this.handleEnter.bind(this);
@@ -57,13 +59,15 @@ class LeagueOfLegends extends Component {
     onSwitch = this.onSwitch.bind(this);
     confirmLolAccount = this.confirmLolAccount.bind(this);
     addLolBet = this.addLolBet.bind(this);
-    static contextType = WebSocketContext;
+    onBetPending = onBetPending.bind(this);
+    offBetPending = offBetPending.bind(this);
     state = {
         ecoinOption: 5,
         summonerName: '',
         region: 'euw1',
         defaultEcoinOption: undefined,
         multiplayer: false,
+        type: 'lol-5v5-ranked-solo',
         searching: false,
         betIsPending: false,
         loading: false
@@ -78,7 +82,11 @@ class LeagueOfLegends extends Component {
     }
 
     onSwitch() {
-        this.setState({ multiplayer: !this.state.multiplayer });
+        const type = this.state.multiplayer ? 'lol-5v5-ranked-solo' : 'lol-5v5-private-solo';
+        this.setState({
+            multiplayer: !this.state.multiplayer,
+            type: type
+        });
     }
 
     confirmLolAccount() {
@@ -107,9 +115,13 @@ class LeagueOfLegends extends Component {
     addLolBet() {
         if (!this.state.multiplayer) {
             this.setState({ loading: true });
-            this.props.addLolBet(this.state.ecoinOption);
+            this.props.addLolBet(
+                this.state.type,
+                this.state.ecoinOption
+            );
         }
         else {
+            //Join queue
             if (!this.state.searching) {
                 this.setState({ searching: true });
                 this.refs.notifLolSearch.style.display = 'inline';
@@ -131,37 +143,15 @@ class LeagueOfLegends extends Component {
                     this.refs.chrono.innerHTML = `${min}:${sec}`;
                 }, 1000);
             }
+            //Leave queue
             else {
-                if (false) {
-                    this.setState({ searching: false });
-                    this.refs.notifLolSearch.style.display = 'none';
-                    this.refs.notifLolEstimation.style.display = 'none';
-                    this.refs.buttonLolBet.innerHTML = 'Parier';
-                    this.refs.buttonLolBet.classList.remove('grey');
-                    this.refs.chrono.innerHTML = '00:00';
-                    clearInterval(window.intervalLolBet);
-                }
-                else {
-                    this.setState({
-                        searching: false,
-                        betIsPending: true
-                    });
-                    this.refs.notifLolSearch.style.display = 'none';
-                    this.refs.notifLolEstimation.style.display = 'none';
-                    this.refs.buttonLolBet.innerHTML = 'Parier';
-                    this.refs.buttonLolBet.classList.remove('grey');
-                    this.refs.buttonLolBet.disabled = true;
-                    this.refs.chrono.innerHTML = '00:00';
-                    clearInterval(window.intervalLolBet);
-
-                    this.refs.notifGameFound.style.display = 'inline';
-                    this.refs.notifLolTournCode.style.display = 'inline';
-                    this.refs.notifLolJoin.style.display = 'inline';
-                    this.refs.linkLolHelp.style.display = 'inline';
-                    this.refs.notifDiscord.style.display = 'inline';
-                    this.refs.discordLink.style.display = 'inline';
-                    
-                }
+                this.setState({ searching: false });
+                this.refs.notifLolSearch.style.display = 'none';
+                this.refs.notifLolEstimation.style.display = 'none';
+                this.refs.buttonLolBet.innerHTML = 'Parier';
+                this.refs.buttonLolBet.classList.remove('grey');
+                this.refs.chrono.innerHTML = '00:00';
+                clearInterval(window.intervalLolBet);
             }
         }
     }
@@ -182,43 +172,10 @@ class LeagueOfLegends extends Component {
         const thisBets = this.props.pendingBets;
         if (this.props.accountConfirmed && !isEqual(prevBets, thisBets)) {
             if ("leagueoflegends" in thisBets && !isEqual(prevBets.leagueoflegends, thisBets.leagueoflegends)) {
-                const ecoinValue = this.props.pendingBets.leagueoflegends.ecoin.toString();
-                const optionIndex = ecoinOptions.findIndex(option => option.value === ecoinValue);
-                this.setState({
-                    loading: false,
-                    betIsPending: true,
-                    defaultEcoinOption: ecoinOptions[optionIndex]
-                });
-                this.refs.buttonLolBet.disabled = true;
-                this.refs.notifLolBet.style.display = 'inline';
-                const countDown = () => {
-                    const timestamp = thisBets.leagueoflegends.timestamp;
-                    const timeRemaining = 1800 - ((Date.now() - timestamp) / 1000);
-                    if (thisBets.leagueoflegends.status === 'playing') {
-                        this.refs.notifLolBet.innerHTML = 'Partie en cours... GLHF!';
-                    }
-                    else if (timeRemaining < 0) {
-                        this.refs.notifLolBet.innerHTML = 'Pari en cours...';
-                    }
-                    else {
-                        const hour = Math.floor(timeRemaining / 3600);
-                        const hourString = hour > 0 ? `${hour}h` : '';
-                        const min = Math.floor(timeRemaining % 3600 / 60);
-                        const minString = min > 0 ? `${min}min` : '';
-                        this.refs.countDown.innerHTML = hourString + minString;
-                    }
-                }
-                countDown();
-                window.intervalLolBet = setInterval(() => {
-                    countDown();
-                }, 60000);
+                this.onBetPending('leagueoflegends', thisBets.leagueoflegends);
             }
             else if ("leagueoflegends" in prevBets && !("leagueoflegends" in thisBets)) {
-                this.setState({ betIsPending: false, defaultEcoinOption: undefined });
-                this.props.loggedInCheck();
-                this.refs.buttonLolBet.disabled = false;
-                this.refs.notifLolBet.style.display = 'none';
-                clearInterval(window.intervalLolBet);
+                this.offBetPending('leagueoflegends');
             }
         }
     }
@@ -226,36 +183,7 @@ class LeagueOfLegends extends Component {
     componentDidMount() {
         const thisBets = this.props.pendingBets;
         if ("leagueoflegends" in thisBets) {
-            const ecoinValue = this.props.pendingBets.leagueoflegends.ecoin.toString();
-            const optionIndex = ecoinOptions.findIndex(option => option.value === ecoinValue);
-            this.setState({
-                loading: false,
-                betIsPending: true,
-                defaultEcoinOption: ecoinOptions[optionIndex]
-            });
-            this.refs.buttonLolBet.disabled = true;
-            this.refs.notifLolBet.style.display = 'inline';
-            const countDown = () => {
-                const timestamp = thisBets.leagueoflegends.timestamp;
-                const timeRemaining = 1800 - ((Date.now() - timestamp) / 1000);
-                if (thisBets.leagueoflegends.status === 'playing') {
-                    this.refs.notifLolBet.innerHTML = 'Partie en cours... GLHF!';
-                }
-                else if (timeRemaining < 0) {
-                    this.refs.notifLolBet.innerHTML = 'Pari en cours...';
-                }
-                else {
-                    const hour = Math.floor(timeRemaining / 3600);
-                    const hourString = hour > 0 ? `${hour}h` : '';
-                    const min = Math.floor(timeRemaining % 3600 / 60);
-                    const minString = min > 0 ? `${min}min` : '';
-                    this.refs.countDown.innerHTML = hourString + minString;
-                }
-            }
-            countDown();
-            window.intervalLolBet = setInterval(() => {
-                countDown();
-            }, 60000);
+            this.onBetPending('leagueoflegends', thisBets.leagueoflegends);
         }
         document.addEventListener('keydown', this.handleEnter, false);
     }
@@ -270,7 +198,6 @@ class LeagueOfLegends extends Component {
     }
 
     render() {
-        const cote = this.state.multiplayer ? 2 : 1.8;
         return (
             <div className="wrap-leagueoflegends" style={{ display: this.props.display ? 'flex' : 'none' }}>
                 <div className="left">
@@ -302,7 +229,7 @@ class LeagueOfLegends extends Component {
                                 <span className="goal-price">
                                     { !this.state.multiplayer && 'Gagne une partie classée :' }
                                     { this.state.multiplayer && 'Gagne une partie privée entre joueurs Excite :' }
-                                    &nbsp;<span className="number">{this.state.ecoinOption * cote}</span>
+                                    &nbsp;<span className="number">{this.state.ecoinOption * odds[this.state.type]}</span>
                                     <img className="ecoin" src={ecoin} alt="ecoin"></img>
                                 </span>
                             </div>
@@ -335,7 +262,7 @@ class LeagueOfLegends extends Component {
                                     ref="discordLink"
                                     className="grey-link"
                                     title="Où cà ?"
-                                    href="https://static.developer.riotgames.com/img/docs/lol/tournament-client.png"
+                                    href="https://discord.com/channels/704630064242753577/704630064242753580"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     >Discord
@@ -365,7 +292,7 @@ class LeagueOfLegends extends Component {
                                         <span>Région</span>
                                     </label>
                                     <Select
-                                        className="select-region"
+                                        className="select"
                                         options={lolRegionsOptions}
                                         defaultValue={lolRegionsOptions[0]}
                                         blurInputOnSelect={true}
@@ -394,13 +321,13 @@ class LeagueOfLegends extends Component {
 
 function mapDispatchToProps(dispatch) {
     return {
-        confirmLolAccount: function (summonerName, region) {
+        confirmLolAccount: function(summonerName, region) {
             return dispatch(confirmLolAccount(summonerName, region));
         },
-        addLolBet: function (ecoin) {
-            dispatch(addLolBet(ecoin));
+        addLolBet: function(type, ecoin) {
+            dispatch(addLolBet(type, ecoin));
         },
-        loggedInCheck: function () {
+        loggedInCheck: function() {
             dispatch(loggedInCheck());
         }
     }

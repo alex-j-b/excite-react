@@ -9,6 +9,7 @@ export const UPDATE_BET_LOST = 'UPDATE_BET_LOST';
 export const CONFIRM_LOL_ACCOUNT = 'CONFIRM_LOL_ACCOUNT';
 export const CONFIRM_FORTNITE_ACCOUNT = 'CONFIRM_FORTNITE_ACCOUNT';
 export const CONFIRM_CSGO_ACCOUNT = 'CONFIRM_CSGO_ACCOUNT';
+export const CONFIRM_FIFA20_ACCOUNT = 'CONFIRM_FIFA20_ACCOUNT';
 
 export const GET_SHOP_ARTICLES = 'GET_SHOP_ARTICLES';
 export const ADD_CART = 'ADD_CART';
@@ -201,6 +202,14 @@ export function setMessageReceived(body) {
 ////////////////////////////////////////////////////////////// GAMES //////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+/* ----------------- CheckQueue ----------------- */
+export function checkQueue() {
+    return API.get('exciteAPI', '/checkQueue')
+    .then(response => {
+        return response;
+    });
+}
+
 // ----------------//---------------- League of Legends ----------------//---------------- //
 
 /* ----------------- ConfirmLolAccount ----------------- */
@@ -258,10 +267,11 @@ export function setAddLolBet(body) {
         }
     };
 }
-export function addLolBet(ecoin) {
+export function addLolBet(type, ecoin) {
     return dispatch => {
         API.post('exciteAPI', '/lol/addBet', {
             'body': {
+                'type': type,
                 'ecoin': ecoin
             }
         }).then(response => {
@@ -329,10 +339,11 @@ export function setAddFortniteBet(body) {
         }
     };
 }
-export function addFortniteBet(ecoin) {
+export function addFortniteBet(type, ecoin) {
     return dispatch => {
         API.post('exciteAPI', '/fortnite/addBet', {
             'body': {
+                'type': type,
                 'ecoin': ecoin
             }
         }).then(response => {
@@ -402,10 +413,11 @@ export function setAddCsgoBet(body) {
         }
     };
 }
-export function addCsgoBet(ecoin) {
+export function addCsgoBet(type, ecoin) {
     return dispatch => {
         API.post('exciteAPI', '/csgo/addBet', {
             'body': {
+                'type': type,
                 'ecoin': ecoin
             }
         }).then(response => {
@@ -414,6 +426,78 @@ export function addCsgoBet(ecoin) {
             }
         });
     }
+}
+
+/* ------------------- joinCsgoQueue ------------------- */
+export function joinCsgoQueue(type, ecoin) {
+    return API.post('exciteAPI', '/csgo/joinQueue', {
+        'body': {
+            'type': type,
+            'ecoin': ecoin
+        }
+    }).then(response => {
+        return response;
+    });
+}
+
+
+// ----------------//---------------- Fifa 20 -------------------//------------- //
+
+/* ----------------- ConfirmFifa20Account ------------------- */
+export function setConfirmFifa20Account(body) {
+    return {
+        type: CONFIRM_FIFA20_ACCOUNT,
+        body: body
+    };
+}
+export function confirmFifa20Account(plateform, accountId) {
+    return dispatch => {
+        return API.get('exciteAPI', '/fifa20/confirmAccount', {
+            'queryStringParameters': {
+                'plateform': plateform,
+                'accountId': accountId
+            }
+        }).then(response => {
+            console.log(response)
+            if (response.statusCode === 200) {
+                dispatch(setConfirmFifa20Account(response.body));
+            }
+            return response;
+        });
+    }
+}
+
+/* ------------------ getFifa20Bets ------------------ */
+export function setGetFifa20Bets(body) {
+    return {
+        type: GET_BETS,
+        actions: {
+            body: body,
+            game: 'counterstrikego'
+        }
+    };
+}
+export function getFifa20Bets() {
+    return dispatch => {
+        API.get('exciteAPI', '/fifa20/getBets')
+        .then(response => {
+            if (response.statusCode === 200) {
+                dispatch(setGetFifa20Bets(response.body));
+            }
+        });
+    }
+}
+
+/* ------------------- joinCsgoQueue ------------------- */
+export function joinFifa20Queue(type, ecoin) {
+    return API.post('exciteAPI', '/fifa20/joinQueue', {
+        'body': {
+            'type': type,
+            'ecoin': ecoin
+        }
+    }).then(response => {
+        return response;
+    });
 }
 
 

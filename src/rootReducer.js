@@ -3,6 +3,7 @@ import {
     CONFIRM_LOL_ACCOUNT,
     CONFIRM_FORTNITE_ACCOUNT,
     CONFIRM_CSGO_ACCOUNT,
+    CONFIRM_FIFA20_ACCOUNT,
     GET_BETS,
     ADD_BET,
     UPDATE_BET_LOST,
@@ -36,14 +37,7 @@ export default function refresh(state = DEFAULT_STATE, action = {}) {
     let newStateBetsHistory = [...newState.betsHistory];
     let newStatePendingBets = Object.assign({}, newState.pendingBets);
     let newStateCart = [...newState.cartArticles];
-
-    const displayGameFunc = (game) => {
-        return ({
-            leagueoflegends: 'League of legends',
-            fortnite: 'Fortnite',
-            counterstrikego: 'Counter Strike'
-        })[action.actions.game] || 'undefined';
-    }
+    const pendingStatus = ['pending', 'playing', 'creating'];
 
     const timestampToDate = (timestamp) => {
         let date = new Date(timestamp);
@@ -55,11 +49,9 @@ export default function refresh(state = DEFAULT_STATE, action = {}) {
         return `${day}/${month}/${year} à ${date.getHours()}h${min}`;
     }
 
-
     switch(action.type) {
 
         ////////////////////////////////////////////////////////////// USER COGNITO ///////////////////////////////////////////////////////////
-
         case SET_USER:
             let user = action.user;
             let isLogged, authStatus;
@@ -100,7 +92,7 @@ export default function refresh(state = DEFAULT_STATE, action = {}) {
 
         case SET_MESSAGE_SENT:
             const messageSent = action.body;
-            console.log(messageSent)
+            console.log('messageSent: ', messageSent)
 
             return {
                 ...newState
@@ -108,25 +100,45 @@ export default function refresh(state = DEFAULT_STATE, action = {}) {
 
         case SET_MESSAGE_RECEIVED:
             const messageReceived = action.body;
+            console.log('messageReceived: ', messageReceived)
 
-            if (messageReceived.action === 'updatePendingBet') {
-                const betTimeStamp = Number(messageReceived.timestamp.N);
-                const betIndex = newStateBetsHistory.findIndex(el => el.timestamp === betTimeStamp);
-                if (betIndex > -1) {
-                    const betFound = newStateBetsHistory[betIndex];
-                    betFound.status = messageReceived.status.S;
-                    betFound.message = ({win: 'Victoire +', lost: 'Défaite -'})[messageReceived.status.S] || 'En cours... ';
-                    if (betFound.status === 'playing') {
-                        newStatePendingBets[messageReceived.game] = betFound;
+            if (messageReceived.action.includes('PendingBet')) {
+                let newPendingBet = messageReceived;
+                for (let [key, value] of Object.entries(messageReceived)) {
+                    if (typeof value === 'object') {
+                        newPendingBet[key] = value[Object.keys(value)[0]];
                     }
-                    else {
-                        delete newStatePendingBets[messageReceived.game];
+                }
+                newPendingBet.message = ({win: 'Victoire +', lost: 'Défaite -'})[newPendingBet.status] || 'En cours... ';
+                newPendingBet.date = timestampToDate(Number(newPendingBet.timestamp));
+
+                if (messageReceived.action === 'updatePendingBet') {
+                    console.log('updatePendingBet')
+                    const betIndex = newStateBetsHistory.findIndex(el => el.betId === messageReceived.betId);
+                    console.log(betIndex)
+                    if (betIndex > -1) {
+                        newStateBetsHistory[betIndex] = newPendingBet;
+                        if (pendingStatus.includes(newPendingBet.status)) {
+                            console.log('pendingStatus.includes(newPendingBet.status)')
+                            newStatePendingBets[messageReceived.game] = newPendingBet;
+                        }
+                        else {
+                            console.log('else {')
+                            delete newStatePendingBets[messageReceived.game];
+                        }
                     }
+                }
+                else if (messageReceived.action === 'addPendingBet') {
+                    console.log('addPendingBet')
+                    newStateUser['custom:ecoin'] = Number(newStateUser['custom:ecoin']) - Number(newPendingBet.ecoin);
+                    newStateBetsHistory.unshift(newPendingBet);
+                    newStatePendingBets[newPendingBet.game] = newPendingBet;
                 }
             }
 
             return {
                 ...newState,
+                user: newStateUser,
                 betsHistory: newStateBetsHistory,
                 pendingBets: newStatePendingBets
             };
@@ -164,18 +176,28 @@ export default function refresh(state = DEFAULT_STATE, action = {}) {
                 user: newStateUser
             };
 
+
+        case CONFIRM_FIFA20_ACCOUNT:
+            const fifa20Account = action.body;
+            newStateUser['game_accounts'].fifa20 = fifa20Account;
+            delete newStateUser['game_accounts'].fifa20.game;
+
+            return {
+                ...newState,
+                user: newStateUser
+            };
+
         //////////////////////////////////////////////////////////////////// BETS /////////////////////////////////////////////////////////////////
 
         case GET_BETS:
             const getBets = action.actions.body;
-            const displayGame1 = displayGameFunc(action.actions.game);
             let betPending = false;
             let allTimestamps = newStateBetsHistory.map(bet => bet.timestamp);
 
             getBets.forEach(el => {
-                el.game = displayGame1;
+                el.game = action.actions.game;
                 el.message = ({win: 'Victoire +', lost: 'Défaite -'})[el.status] || 'En cours... ';
-                el.date = timestampToDate(el.timestamp);
+                el.date = timestampToDate(Number(el.timestamp));
 
                 if (allTimestamps.includes(el.timestamp)) {
                     const oldIndex = newStateBetsHistory.findIndex(bet => bet.timestamp === el.timestamp);
@@ -186,7 +208,7 @@ export default function refresh(state = DEFAULT_STATE, action = {}) {
                     newStateBetsHistory.push(el);
                 }
 
-                if (el.status === 'pending' || el.status === 'playing') {
+                if (pendingStatus.includes(el.status)) {
                     newStatePendingBets[action.actions.game] = el;
                     betPending = true;
                 }
@@ -209,11 +231,10 @@ export default function refresh(state = DEFAULT_STATE, action = {}) {
 
         case ADD_BET:
             let newBet = action.actions.body;
-            const displayGame2 = displayGameFunc(action.actions.game);
 
-            newBet.game = displayGame2;
+            newBet.game = action.actions.game;
             newBet.message = ({win: 'Victoire +', lost: 'Défaite -'})[newBet.status] || 'En cours... ';
-            newBet.date = timestampToDate(newBet.timestamp);
+            newBet.date = timestampToDate(Number(newBet.timestamp));
 
             newStateBetsHistory.unshift(newBet);
             newStatePendingBets[action.actions.game] = newBet;
@@ -299,7 +320,7 @@ export default function refresh(state = DEFAULT_STATE, action = {}) {
 
         case ADD_COMMAND:
             let addCommandArticles = action.body;
-            addCommandArticles.date = timestampToDate(addCommandArticles.timestamp);
+            addCommandArticles.date = timestampToDate(Number(addCommandArticles.timestamp));
             newState.commandArticles.unshift(addCommandArticles);
 
             newStateUser['custom:ecoin'] = Number(newStateUser['custom:ecoin']) - addCommandArticles.totalPrice;
@@ -315,7 +336,7 @@ export default function refresh(state = DEFAULT_STATE, action = {}) {
         case GET_COMMAND:
             let getCommandArticles = action.body;
             getCommandArticles.forEach(elArticle => {
-                elArticle.date = timestampToDate(elArticle.timestamp);
+                elArticle.date = timestampToDate(Number(elArticle.timestamp));
             });
 
             return {

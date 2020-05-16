@@ -9,6 +9,8 @@ import {
     updateBetLost
 } from "../actions";
 //libs
+import { onBetPending, offBetPending } from '../libs/betPending';
+import { odds } from '../libs/infos';
 import { isEqual } from 'lodash';
 import Select from 'react-select';
 import ImageFadeIn from 'react-image-fade-in';
@@ -43,14 +45,18 @@ class Fortnite extends Component {
     selectChange = this.selectChange.bind(this);
     onSwitch = this.onSwitch.bind(this);
     confirmFortniteAccount = this.confirmFortniteAccount.bind(this);
-    addFortniteBet = this.addFortniteBet.bind(this);
     togglePopUp = this.togglePopUp.bind(this);
     betLost = this.betLost.bind(this);
+    addFortniteBet = this.addFortniteBet.bind(this);
+    onBetPending = onBetPending.bind(this);
+    offBetPending = offBetPending.bind(this);
     state = {
         ecoinOption: 5,
         fortniteId: '',
         defaultEcoinOption: undefined,
         betIsPending: false,
+        multiplayer: false,
+        type: 'fortnite-top10-BR-solo',
         loading: false
     }
 
@@ -88,7 +94,10 @@ class Fortnite extends Component {
         this.refs.errorEcoin.style.display = 'none';
         if (Number(this.props.user['custom:ecoin']) >= this.state.ecoinOption) {
             this.setState({ loading: true });
-            this.props.addFortniteBet(this.state.ecoinOption);
+            this.props.addFortniteBet(
+                this.state.type,
+                this.state.ecoinOption
+            );
         }
         else {
             this.refs.errorEcoin.style.display = 'inline';
@@ -125,42 +134,10 @@ class Fortnite extends Component {
         const thisBets = this.props.pendingBets;
         if (!isEqual(prevBets, thisBets)) {
             if ("fortnite" in thisBets && !isEqual(prevBets.fortnite, thisBets.fortnite)) {
-                const ecoinValue = this.props.pendingBets.fortnite.ecoin.toString();
-                const optionIndex = ecoinOptions.findIndex(option => option.value === ecoinValue);
-                this.setState({
-                    loading: false,
-                    betIsPending: true,
-                    defaultEcoinOption: ecoinOptions[optionIndex]
-                });
-                this.refs.buttonFortniteBet.disabled = true;
-                this.refs.notifFortniteBet.style.display = 'inline';
-                this.refs.lostBetLink.style.display = 'inline';
-                const countDown = () => {
-                    const timestamp = thisBets.fortnite.timestamp;
-                    const timeRemaining = 600 - ((Date.now() - timestamp) / 1000);
-                    if (timeRemaining < 0) {
-                        this.refs.notifFortniteBet.innerHTML = 'Pari en cours...';
-                    }
-                    else {
-                        const hour = Math.floor(timeRemaining / 3600);
-                        const hourString = hour > 0 ? `${hour}h` : '';
-                        const min = Math.floor(timeRemaining % 3600 / 60);
-                        const minString = min > 0 ? `${min}min` : '';
-                        this.refs.countDown.innerHTML = hourString + minString;
-                    }
-                }
-                countDown();
-                window.intervalFortniteBet = setInterval(() => {
-                    countDown();
-                }, 60000);
+                this.onBetPending('fortnite', thisBets.fortnite);
             }
             else if ("fortnite" in prevBets && !("fortnite" in thisBets)) {
-                this.setState({ betIsPending: false, defaultEcoinOption: undefined });
-                this.props.loggedInCheck();
-                this.refs.buttonFortniteBet.disabled = false;
-                this.refs.notifFortniteBet.style.display = 'none';
-                this.refs.lostBetLink.style.display = 'none';
-                clearInterval(window.intervalFortniteBet);
+                this.offBetPending('fortnite');
             }
         }
     }
@@ -168,34 +145,7 @@ class Fortnite extends Component {
     componentDidMount() {
         const thisBets = this.props.pendingBets;
         if ("fortnite" in thisBets) {
-            const ecoinValue = this.props.pendingBets.fortnite.ecoin.toString();
-            const optionIndex = ecoinOptions.findIndex(option => option.value === ecoinValue);
-            this.setState({
-                loading: false,
-                betIsPending: true,
-                defaultEcoinOption: ecoinOptions[optionIndex]
-            });
-            this.refs.buttonFortniteBet.disabled = true;
-            this.refs.notifFortniteBet.style.display = 'inline';
-            this.refs.lostBetLink.style.display = 'inline';
-            const countDown = () => {
-                const timestamp = thisBets.fortnite.timestamp;
-                const timeRemaining = 600 - ((Date.now() - timestamp) / 1000);
-                if (timeRemaining < 0) {
-                    this.refs.notifFortniteBet.innerHTML = 'Pari en cours...';
-                }
-                else {
-                    const hour = Math.floor(timeRemaining / 3600);
-                    const hourString = hour > 0 ? `${hour}h` : '';
-                    const min = Math.floor(timeRemaining % 3600 / 60);
-                    const minString = min > 0 ? `${min}min` : '';
-                    this.refs.countDown.innerHTML = hourString + minString;
-                }
-            }
-            countDown();
-            window.intervalFortniteBet = setInterval(() => {
-                countDown();
-            }, 60000);
+            this.onBetPending('fortnite', thisBets.fortnite);
         }
         document.addEventListener("keydown", this.handleEnter, false);
     }
@@ -239,7 +189,7 @@ class Fortnite extends Component {
                                 onChange={obj => this.selectChange('ecoinOption', obj.value)}
                             />
                             <div>
-                                <span className="goal-price">Finir top 10 en Battle Royal solo : <span className="number">{this.state.ecoinOption * 2}</span>
+                                <span className="goal-price">Finir top 10 en Battle Royal solo : <span className="number">{this.state.ecoinOption * odds[this.state.type]}</span>
                                     <img className="ecoin" src={ecoin} alt="ecoin"></img>
                                 </span>
                             </div>
@@ -321,8 +271,8 @@ function mapDispatchToProps(dispatch) {
         confirmFortniteAccount: function(summonerName, region) {
             return dispatch(confirmFortniteAccount(summonerName, region));
         },
-        addFortniteBet: function(ecoin) {
-            dispatch(addFortniteBet(ecoin));
+        addFortniteBet: function(type, ecoin) {
+            dispatch(addFortniteBet(type, ecoin));
         },
         updateBetLost: function(game) {
             return dispatch(updateBetLost(game));
