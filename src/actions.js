@@ -3,13 +3,14 @@ import AWS from 'aws-sdk/global';
 
 export const SET_USER = 'SET_USER';
 
-export const GET_BETS = 'GET_BETS';
-export const ADD_BET = 'ADD_BET';
-export const UPDATE_BET_LOST = 'UPDATE_BET_LOST';
 export const CONFIRM_LOL_ACCOUNT = 'CONFIRM_LOL_ACCOUNT';
 export const CONFIRM_FORTNITE_ACCOUNT = 'CONFIRM_FORTNITE_ACCOUNT';
 export const CONFIRM_CSGO_ACCOUNT = 'CONFIRM_CSGO_ACCOUNT';
 export const CONFIRM_FIFA20_ACCOUNT = 'CONFIRM_FIFA20_ACCOUNT';
+export const GET_BETS = 'GET_BETS';
+export const ADD_BET = 'ADD_BET';
+export const UPDATE_BET_LOST = 'UPDATE_BET_LOST';
+export const ADD_SCREENSHOT = 'ADD_SCREENSHOT';
 
 export const GET_SHOP_ARTICLES = 'GET_SHOP_ARTICLES';
 export const ADD_CART = 'ADD_CART';
@@ -473,7 +474,7 @@ export function setGetFifa20Bets(body) {
         type: GET_BETS,
         actions: {
             body: body,
-            game: 'counterstrikego'
+            game: 'fifa20'
         }
     };
 }
@@ -498,6 +499,59 @@ export function joinFifa20Queue(type, ecoin) {
     }).then(response => {
         return response;
     });
+}
+
+// ----------------//---------------- updateBetLost -------------------//------------- //
+export function setUpdateBetLost(game, body) {
+    return {
+        type: UPDATE_BET_LOST,
+        actions: {
+            game: game,
+            body: body
+        }
+    };
+}
+export function updateBetLost(game, betId) {
+    return dispatch => {
+        return API.post('exciteAPI', '/updateBetLost', {
+            'body': {
+                'game': game,
+                'betId': betId
+            }
+        }).then(response => {
+            console.log(response)
+            if (response.statusCode === 200) {
+                dispatch(setUpdateBetLost(game, response.body));
+            }
+            return response;
+        });
+    }
+}
+
+// ----------------//---------------- addScreenshot -------------------//------------- //
+export function setAddScreenshot(body) {
+    return {
+        type: ADD_SCREENSHOT,
+        body: body
+    };
+}
+export function addScreenshot(betId, game, file) {
+    const body = {
+        'betId': betId,
+        'game': game,
+        'file': file
+    };
+    return dispatch => {
+        return API.post('exciteAPI', '/addScreenshot', {
+            'body': body
+        }).then(response => {
+            console.log(response)
+            if (response.statusCode === 200) {
+                dispatch(setAddScreenshot(body));
+            }
+            return response;
+        });
+    }
 }
 
 
@@ -664,30 +718,6 @@ export function buyEcoin(method, ecoinAmount, source) {
             console.log(response)
             if (response.statusCode === 200) {
                 dispatch(setBuyEcoin(ecoinAmount));
-            }
-            return response;
-        });
-    }
-}
-
-/* -------------------- updateBetLost --------------------- */
-export function setUpdateBetLost(body) {
-    return {
-        type: UPDATE_BET_LOST,
-        actions: {
-            body: body,
-            game: 'fortnite'
-        }
-    };
-}
-export function updateBetLost(game) {
-    return dispatch => {
-        return API.post('exciteAPI', '/updateBetLost', {
-            'body': { 'game': game }
-        }).then(response => {
-            console.log(response)
-            if (response.statusCode === 200) {
-                dispatch(setUpdateBetLost(response.body));
             }
             return response;
         });

@@ -1,5 +1,6 @@
 
 const dev = {
+    prod: false,
     cognito: {
         REGION: "eu-west-2",
         USER_POOL_ID: "eu-west-2_M2Ye9mmsk",
@@ -13,10 +14,14 @@ const dev = {
     },
     stripe: {
         STRIPE_PUBLIC_KEY: "pk_test_Ua3dPWghEeL733J86S3Okzie00nTYcMZJC"
+    },
+    paypal: {
+        CLIENT_ID: "ASEnEsJCkfDtnm0UInr8se4gu-hKVCiekNnGaCKywib1kB1TCaoFlpdK8YmJ08wWqWHyAkYl-lOOXdP1"
     }
 };
 
 const prod = {
+    prod: true,
     cognito: {
         REGION: "eu-west-2",
         USER_POOL_ID: "eu-west-2_B4Dcwg8xW",
@@ -29,7 +34,10 @@ const prod = {
         SOCKET_ENDPOINT: "wss://ao6phean1m.execute-api.eu-west-2.amazonaws.com/prod"
     },
     stripe: {
-        STRIPE_PUBLIC_KEY: "pk_test_Ua3dPWghEeL733J86S3Okzie00nTYcMZJC"
+        STRIPE_PUBLIC_KEY: "pk_live_dVJeofQgaQbzvvlec3LaCTBy00xsNdao7R"
+    },
+    paypal: {
+        CLIENT_ID: "AbFp5tGP63D2UMxlZa-BfmbXvnVA0lME-HcQj2wszgWi-ckiAtY0yLrMdtrA80_2jXSqYAD5kHk-FMEA"
     }
 };
 

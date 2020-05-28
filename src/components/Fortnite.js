@@ -113,7 +113,7 @@ class Fortnite extends Component {
             loading: true,
             popUpBetLost: false
         });
-        this.props.updateBetLost('fortnite').then(response => {
+        this.props.updateBetLost('fortnite', this.props.pendingBets.fortnite.betId).then(response => {
             this.setState({ loading: false });
         });
     }
@@ -274,8 +274,8 @@ function mapDispatchToProps(dispatch) {
         addFortniteBet: function(type, ecoin) {
             dispatch(addFortniteBet(type, ecoin));
         },
-        updateBetLost: function(game) {
-            return dispatch(updateBetLost(game));
+        updateBetLost: function(game, betId) {
+            return dispatch(updateBetLost(game, betId));
         },
         loggedInCheck: function() {
             dispatch(loggedInCheck());

@@ -53,20 +53,6 @@ let csgoCountDown = function(bet) {
     }
 }
 
-let fifa20CountDown = function(bet) {
-    const timestamp = bet.timestamp;
-    const timeRemaining = 1800 - ((Date.now() - timestamp) / 1000);
-    if (timeRemaining < 0) {
-        this.refs.notifFifa20Bet.innerHTML = 'Pari en cours...';
-    }
-    else {
-        const hour = Math.floor(timeRemaining / 3600);
-        const hourString = hour > 0 ? `${hour}h` : '';
-        const min = Math.floor(timeRemaining % 3600 / 60);
-        const minString = min > 0 ? `${min}min` : '';
-        this.refs.countDown.innerHTML = hourString + minString;
-    }
-}
 
 export function onBetPending(game, bet) {
     const ecoinValue = bet.ecoin.toString();
@@ -176,34 +162,35 @@ export function onBetPending(game, bet) {
                     this.refs.notifCsgoCreation.style.display = 'inline';
                 }
             }
-
-            case 'fifa20':
-                this.refs.buttonCsgoBet.disabled = true;
-
-                this.setState({
-                    multiplayer: true,
-                    searching: false
-                });
-
-                this.refs.notifFifa20Estimation.style.display = 'none';
-                this.refs.buttonFifa20Bet.innerHTML = 'Parier';
-                this.refs.buttonFifa20Bet.classList.remove('grey');
-                this.refs.chrono.innerHTML = '00:00';
-                clearInterval(window.intervalFifa20Bet);
-
-                this.refs.notifGameFound.style.display = 'inline';
-                this.refs.notifFifa20Creation.style.display = 'none';
-                this.refs.notifFifa20SvInfo.style.display = 'inline';
-                this.refs.notifFifa20SvInfo.innerHTML = `Rejoignez Excite #${bet.serverId}&nbsp;&nbsp;Mdp : ${bet.password}`;
-
-                this.refs.notifFifa20Console.style.display = 'inline';
-                this.refs.notifFifa20Console.innerHTML = `Ou via la console :<br/>connect ${bet.publicIp}:2701${Number(bet.serverId)-1}; password ${bet.password}`;
-
-                this.refs.notifDiscord.style.display = 'inline';
-                this.refs.discordLink.style.display = 'inline';
-
             break;
-         
+
+        case 'fifa20':
+            this.refs.buttonFifa20Bet.disabled = true;
+
+            this.setState({
+                multiplayer: true,
+                searching: false
+            });
+
+            this.refs.notifFifa20Search.style.display = 'none';
+            this.refs.notifFifa20Estimation.style.display = 'none';
+
+            this.refs.buttonFifa20Bet.style.display = 'none';
+            this.refs.buttonFifa20Bet.innerHTML = 'Parier';
+            this.refs.buttonFifa20Bet.classList.remove('grey');
+
+            this.refs.chrono.innerHTML = '00:00';
+            clearInterval(window.intervalFifa20Bet);
+
+            this.refs.notifGameFound.style.display = 'inline';
+            this.refs.notifFifa20Screenshot.style.display = 'inline';
+            this.refs.notifFifa20Opponent.style.display = 'inline';
+            this.refs.notifFifa20Opponent.innerHTML = `Ajoutez et Affrontez ${bet.opponentAccountId}`;
+
+            this.refs.notifDiscord.style.display = 'inline';
+            this.refs.discordLink.style.display = 'inline';
+            break;
+
         default:
             break;
     }
@@ -246,9 +233,8 @@ export function offBetPending(game) {
             this.refs.buttonFifa20Bet.disabled = false;
             this.refs.notifFifa20Bet.style.display = 'none';
             this.refs.notifGameFound.style.display = 'none';
-            this.refs.notifFifa20Creation.style.display = 'none';
-            this.refs.notifFifa20SvInfo.style.display = 'none';
-            this.refs.notifFifa20Console.style.display = 'none';
+            this.refs.notifFifa20Screenshot.style.display = 'none';
+            this.refs.notifFifa20Opponent.style.display = 'none';
             this.refs.notifDiscord.style.display = 'none';
             this.refs.discordLink.style.display = 'none';
             clearInterval(window.intervalFifa20Bet);

@@ -5,11 +5,14 @@ import { connect } from "react-redux";
 import {
     loggedInCheck,
     confirmFifa20Account,
-    joinFifa20Queue
+    joinFifa20Queue,
+    updateBetLost,
+    addScreenshot
 } from "../actions";
 //libs
 import { onBetPending, offBetPending } from '../libs/betPending';
 import { odds } from '../libs/infos';
+import { toBase64 } from '../libs/toBase64';
 import { isEqual } from 'lodash';
 import Select from 'react-select';
 import ImageFadeIn from 'react-image-fade-in';
@@ -59,6 +62,7 @@ class Fifa20 extends Component {
     togglePopUp = this.togglePopUp.bind(this);
     betLost = this.betLost.bind(this);
     addFifa20Bet = this.addFifa20Bet.bind(this);
+    onImageUpload = this.onImageUpload.bind(this);
     onBetPending = onBetPending.bind(this);
     offBetPending = offBetPending.bind(this);
     state = {
@@ -69,6 +73,9 @@ class Fifa20 extends Component {
         betIsPending: false,
         multiplayer: false,
         type: 'fifa20-1v1-private-solo',
+        popUpBetWin: false,
+        popUpBetLost: false,
+        uploadLoading: false,
         loading: false
     }
 
@@ -126,6 +133,7 @@ class Fifa20 extends Component {
             }, 1000);
 
             joinFifa20Queue(this.state.type, this.state.ecoinOption).then(response => {
+                console.log(response);
                 if (response.statusCode === 500) {
                     this.refs.reponseError.style.display = 'inline';
                     this.refs.reponseError.innerHTML = response.body.error;
@@ -140,6 +148,26 @@ class Fifa20 extends Component {
                 }
             })
         }
+        else if (true) {
+            this.setState({ searching: false });
+            this.refs.notifFifa20Search.style.display = 'none';
+            this.refs.notifFifa20Estimation.style.display = 'none';
+
+            this.refs.buttonFifa20Bet.style.display = 'none';
+            this.refs.buttonFifa20Bet.innerHTML = 'Parier';
+            this.refs.buttonFifa20Bet.classList.remove('grey');
+
+            this.refs.chrono.innerHTML = '00:00';
+            clearInterval(window.intervalFifa20Bet);
+
+            this.refs.notifGameFound.style.display = 'inline';
+            this.refs.notifFifa20Screenshot.style.display = 'inline';
+            this.refs.notifFifa20Opponent.style.display = 'inline';
+            this.refs.notifFifa20Opponent.innerHTML = `Ajoutez et Affrontez ${'bet.opponentAccountId'}`;
+
+            this.refs.notifDiscord.style.display = 'inline';
+            this.refs.discordLink.style.display = 'inline';
+        }
         else {
             joinFifa20Queue(false, false);
             this.setState({ searching: false });
@@ -152,8 +180,8 @@ class Fifa20 extends Component {
         }
     }
 
-    togglePopUp() {
-        this.setState({ popUpBetLost: !this.state.popUpBetLost });
+    togglePopUp(popUpType) {
+        this.setState({ [popUpType]: !this.state[popUpType] });
     }
 
     betLost() {
@@ -161,9 +189,54 @@ class Fifa20 extends Component {
             loading: true,
             popUpBetLost: false
         });
-        this.props.updateBetLost('fifa20').then(response => {
+        console.log(this.props.pendingBets.fifa20.betId)
+        this.props.updateBetLost('fifa20', this.props.pendingBets.fifa20.betId).then(response => {
             this.setState({ loading: false });
         });
+    }
+
+    async onImageUpload() {
+        const file = this.refs.uploadInput.files[0];
+        console.log('file:', file)
+        if (file) {
+            const size = ((file.size/1024)/1024).toFixed(4);
+            console.log('size:', size)
+
+            if (size > 5) {
+                this.refs.popUpError.style.display = 'inline';
+                this.refs.popUpError.innerHTML = 'Fichier trop gros (5MB max)';
+                return;
+            }
+
+            this.refs.popUpError.style.display = 'none';
+            this.setState({ uploadLoading: true });
+
+            const userId = this.props.user.sub;
+            const betId = this.props.pendingBets.fifa20.betId;
+            const fileExtension = file.name.split('.').pop();
+            const name = `${userId}_${betId}.${fileExtension}`;
+            const fileBase64 = await toBase64(file);
+
+            const fileObj = {
+                name: name,
+                base64: fileBase64,
+                type: file.type,
+            };
+            this.props.addScreenshot(betId, 'fifa20', fileObj).then(response => {
+                this.setState({ uploadLoading: false });
+                if (response.statusCode === 500) {
+                    this.refs.popUpError.style.display = 'inline';
+                    this.refs.popUpError.innerHTML = response.body.error;
+                }
+                else {
+                    this.setState({ popUpBetWin: false });
+                }
+            })
+        }
+        else {
+            this.refs.popUpError.style.display = 'inline';
+            this.refs.popUpError.innerHTML = 'Veuillez sélectionner un fichier';
+        }
     }
 
     handleEnter(e) {
@@ -271,6 +344,53 @@ class Fifa20 extends Component {
                             </div>
 
                             <button ref="buttonFifa20Bet" className="e-button" onClick={this.addFifa20Bet}>Parier</button>
+
+
+                            <div>
+                                <button ref="buttonFifa20Win" className="yes" onClick={() => this.togglePopUp('popUpBetWin')}>Gagné</button>
+                                <button ref="buttonFifa20Lose" className="no" onClick={() => this.togglePopUp('popUpBetLost')}>Perdu</button>
+                            </div>
+                            <Popup
+                                open={this.state.popUpBetWin}
+                                contentStyle={{ width: 'fit-content' }}
+                                closeOnDocumentClick
+                            >
+                                <div className="yes-no-popup">
+                                    <div className="close" onClick={() => this.togglePopUp('popUpBetWin')}>
+                                        &times;
+                                    </div>
+                                    <p>Afin de confirmer votre <b>victoire</b>, veuillez envoyer une photo ou capture d'écran du résultat du match.</p>
+                                    <p>Vos eCoins vous seront envoyés rapidement.</p>
+                                    <div className="wrap-buttons">
+                                        <input
+                                            ref="uploadInput"
+                                            id="file-input"
+                                            type="file"
+                                            accept="image/*"
+                                        />
+                                        <button className="e-button" onClick={this.onImageUpload}>Envoyer</button>
+                                        <DotsLoader loading={this.state.uploadLoading} />
+                                        <p ref="popUpError" className="error-input"></p>
+                                    </div>
+                                </div>
+                            </Popup>
+                            <Popup
+                                open={this.state.popUpBetLost}
+                                contentStyle={{ width: 'fit-content' }}
+                                closeOnDocumentClick
+                            >
+                                <div className="yes-no-popup">
+                                    <div className="close" onClick={() => this.togglePopUp('popUpBetLost')}>
+                                        &times;
+                                    </div>
+                                    <p>Voulez-vous vraiment confirmer votre <b>défaite</b> ?</p>
+                                    <div className="wrap-buttons">
+                                        <button className="yes" type="button" onClick={this.betLost}>Oui</button>
+                                        <button className="no" type="button" onClick={() => this.togglePopUp('popUpBetLost')}>Non</button>
+                                    </div>
+                                </div>
+                            </Popup>
+
                             <DotsLoader loading={this.state.loading} />
 
                             <p ref="reponseError" className="error-input"></p>
@@ -284,21 +404,15 @@ class Fifa20 extends Component {
                             <p ref="notifFifa20Search" className="notif search">Recherche d'une partie...<span ref="chrono">00:00</span></p>
 
                             <p ref="notifGameFound" className="notif">Partie trouvée !</p>
-                            <p ref="notifFifa20Creation" className="notif">En cours de création...</p>
-
-                            <p ref="notifFifa20SvInfo" className="notif">Rejoignez Excite #2&nbsp;&nbsp;Mdp : 789625</p>
-
-                            <p ref="notifFifa20Console" className="notif">
-                                Ou via la console :<br/>
-                                connect 35.177.187.64:27010; password 789625
-                            </p>
+                            <p ref="notifFifa20Opponent" className="notif"></p>
+                            <p ref="notifFifa20Screenshot" className="notif">En cas de victoire n'oubliez pas de prendre une photo ou capture d'écran du résultat du match</p>
 
                             <p ref="notifDiscord" className="notif">Une question ? venez sur&nbsp;
                                 <a 
                                     ref="discordLink"
                                     className="grey-link"
                                     title="Où cà ?"
-                                    href="https://discord.com/channels/704630064242753577/704630064242753580"
+                                    href="https://discord.gg/q2an7Sk"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     >Discord
@@ -353,6 +467,12 @@ function mapDispatchToProps(dispatch) {
     return {
         confirmFifa20Account: function(summonerName, region) {
             return dispatch(confirmFifa20Account(summonerName, region));
+        },
+        addScreenshot: function(betId, game, file) {
+            return dispatch(addScreenshot(betId, game, file));
+        },
+        updateBetLost: function(game, betId) {
+            return dispatch(updateBetLost(game, betId));
         },
         loggedInCheck: function() {
             dispatch(loggedInCheck());

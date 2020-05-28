@@ -1,5 +1,6 @@
 //React
 import React, { Component } from 'react';
+import config from '../config';
 //Redux
 import { connect } from "react-redux";
 import { buyEcoin } from "../actions";
@@ -179,11 +180,13 @@ class BuyEcoinForm extends Component {
 
                 <div className="method paypal" style={{ display: this.state.method === 'paypal' ? 'flex' : 'none' }}>
                     <PayPalButton
-                        amount={Number(this.state.ecoinOption)/100}
-                        shippingPreference="NO_SHIPPING"
                         options={{
-                            clientId: "ATAknTwX04F9lUGZuNFu7cIqVswHTCkH5nwi6yVI4zoWjVDq0EUN6WebQ35IhQ_vOqH8pNwGRUWtKdgp"
+                            clientId: config.paypal.CLIENT_ID,
+                            currency: "EUR"
                         }}
+                        //amount={Number(this.state.ecoinOption)/100}
+                        amount={0.01}
+                        shippingPreference="NO_SHIPPING"
                         onSuccess={(details, data) => {
                             this.setState({ loading: true });
                             this.onSubmit();

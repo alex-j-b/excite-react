@@ -217,31 +217,33 @@ p.grey-element.connexion {
     margin-top: 20px;
 }
 
-.yes-no-popup button {
+button.no, button.yes {
     padding: 4px 12px 4px 12px;
     background: none;
     font-size: 18px; font-family: 'Raleway', Arial, Helvetica; -webkit-text-stroke: 0.6px;
     transition-duration: 0.4s; -webkit-transition-duration: 0.4s;
 }
 
-.yes-no-popup button[class="no"] {
+button.no {
     margin-left: 12px;
     border: 2px solid #e60000;
     color: #e60000;
 }
-.yes-no-popup button[class="no"]:hover, .yes-no-popup button[class="no"]:active {
+button.no:hover, button.no:active {
     background-color: #e60000;
     color: white;
 }
 
-.yes-no-popup button[class="yes"] {
+button.yes {
     color: #00AD3F;
     border: 2px solid #00AD3F;
 }
-.yes-no-popup button[class="yes"]:hover, .yes-no-popup button[class="yes"]:active {
+button.yes:hover, button.yes:active {
     background-color: #00AD3F;
     color: white;
 }
+
+
 
 /* -------------------- Pop Ups under 780 -------------------- */
 @media screen and (max-width: 780px) {
@@ -253,19 +255,19 @@ p.grey-element.connexion {
         font-size: 18px;
     }
 
-    .yes-no-popup button[class="yes"]:hover {
+    .yes-no-popup button.yes:hover {
         background-color: white;
         color: #00AD3F;
     }
-    .yes-no-popup button[class="yes"]:active {
+    .yes-no-popup button.yes:active {
         background-color: #00AD3F !important;
         color: white !important;
     }
-    .yes-no-popup button[class="no"]:hover {
+    .yes-no-popup button.no:hover {
         background-color: white;
         color: #e60000;
     }
-    .yes-no-popup button[class="no"]:active {
+    .yes-no-popup button.no:active {
         background-color: #e60000 !important;
         color: white !important;
     }

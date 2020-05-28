@@ -50,7 +50,7 @@ class Contact extends Component {
     }
 
     componentDidUpdate() {
-        this.refs.emailSent.style.display = 'inline';
+        this.refs.emailSent.style.display = 'none';
     }
 
     componentDidMount() {
@@ -64,6 +64,17 @@ class Contact extends Component {
 
                 <form onSubmit={this.onSubmit}>
                     <p className="title"><span className="purple">C</span>ontactez-nous</p>
+                    <span>Rejoingez Discord :&nbsp;
+                        <a 
+                            ref="discordLink"
+                            className="grey-link"
+                            title="Où cà ?"
+                            href="https://discord.gg/q2an7Sk"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            >https://discord.gg/q2an7Sk
+                        </a>
+                    </span>
                     <h5>Si vous avez une question, n'hésitez pas à nous écrire, nous vous répondrons rapidement.</h5>
 
                     { !(this.props.isLogging || this.props.isLogged) &&

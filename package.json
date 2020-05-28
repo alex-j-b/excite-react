@@ -17,6 +17,7 @@
         "react-app-polyfill": "^1.0.6",
         "react-crossfade-image": "^1.2.0",
         "react-dom": "^16.12.0",
+        "react-ga": "^2.7.0",
         "react-image-fade-in": "^1.1.0",
         "react-image-magnify": "^2.7.4",
         "react-paypal-button-v2": "^2.6.1",

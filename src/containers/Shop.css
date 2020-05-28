@@ -94,8 +94,8 @@
 }
 .article {
     width: 100%;
-    max-width: 350px; max-height: 230px;
-    padding: 0 12px 90px 12px;
+    max-width: 350px;
+    padding: 0 12px 20px 12px;
 }
 .article span {
     padding: 0 12px;
@@ -107,7 +107,7 @@
 .shop-img {
     margin-bottom: 10px;
     overflow: hidden;
-    background-color:#eee;
+    background-color:transparent;
     cursor: pointer;
 }
 .shop-img img {

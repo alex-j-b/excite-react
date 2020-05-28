@@ -7,6 +7,7 @@ import {
     GET_BETS,
     ADD_BET,
     UPDATE_BET_LOST,
+    ADD_SCREENSHOT,
     GET_SHOP_ARTICLES,
     ADD_CART,
     DELETE_CART,
@@ -208,7 +209,7 @@ export default function refresh(state = DEFAULT_STATE, action = {}) {
                     newStateBetsHistory.push(el);
                 }
 
-                if (pendingStatus.includes(el.status)) {
+                if (pendingStatus.includes(el.status) && (!el.screenshot || el.screenshot === 'null')) {
                     newStatePendingBets[action.actions.game] = el;
                     betPending = true;
                 }
@@ -266,10 +267,26 @@ export default function refresh(state = DEFAULT_STATE, action = {}) {
                 pendingBets: newStatePendingBets
             };
 
+        case ADD_SCREENSHOT:
+            console.log('ADD_SCREENSHOT')
+            const screenshotBet = action.body;
+            const betIndex = newStateBetsHistory.findIndex(el => el.betId === screenshotBet.betId);
+            console.log(betIndex)
+            if (betIndex > -1) newStateBetsHistory[betIndex].screenshot = screenshotBet.name;
+            delete newStatePendingBets[screenshotBet.game];
+
+            return {
+                ...newState,
+                user: newStateUser,
+                betsHistory: newStateBetsHistory,
+                pendingBets: newStatePendingBets
+            };
+
+
         //////////////////////////////////////////////////////////////////// SHOP /////////////////////////////////////////////////////////////////
 
         case GET_SHOP_ARTICLES:
-            const shopArticles = [action.body[0], action.body[1], action.body[0], action.body[1], action.body[0], action.body[1], action.body[0], action.body[1], action.body[0], action.body[1], action.body[0], action.body[1]];
+            const shopArticles = action.body.sort((a, b) => (a.price > b.price) ? 1 : -1);
             return {
                 ...newState,
                 shopArticles: shopArticles

@@ -1,14 +1,14 @@
 //React
 import React, { Component } from 'react';
-import config from "../config";
+import config from '../config';
 import './BuyEcoin.css';
 //Component
 import BuyEcoinForm from '../components/BuyEcoinForm';
 //libs
 import { Elements, StripeProvider } from 'react-stripe-elements';
 //Images
-import authBG from "../images/mystique-statue.jpg";
-import ecoin from "../images/e-coin.png";
+import authBG from '../images/mystique-statue.jpg';
+import ecoin from '../images/e-coin.png';
 
 class BuyEcoin extends Component {
 

@@ -262,7 +262,7 @@ class LeagueOfLegends extends Component {
                                     ref="discordLink"
                                     className="grey-link"
                                     title="Où cà ?"
-                                    href="https://discord.com/channels/704630064242753577/704630064242753580"
+                                    href="https://discord.gg/q2an7Sk"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     >Discord
