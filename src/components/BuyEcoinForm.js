@@ -16,7 +16,6 @@ import ecoin from "../images/e-coin.png";
 import mastercardLogo from "../images/mastercard-logo.png";
 import visaLogo from "../images/visa-logo.jpg";
 import paypalLogo from "../images/paypal-logo.png";
-import paysafecardLogo from "../images/paysafecard-logo.jpg";
 
 const ecoinOptions = [
     { value: '500', label: '500' },
@@ -116,13 +115,6 @@ class BuyEcoinForm extends Component {
                         </label>
                     </div>
 
-                    <div onClick={() => this.switchMethod('paysafecard')}>
-                        <label htmlFor="paysafecard">
-                            <img className="paysafecard-logo" src={paysafecardLogo} alt="paysafecardLogo"></img>
-                            <input type="radio" name="radio" value="paysafecard" checked={this.state.method === 'paysafecard'} readOnly></input>
-                        </label>
-                    </div>
-
                 </div>
 
                 <div className="ecoin-amount">
@@ -172,10 +164,10 @@ class BuyEcoinForm extends Component {
                         style={{ base: { fontFamily: '"Raleway", Arial' } }}
                     />
 
-                    <p>La transaction est sécurisée et cryptée par la solution de paiement Stripe.</p>
+                    <p className="stripe-infos">La transaction est sécurisée et cryptée par la solution de paiement Stripe.</p>
                     <img className="stripe-logo" src={stripeLogo} alt="stripeLogo"></img>
                     <button className="e-button">Valider</button>
-                    <p ref="stripeError" className="error-input stripe-error">Erreur, veuillez vérifiez vos informations</p>
+                    <p ref="stripeError" className="error-button stripe-error">Erreur, veuillez vérifiez vos informations</p>
                 </div>
 
                 <div className="method paypal" style={{ display: this.state.method === 'paypal' ? 'flex' : 'none' }}>
@@ -192,10 +184,6 @@ class BuyEcoinForm extends Component {
                             this.onSubmit();
                         }}
                     />
-                </div>
-
-                <div className="method paysafecard" style={{ display: this.state.method === 'paysafecard' ? 'flex' : 'none' }}>
-                    <button className="e-button">paysafecard</button>
                 </div>
 
                 <DotsLoader loading={this.state.loading}/>

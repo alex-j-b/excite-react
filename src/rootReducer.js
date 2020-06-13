@@ -18,6 +18,7 @@ import {
     SET_MESSAGE_SENT,
     SET_MESSAGE_RECEIVED
 } from './actions';
+import { betStatus } from './libs/infos';
 
 const DEFAULT_STATE = {
     isLogged: false,
@@ -33,12 +34,8 @@ const DEFAULT_STATE = {
 }
 
 export default function refresh(state = DEFAULT_STATE, action = {}) {
-    let newState = {...state};
-    let newStateUser = Object.assign({}, newState.user);
-    let newStateBetsHistory = [...newState.betsHistory];
-    let newStatePendingBets = Object.assign({}, newState.pendingBets);
-    let newStateCart = [...newState.cartArticles];
-    const pendingStatus = ['pending', 'playing', 'creating'];
+    let newState = JSON.parse(JSON.stringify(state));
+    const pendingStatus = ['pending', 'playing', 'creating', 'confirmLost'];
 
     const timestampToDate = (timestamp) => {
         let date = new Date(timestamp);
@@ -63,6 +60,10 @@ export default function refresh(state = DEFAULT_STATE, action = {}) {
                 if (user === "logOut" || user === "deleteUser") {
                     isLogged = false;
                     user = {};
+                    newState.betsHistory = [];
+                    newState.pendingBets = {};
+                    newState.cartArticles = [];
+                    newState.commandArticle = [];
                 }
                 else {
                     console.log('newState.user: ', newState.user)
@@ -79,14 +80,18 @@ export default function refresh(state = DEFAULT_STATE, action = {}) {
                 user.bdDay = bdArray[2];
                 console.log('user: ', user)
             }
-            
+
             return {
                 ...newState,
                 forceUpdate: newState.forceUpdate + 1,
                 isLogged: isLogged,
                 isLogging: false,
                 authStatus: authStatus,
-                user: user
+                user: user,
+                betsHistory: newState.betsHistory,
+                pendingBets: newState.pendingBets,
+                cartArticles: newState.cartArticles,
+                commandArticles: newState.commandArticle
             };
 
         //////////////////////////////////////////////////////////////////// WEBSOCKET /////////////////////////////////////////////////////////////
@@ -110,176 +115,180 @@ export default function refresh(state = DEFAULT_STATE, action = {}) {
                         newPendingBet[key] = value[Object.keys(value)[0]];
                     }
                 }
-                newPendingBet.message = ({win: 'Victoire +', lost: 'Défaite -'})[newPendingBet.status] || 'En cours... ';
+                newPendingBet.message = betStatus[newPendingBet.status] || 'En cours... ';
                 newPendingBet.date = timestampToDate(Number(newPendingBet.timestamp));
 
                 if (messageReceived.action === 'updatePendingBet') {
                     console.log('updatePendingBet')
-                    const betIndex = newStateBetsHistory.findIndex(el => el.betId === messageReceived.betId);
+                    const betIndex = newState.betsHistory.findIndex(el => el.betId === messageReceived.betId);
                     console.log(betIndex)
                     if (betIndex > -1) {
-                        newStateBetsHistory[betIndex] = newPendingBet;
+                        newState.betsHistory[betIndex] = newPendingBet;
                         if (pendingStatus.includes(newPendingBet.status)) {
                             console.log('pendingStatus.includes(newPendingBet.status)')
-                            newStatePendingBets[messageReceived.game] = newPendingBet;
+                            newState.pendingBets[messageReceived.game] = newPendingBet;
                         }
                         else {
                             console.log('else {')
-                            delete newStatePendingBets[messageReceived.game];
+                            delete newState.pendingBets[messageReceived.game];
                         }
                     }
                 }
                 else if (messageReceived.action === 'addPendingBet') {
                     console.log('addPendingBet')
-                    newStateUser['custom:ecoin'] = Number(newStateUser['custom:ecoin']) - Number(newPendingBet.ecoin);
-                    newStateBetsHistory.unshift(newPendingBet);
-                    newStatePendingBets[newPendingBet.game] = newPendingBet;
+                    newPendingBet.game = newPendingBet.game ? newPendingBet.game : newPendingBet.type.split('-')[0];
+                    newState.user['custom:ecoin'] = Number(newState.user['custom:ecoin']) - Number(newPendingBet.ecoin);
+                    newState.betsHistory.unshift(newPendingBet);
+                    newState.pendingBets[newPendingBet.game] = newPendingBet;
                 }
             }
 
             return {
                 ...newState,
-                user: newStateUser,
-                betsHistory: newStateBetsHistory,
-                pendingBets: newStatePendingBets
+                user: newState.user,
+                betsHistory: newState.betsHistory,
+                pendingBets: newState.pendingBets
             };
 
         ////////////////////////////////////////////////////////////// CONFIRM ACCOUNTS ///////////////////////////////////////////////////////////
 
         case CONFIRM_LOL_ACCOUNT:
             const lolAccount = action.body;
-            newStateUser['game_accounts'].leagueoflegends = lolAccount;
-            delete newStateUser['game_accounts'].leagueoflegends.game;
+            newState.user['game_accounts'].leagueoflegends = lolAccount;
+            delete newState.user['game_accounts'].leagueoflegends.game;
 
             return {
                 ...newState,
-                user: newStateUser
+                user: newState.user
             };
 
         case CONFIRM_FORTNITE_ACCOUNT:
             const fortniteAccount = action.body;
-            newStateUser['game_accounts'].fortnite = fortniteAccount;
-            delete newStateUser['game_accounts'].fortnite.game;
+            newState.user['game_accounts'].fortnite = fortniteAccount;
+            delete newState.user['game_accounts'].fortnite.game;
 
             return {
                 ...newState,
-                user: newStateUser
+                user: newState.user
             };
 
 
         case CONFIRM_CSGO_ACCOUNT:
             const csgoAccount = action.body;
-            newStateUser['game_accounts'].counterstrikego = csgoAccount;
-            delete newStateUser['game_accounts'].counterstrikego.game;
+            newState.user['game_accounts'].counterstrikego = csgoAccount;
+            delete newState.user['game_accounts'].counterstrikego.game;
 
             return {
                 ...newState,
-                user: newStateUser
+                user: newState.user
             };
 
 
         case CONFIRM_FIFA20_ACCOUNT:
             const fifa20Account = action.body;
-            newStateUser['game_accounts'].fifa20 = fifa20Account;
-            delete newStateUser['game_accounts'].fifa20.game;
+            newState.user['game_accounts'].fifa20 = fifa20Account;
+            delete newState.user['game_accounts'].fifa20.game;
 
             return {
                 ...newState,
-                user: newStateUser
+                user: newState.user
             };
 
         //////////////////////////////////////////////////////////////////// BETS /////////////////////////////////////////////////////////////////
 
         case GET_BETS:
+            console.log('GET_BETS: ', action.actions.game)
             const getBets = action.actions.body;
             let betPending = false;
-            let allTimestamps = newStateBetsHistory.map(bet => bet.timestamp);
+            let allTimestamps = newState.betsHistory.map(bet => bet.timestamp);
 
             getBets.forEach(el => {
                 el.game = action.actions.game;
-                el.message = ({win: 'Victoire +', lost: 'Défaite -'})[el.status] || 'En cours... ';
+                el.message = betStatus[el.status] || 'En cours... ';
                 el.date = timestampToDate(Number(el.timestamp));
 
                 if (allTimestamps.includes(el.timestamp)) {
-                    const oldIndex = newStateBetsHistory.findIndex(bet => bet.timestamp === el.timestamp);
-                    newStateBetsHistory[oldIndex] = el;
+                    const oldIndex = newState.betsHistory.findIndex(bet => bet.timestamp === el.timestamp);
+                    newState.betsHistory[oldIndex] = el;
                 }
                 else {
                     allTimestamps.push(el.timestamp);
-                    newStateBetsHistory.push(el);
+                    newState.betsHistory.push(el);
                 }
 
                 if (pendingStatus.includes(el.status) && (!el.screenshot || el.screenshot === 'null')) {
-                    newStatePendingBets[action.actions.game] = el;
+                    newState.pendingBets[action.actions.game] = el;
                     betPending = true;
                 }
             });
-            newStateBetsHistory.sort((a, b) => {
+            newState.betsHistory.sort((a, b) => {
                 return b.timestamp - a.timestamp;
             });
 
-            if (!betPending) delete newStatePendingBets[action.actions.game];
+            if (!betPending) delete newState.pendingBets[action.actions.game];
 
-            console.log('betsHistory: ', newStateBetsHistory)
-            console.log('pendingBets: ', newStatePendingBets)
+            console.log('betsHistory: ', newState.betsHistory)
+            console.log('pendingBets: ', newState.pendingBets)
 
             return {
                 ...newState,
-                betsHistory: newStateBetsHistory,
-                pendingBets: newStatePendingBets
+                betsHistory: newState.betsHistory,
+                pendingBets: newState.pendingBets
             };
 
 
         case ADD_BET:
+            console.log('ADD_BET')
             let newBet = action.actions.body;
 
             newBet.game = action.actions.game;
-            newBet.message = ({win: 'Victoire +', lost: 'Défaite -'})[newBet.status] || 'En cours... ';
+            newBet.message = betStatus[newBet.status] || 'En cours... ';
             newBet.date = timestampToDate(Number(newBet.timestamp));
 
-            newStateBetsHistory.unshift(newBet);
-            newStatePendingBets[action.actions.game] = newBet;
+            newState.betsHistory.unshift(newBet);
+            newState.pendingBets[action.actions.game] = newBet;
 
-            newStateUser['custom:ecoin'] = Number(newStateUser['custom:ecoin']) - newBet.ecoin;
+            newState.user['custom:ecoin'] = Number(newState.user['custom:ecoin']) - newBet.ecoin;
 
-            console.log('betsHistory: ', newStateBetsHistory)
-            console.log('pendingBets: ', newStatePendingBets)
+            console.log('betsHistory: ', newState.betsHistory)
+            console.log('pendingBets: ', newState.pendingBets)
 
             return {
                 ...newState,
-                user: newStateUser,
-                betsHistory: newStateBetsHistory,
-                pendingBets: newStatePendingBets
+                user: newState.user,
+                betsHistory: newState.betsHistory,
+                pendingBets: newState.pendingBets
             };
 
 
         case UPDATE_BET_LOST:
+            console.log('UPDATE_BET_LOST')
             const betUpdated = action.actions.body;
 
-            const oldIndex = newStateBetsHistory.findIndex(bet => bet.betId === betUpdated.betId);
-            newStateBetsHistory[oldIndex].status = 'lost';
-            newStateBetsHistory[oldIndex].message = 'Défaite -';
-            delete newStatePendingBets[action.actions.game];
+            const oldIndex = newState.betsHistory.findIndex(bet => bet.betId === betUpdated.betId);
+            newState.betsHistory[oldIndex].status = 'lost';
+            newState.betsHistory[oldIndex].message = 'Défaite -';
+            delete newState.pendingBets[action.actions.game];
 
             return {
                 ...newState,
-                betsHistory: newStateBetsHistory,
-                pendingBets: newStatePendingBets
+                betsHistory: newState.betsHistory,
+                pendingBets: newState.pendingBets
             };
 
         case ADD_SCREENSHOT:
             console.log('ADD_SCREENSHOT')
             const screenshotBet = action.body;
-            const betIndex = newStateBetsHistory.findIndex(el => el.betId === screenshotBet.betId);
+            const betIndex = newState.betsHistory.findIndex(el => el.betId === screenshotBet.betId);
             console.log(betIndex)
-            if (betIndex > -1) newStateBetsHistory[betIndex].screenshot = screenshotBet.name;
-            delete newStatePendingBets[screenshotBet.game];
+            if (betIndex > -1) newState.betsHistory[betIndex].screenshot = screenshotBet.name;
+            delete newState.pendingBets[screenshotBet.game];
 
             return {
                 ...newState,
-                user: newStateUser,
-                betsHistory: newStateBetsHistory,
-                pendingBets: newStatePendingBets
+                user: newState.user,
+                betsHistory: newState.betsHistory,
+                pendingBets: newState.pendingBets
             };
 
 
@@ -295,36 +304,36 @@ export default function refresh(state = DEFAULT_STATE, action = {}) {
 
         case ADD_CART:
             const addCartArticle = action.body;
-            const addCartIndex = newStateCart.findIndex(el => {
+            const addCartIndex = newState.cartArticles.findIndex(el => {
                 return el.articleId === addCartArticle.articleId;
             });
 
             if (addCartIndex > -1) {
-                newStateCart[addCartIndex] = addCartArticle;
+                newState.cartArticles[addCartIndex] = addCartArticle;
             }
             else {
-                newStateCart.push(addCartArticle);
+                newState.cartArticles.push(addCartArticle);
             }
 
             return {
                 ...newState,
-                cartArticles: newStateCart
+                cartArticles: newState.cartArticles
             };
 
 
         case DELETE_CART:
             const deleteCartArticle = action.body;
-            const deleteCartIndex = newStateCart.findIndex(el => {
+            const deleteCartIndex = newState.cartArticles.findIndex(el => {
                 return el.articleId === deleteCartArticle.articleId;
             });
 
             if (deleteCartIndex > -1) {
-                newStateCart.splice(deleteCartIndex, 1);
+                newState.cartArticles.splice(deleteCartIndex, 1);
             }
 
             return {
                 ...newState,
-                cartArticles: newStateCart
+                cartArticles: newState.cartArticles
             };
 
 
@@ -340,11 +349,11 @@ export default function refresh(state = DEFAULT_STATE, action = {}) {
             addCommandArticles.date = timestampToDate(Number(addCommandArticles.timestamp));
             newState.commandArticles.unshift(addCommandArticles);
 
-            newStateUser['custom:ecoin'] = Number(newStateUser['custom:ecoin']) - addCommandArticles.totalPrice;
+            newState.user['custom:ecoin'] = Number(newState.user['custom:ecoin']) - addCommandArticles.totalPrice;
 
             return {
                 ...newState,
-                user: newStateUser,
+                user: newState.user,
                 cartArticles: [],
                 commandArticles: newState.commandArticles
             };
@@ -363,11 +372,11 @@ export default function refresh(state = DEFAULT_STATE, action = {}) {
 
 
         case BUY_ECOIN:
-            newStateUser['custom:ecoin'] = Number(newStateUser['custom:ecoin']) + Number(action.ecoinAmount);
+            newState.user['custom:ecoin'] = Number(newState.user['custom:ecoin']) + Number(action.ecoinAmount);
 
             return {
                 ...newState,
-                user: newStateUser
+                user: newState.user
             };
 
 

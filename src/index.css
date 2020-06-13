@@ -103,10 +103,24 @@ input[type="radio"]:focus {
     font-size: 14px; -webkit-text-stroke: 0.1px;
     color: red !important;
 }
-.confirmation-modif {
+.error-button {
+    display: none; align-self: center; text-align: center;
+    max-width: 90%;
+    margin: 0 0 -16px 0;
+    font-size: 14px; -webkit-text-stroke: 0.2px;
+    color: red !important;
+}
+.confirmation-input {
     display: none;
     margin-left: 8px;
     font-size: 14px; -webkit-text-stroke: 0.1px;
+    color: #00AD3F;
+}
+.confirmation-button {
+    display: none; align-self: center; text-align: center;
+    max-width: 90%;
+    margin: 0 0 -19px 0; /* conf check take more space */
+    font-size: 14px; -webkit-text-stroke: 0.2px;
     color: #00AD3F;
 }
 

@@ -76,7 +76,7 @@ class Account extends Component {
 
         const attributesKeys = ['nickname', 'given_name', 'family_name', 'birthdate', 'phone_number', 'address']
         attributesKeys.forEach(key => {
-            document.querySelector(`.confirmation-modif.${key}`).style.display = "none";
+            document.querySelector(`.confirmation-input.${key}`).style.display = "none";
         })
 
         let errorNickname = document.querySelector('.error-input.nickname');
@@ -96,7 +96,7 @@ class Account extends Component {
             let errorCurrentPassword = document.querySelector('.error-input.current-password');
             let errorNewPassword = document.querySelector('.error-input.new-password');
             let errorpasswordRepeat = document.querySelector('.error-input.new-password-repeat');
-            document.querySelector('.confirmation-modif.password').style.display = "none";
+            document.querySelector('.confirmation-input.password').style.display = "none";
             errorCurrentPassword.style.display = "none";
             errorNewPassword.style.display = "none";
             errorpasswordRepeat.style.display = "none";
@@ -160,16 +160,16 @@ class Account extends Component {
             const attributesKeys = ['nickname', 'given_name', 'family_name', 'birthdate', 'phone_number', 'address']
             attributesKeys.forEach(key => {
                 if (prevProps.user[key] !== this.props.user[key]) {
-                    document.querySelector(`.confirmation-modif.${key}`).style.display = "inline";
+                    document.querySelector(`.confirmation-input.${key}`).style.display = "inline";
                 }
                 else {
-                    document.querySelector(`.confirmation-modif.${key}`).style.display = "none";
+                    document.querySelector(`.confirmation-input.${key}`).style.display = "none";
                 }
             })
         }
         //Password Update -> Error + Confirmation
         let errorPassword = document.querySelector('.error-input.current-password');
-        let confirmationPassword = document.querySelector('.confirmation-modif.password');
+        let confirmationPassword = document.querySelector('.confirmation-input.password');
         if (this.state.loading && prevProps.forceUpdate !== this.props.forceUpdate) {
             if (this.props.authStatus === 'errorPassword') {
                 this.setState({ loading: false }, () => {
@@ -225,7 +225,7 @@ class Account extends Component {
                             <label htmlFor="nickname">
                                 <span><span className="purple">P</span>seudo</span>
                                 <span className="error-input nickname">3 caractères minimum</span>
-                                <span className="confirmation-modif nickname">modifié &#10004;</span>
+                                <span className="confirmation-input nickname">modifié &#10004;</span>
                             </label>
                             <input
                                 type="text"
@@ -239,7 +239,7 @@ class Account extends Component {
 
                             <label htmlFor="givenName">
                                 <span><span className="purple">P</span>rénom</span>
-                                <span className="confirmation-modif given_name">modifié &#10004;</span>
+                                <span className="confirmation-input given_name">modifié &#10004;</span>
                             </label>
                             <input
                                 type="text"
@@ -253,7 +253,7 @@ class Account extends Component {
 
                             <label htmlFor="familyName">
                                 <span><span className="purple">N</span>om</span>
-                                <span className="confirmation-modif family_name">modifié &#10004;</span>
+                                <span className="confirmation-input family_name">modifié &#10004;</span>
                             </label>
                             <input
                                 type="text"
@@ -268,7 +268,7 @@ class Account extends Component {
                             <label htmlFor="birthdate">
                                 <span><span className="purple">D</span>ate de naissance</span>
                                 <span className="error-input birthdate">invalide</span>
-                                <span className="confirmation-modif birthdate">modifié &#10004;</span>
+                                <span className="confirmation-input birthdate">modifié &#10004;</span>
                             </label>
                             <div className="wrap-birth-inputs">
                                 <input
@@ -315,7 +315,7 @@ class Account extends Component {
                             <label htmlFor="phoneNumber">
                                 <span><span className="purple">T</span>éléphone</span>
                                 <span className="error-input phone_number">12 caractères requis</span>
-                                <span className="confirmation-modif phone_number">modifié &#10004;</span>
+                                <span className="confirmation-input phone_number">modifié &#10004;</span>
                             </label>
                             <PhoneInput
                                 buttonClass="phone-input"
@@ -332,7 +332,7 @@ class Account extends Component {
                             <label htmlFor="address">
                                 <span><span className="purple">A</span>dresse</span>
                                 <span className="error-input address">invalide</span>
-                                <span className="confirmation-modif address">modifié &#10004;</span>
+                                <span className="confirmation-input address">modifié &#10004;</span>
                             </label>
                             <LocationSearchInput
                                 address={this.state.address}
@@ -344,7 +344,7 @@ class Account extends Component {
                                 <span className="error-input current-password">incorrect.</span>
                                 <span className="error-input new-password">doit faire 8 caractères minimum</span>
                                 <span className="error-input new-password-repeat">ne correspond pas.</span>
-                                <span className="confirmation-modif password">modifié &#10004;</span>
+                                <span className="confirmation-input password">modifié &#10004;</span>
                             </label>
                             <input 
                                 type="password"

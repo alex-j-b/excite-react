@@ -1,12 +1,13 @@
 //React
-import React, { Component } from "react";
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 //Redux
-import { connect } from "react-redux";
+import { connect } from 'react-redux';
 import {
     loggedInCheck,
     confirmLolAccount,
     addLolBet
-} from "../actions";
+} from '../actions';
 //libs
 import { onBetPending, offBetPending } from '../libs/betPending';
 import { odds } from '../libs/infos';
@@ -17,9 +18,9 @@ import ImageFadeIn from 'react-image-fade-in';
 import DotsLoader from '../components/DotsLoader';
 import SwitchPlay from '../components/SwitchPlay';
 //Images
-import ecoin from "../images/e-coin.png";
-import riven from "../images/lol-riven.png";
-import lolPotion from "../images/lol-potion.png";
+import ecoin from '../images/e-coin.png';
+import riven from '../images/lol-riven.png';
+import lolPotion from '../images/lol-potion.png';
 
 const ecoinOptions = [
     { value: 5, label: '5' },
@@ -67,7 +68,7 @@ class LeagueOfLegends extends Component {
         region: 'euw1',
         defaultEcoinOption: undefined,
         multiplayer: false,
-        type: 'lol-5v5-ranked-solo',
+        type: 'leagueoflegends-5v5-ranked-solo',
         searching: false,
         betIsPending: false,
         loading: false
@@ -82,7 +83,7 @@ class LeagueOfLegends extends Component {
     }
 
     onSwitch() {
-        const type = this.state.multiplayer ? 'lol-5v5-ranked-solo' : 'lol-5v5-private-solo';
+        const type = this.state.multiplayer ? 'leagueoflegends-5v5-ranked-solo' : 'leagueoflegends-5v5-private-solo';
         this.setState({
             multiplayer: !this.state.multiplayer,
             type: type
@@ -91,34 +92,35 @@ class LeagueOfLegends extends Component {
 
     confirmLolAccount() {
         const { summonerName, region } = this.state;
-        this.refs.errorInputIcon.style.display = 'none';
-        this.refs.errorInputPseudo.style.display = 'none';
-        if (summonerName === '') {
-            this.refs.errorInputPseudo.style.display = 'inline';
-        }
-        else {
-            this.setState({ loading: true });
-            this.props.confirmLolAccount(summonerName, region).then(response => {
-                this.setState({ loading: false });
-                if (response.statusCode === 500) {
-                    if (response.body.error === 'error bad profileIconId') {
-                        this.refs.errorInputIcon.style.display = 'inline';
-                    }
-                    else {
-                        this.refs.errorInputPseudo.style.display = 'inline';
-                    }
-                }
-            });
-        }
+        this.refs.reponseError.style.display = 'none';
+        this.setState({ loading: true });
+        this.props.confirmLolAccount(summonerName, region).then(response => {
+            this.setState({ loading: false });
+            if (response.statusCode === 500) {
+                this.refs.reponseError.style.display = 'inline';
+                this.refs.reponseError.innerHTML = response.body.error;
+            }
+        });
     }
 
     addLolBet() {
+        this.refs.reponseError.style.display = 'none';
+        this.refs.notifLolNoEcoin.style.display = 'none';
+        const userEcoins = Number(this.props.user['custom:ecoin']);
+        if (userEcoins < this.state.ecoinOption) {
+            this.refs.notifLolNoEcoin.style.display = 'inline';
+            return;
+        }
+
         if (!this.state.multiplayer) {
             this.setState({ loading: true });
-            this.props.addLolBet(
-                this.state.type,
-                this.state.ecoinOption
-            );
+            this.props.addLolBet(this.state.type, this.state.ecoinOption).then(response => {
+                this.setState({ loading: false });
+                if (response.statusCode === 500) {
+                    this.refs.reponseError.style.display = 'inline';
+                    this.refs.reponseError.innerHTML = response.body.error;
+                }
+            });
         }
         else {
             //Join queue
@@ -235,6 +237,17 @@ class LeagueOfLegends extends Component {
                             </div>
                             <button className="e-button" ref="buttonLolBet" onClick={this.addLolBet}>Parier</button>
                             <DotsLoader loading={this.state.loading} />
+
+                            <p ref="notifLolNoEcoin" className="notif">
+                                Vous n'avez plus assez d'eCoins, vous pouvez en&nbsp;
+                                <Link
+                                    className="grey-link no-ecoin"
+                                    title="Obtenir eCoins"
+                                    to="/ecoin"
+                                    >obtenir ici
+                                </Link>
+                            </p>
+
                             <p ref="notifLolBet" className="notif">
                                 Pari en cours... il vous reste&nbsp;
                                 <span ref="countDown"></span>&nbsp;
@@ -308,11 +321,11 @@ class LeagueOfLegends extends Component {
                             </div>
 
                             <button className="e-button" onClick={this.confirmLolAccount}>Valider</button>
-                            <p ref="errorInputPseudo" className="error-input wrong-pseudo-region">Nom d'invocateur ou région invalide</p>
-                            <p ref="errorInputIcon" className="error-input wrong-icon">Veuillez changer votre icon</p>
                             <DotsLoader loading={this.state.loading} />
                         </>
                     }
+                    <p ref="reponseError" className="error-button"></p>
+                    <div className="pusher"></div>
                 </div>
             </div>
         )
@@ -325,7 +338,7 @@ function mapDispatchToProps(dispatch) {
             return dispatch(confirmLolAccount(summonerName, region));
         },
         addLolBet: function(type, ecoin) {
-            dispatch(addLolBet(type, ecoin));
+            return dispatch(addLolBet(type, ecoin));
         },
         loggedInCheck: function() {
             dispatch(loggedInCheck());
@@ -334,7 +347,8 @@ function mapDispatchToProps(dispatch) {
 }
 function mapStateToProps(reduxState) {
     return {
-        pendingBets: reduxState.pendingBets
+        pendingBets: reduxState.pendingBets,
+        user: reduxState.user
     };
 }
 export default connect(mapStateToProps, mapDispatchToProps)(LeagueOfLegends);

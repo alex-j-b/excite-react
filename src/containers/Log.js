@@ -14,6 +14,7 @@ import authBG from "../images/mystique-statue.jpg";
 import lolLogo from "../images/lol-logo.png";
 import fortniteLogo from "../images/fortnite-logo.png";
 import csgoLogo from "../images/csgo-logo.png";
+import fifa20Logo from "../images/fifa20-logo.png";
 
 
 class Log extends Component {
@@ -43,8 +44,8 @@ class Log extends Component {
 
         const passwordRegex = /[^\s]{8,50}/;
         const validPassword = passwordRegex.test(password);
-        
-        let errorAttempt = document.querySelector('.error-input.log-attempt');
+
+        let errorAttempt = document.querySelector('.error-button.log-attempt');
         if (validMail && validPassword){
             this.setState({ loading: true }, () => errorAttempt.style.display = "none");
             this.props.logIn({
@@ -95,7 +96,7 @@ class Log extends Component {
     }
 
     componentDidUpdate() {
-        let errorAttempt = document.querySelector('.error-input.log-attempt');
+        let errorAttempt = document.querySelector('.error-button.log-attempt');
         if (errorAttempt && this.props.authStatus === 'errorPassword' && errorAttempt.style.display !== "inline") {
             this.setState({ loading: false }, () => errorAttempt.style.display = "inline");
         }
@@ -115,6 +116,9 @@ class Log extends Component {
                             <img className="lol-logo" src={lolLogo} alt="lolLogo"></img>
                             <img className="fortnite-logo" src={fortniteLogo} alt="fortniteLogo"></img>
                             <img className="csgo-logo" src={csgoLogo} alt="csgoLogo"></img>
+                            <img className="fifa20-logo" src={fifa20Logo} alt="fifa20Logo"></img>
+
+                            
                         </div>
                         
                         <span><span className="purple">C</span>onnexion</span>
@@ -155,7 +159,7 @@ class Log extends Component {
                             <button className="e-button">Connexion</button>
                             <DotsLoader loading={this.state.loading}/>
                         </div>
-                        <p className="error-input log-attempt">Mot de passe ou email invalide</p>
+                        <p className="error-button log-attempt">Mot de passe ou email invalide</p>
                     </form>
                 }
                 {this.state.forgotForm &&

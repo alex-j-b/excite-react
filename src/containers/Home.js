@@ -14,6 +14,7 @@ import giftIcon from "../images/gift.png";
 import lolImage from "../images/lol-image.png";
 import fortniteImage from "../images/fortnite-image.png";
 import csgoImage from "../images/counter-strike-image.jpg";
+import fifa20Image from "../images/fifa20-image.jpg";
 import separator from "../images/separator.png";
 
 
@@ -46,6 +47,12 @@ export default class Home extends Component {
                     </div>
                 </div>
 
+                <div class="svg-wrapper">
+                    <svg viewBox="0 0 500 150" preserveAspectRatio="none">
+                        <path d="M0.00,49.98 C149.99,150.00 349.20,-49.98 500.00,49.98 L500.00,150.00 L0.00,150.00 Z"></path>
+                    </svg>
+                </div>
+
                 <div className="home-2">
                     <div className="step first">
                         <img className="number" src={oneIcon} alt="oneIcon"></img>
@@ -74,11 +81,14 @@ export default class Home extends Component {
                     <img src={separator} alt="separator"></img>
                     <p>Jeux disponibles</p>
                     <div>
-                        <Link to="/jouer?game=leagueoflegends">
-                            <img src={lolImage} alt="lolImage"></img>
-                        </Link>
                         <Link to="/jouer?game=fortnite">
                             <img src={fortniteImage} alt="fortniteImage"></img>
+                        </Link>
+                        <Link to="/jouer?game=fifa20">
+                            <img src={fifa20Image} alt="fifa20Image"></img>
+                        </Link>
+                        <Link to="/jouer?game=leagueoflegends">
+                            <img src={lolImage} alt="lolImage"></img>
                         </Link>
                         <Link to="/jouer?game=counterstrikego">
                             <img src={csgoImage} alt="csgoImage"></img>

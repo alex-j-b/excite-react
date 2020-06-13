@@ -152,7 +152,7 @@
     font-size: 18px;
     margin-bottom: 30px;
 }
-.shop-article-id > div > .article-infos p {
+.shop-article-id > div > .article-infos .description {
     line-height: 24px;
     margin-bottom: 30px;
 }
@@ -175,9 +175,14 @@
     margin: 0;
     font-size: 18px; font-family: 'Poppins', Arial;
 }
-.shop-article-id .options button {
+.shop-article-id .options .e-button {
+    align-self: center;
+    padding: 12px 26px;
     margin: 0;
     font-size: 18px;
+}
+.shop-article-id .error-button {
+    margin: 10px 0 -26px 0;
 }
 
 
@@ -281,12 +286,8 @@
     margin: 0 10px 0 10px;
     font-size: 18px;
 }
-.error-input.cart {
+.shop-cart .error-button.cart {
     margin-top: 10px;
-    -webkit-text-stroke: 0.2px;
-}
-.error-input.command-invalid {
-    align-self: center;
 }
 
 /* ---------------------------------------- Address ---------------------------------------- */
@@ -400,7 +401,7 @@
     .shop-article-id > div > .article-infos span {
         margin-bottom: 20px;
     }
-    .shop-article-id > div > .article-infos p {
+    .shop-article-id > div > .article-infos .description {
         margin-bottom: 25px;
     }
 

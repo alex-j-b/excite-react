@@ -30,6 +30,10 @@ class ArticleId extends Component {
             this.setState({ loading: true });
             this.props.addCart(this.props.articleIdObj.articleId, this.state.quantity).then(response => {
                 this.setState({ loading: false });
+                if (response.statusCode === 500) {
+                    this.refs.articleIdError.style.display = 'inline';
+                    this.refs.articleIdError.innerHTML = response.body.error;
+                }
             });
         }
         else {
@@ -71,7 +75,7 @@ class ArticleId extends Component {
                     <div className="article-infos">
                         <h3>{articleIdObj.name}</h3>
                         <span className="number">{articleIdObj.price}<img className="ecoin" src={ecoin} alt="ecoin"></img></span>
-                        <p>{articleIdObj.description}</p>
+                        <p className="description">{articleIdObj.description}</p>
 
                         <div className="options">
                             <div className="quantity-picker">
@@ -88,6 +92,7 @@ class ArticleId extends Component {
                             <div>
                                 <button className="e-button" onClick={this.addCart}>Ajouter au panier</button>
                                 <DotsLoader loading={this.state.loading} />
+                                <p ref="articleIdError" className="error-button">erreur test testing</p>
                             </div>
                         </div>
                     </div>

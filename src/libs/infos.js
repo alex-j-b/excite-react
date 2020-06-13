@@ -1,17 +1,17 @@
 export const odds = {
-    "lol-5v5-ranked-solo": 1.8,
-    "lol-5v5-private-solo": 2,
-    "csgo-5v5-competitive-solo": 1.8,
-    "csgo-5v5-private-solo": 2,
+    "leagueoflegends-5v5-ranked-solo": 1.8,
+    "leagueoflegends-5v5-private-solo": 2,
+    "counterstrikego-5v5-competitive-solo": 1.8,
+    "counterstrikego-5v5-private-solo": 2,
     "fortnite-top10-BR-solo": 1.8,
     "fifa20-1v1-private-solo": 2
 };
 
 export const goals = {
-    "lol-5v5-ranked-solo": 'Partie classée',
-    "lol-5v5-private-solo": 'Partie privée',
-    "csgo-5v5-competitive-solo": 'Match compétitif',
-    "csgo-5v5-private-solo": 'Match privé',
+    "leagueoflegends-5v5-ranked-solo": 'Partie classée',
+    "leagueoflegends-5v5-private-solo": 'Partie privée',
+    "counterstrikego-5v5-competitive-solo": 'Match compétitif',
+    "counterstrikego-5v5-private-solo": 'Match privé',
     "fortnite-top10-BR-solo": 'Finir top 10 en BR solo',
     "fifa20-1v1-private-solo": 'Match privé'
 };
@@ -21,4 +21,10 @@ export const gameNames = {
     fortnite: 'Fortnite',
     counterstrikego: 'Counter Strike',
     fifa20: 'Fifa 20'
+};
+
+export const betStatus = {
+    win: 'Victoire +',
+    lost: 'Défaite -',
+    dispute: 'Dispute...'
 };

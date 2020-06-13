@@ -1,14 +1,14 @@
 //React
-import React, { Component } from "react";
-import { withRouter } from "react-router-dom";
+import React, { Component } from 'react';
+import { withRouter, Link } from 'react-router-dom';
 //Redux
-import { connect } from "react-redux";
+import { connect } from 'react-redux';
 import {
     loggedInCheck,
     confirmCsgoAccount,
     addCsgoBet,
     joinCsgoQueue
-} from "../actions";
+} from '../actions';
 //libs
 import { onBetPending, offBetPending } from '../libs/betPending';
 import { odds } from '../libs/infos';
@@ -19,9 +19,9 @@ import ImageFadeIn from 'react-image-fade-in';
 import SwitchPlay from '../components/SwitchPlay';
 import DotsLoader from '../components/DotsLoader';
 //Images
-import ecoin from "../images/e-coin.png";
-import csgoPolice from "../images/csgo-police.png";
-import steamLogo from "../images/steam-logo.png";
+import ecoin from '../images/e-coin.png';
+import csgoPolice from '../images/csgo-police.png';
+import steamLogo from '../images/steam-logo.png';
 
 const ecoinOptions = [
     { value: 5, label: '5' },
@@ -57,7 +57,7 @@ class CounterStrike extends Component {
         lastMatchToken: '',
         defaultEcoinOption: undefined,
         multiplayer: false,
-        type: 'csgo-5v5-competitive-solo',
+        type: 'counterstrikego-5v5-competitive-solo',
         betIsPending: false,
         loading: false
     }
@@ -71,7 +71,7 @@ class CounterStrike extends Component {
     }
 
     onSwitch() {
-        const type = this.state.multiplayer ? 'csgo-5v5-competitive-solo' : 'csgo-5v5-private-solo';
+        const type = this.state.multiplayer ? 'counterstrikego-5v5-competitive-solo' : 'counterstrikego-5v5-private-solo';
         this.setState({
             multiplayer: !this.state.multiplayer,
             type: type
@@ -85,30 +85,35 @@ class CounterStrike extends Component {
 
     confirmCsgoAccount() {
         const { steamId64, authenticationCode, lastMatchToken } = this.state;
-        this.refs.errorInputToken.style.display = "none";
-        if (steamId64 === '' || authenticationCode === '' || lastMatchToken === '') {
-            this.refs.errorInputToken.style.display = "inline";
-        }
-        else {
-            this.setState({ loading: true });
-            this.props.confirmCsgoAccount(steamId64, authenticationCode, lastMatchToken).then(response => {
-                this.setState({ loading: false });
-                if (response.statusCode === 500) {
-                    this.refs.errorInputToken.style.display = "inline";
-                }
-            });
-        }
+        this.refs.reponseError.style.display = 'none';
+        this.setState({ loading: true });
+        this.props.confirmCsgoAccount(steamId64, authenticationCode, lastMatchToken).then(response => {
+            this.setState({ loading: false });
+            if (response.statusCode === 500) {
+                this.refs.reponseError.style.display = 'inline';
+                this.refs.reponseError.innerHTML = response.body.error;
+            }
+        });
     }
 
     addCsgoBet() {
         this.refs.reponseError.style.display = 'none';
+        this.refs.notifCsgoNoEcoin.style.display = 'none';
+        const userEcoins = Number(this.props.user['custom:ecoin']);
+        if (userEcoins < this.state.ecoinOption) {
+            this.refs.notifCsgoNoEcoin.style.display = 'inline';
+            return;
+        }
 
         if (!this.state.multiplayer) {
             this.setState({ loading: true });
-            this.props.addCsgoBet(
-                this.state.type,
-                this.state.ecoinOption
-            );
+            this.props.addCsgoBet(this.state.type, this.state.ecoinOption).then(response => {
+                this.setState({ loading: false });
+                if (response.statusCode === 500) {
+                    this.refs.reponseError.style.display = 'inline';
+                    this.refs.reponseError.innerHTML = response.body.error;
+                }
+            });
         }
         else {
             //Join queue
@@ -190,7 +195,7 @@ class CounterStrike extends Component {
             this.setState({
                 searching: true,
                 multiplayer: true,
-                type: 'csgo-5v5-private-solo'
+                type: 'counterstrikego-5v5-private-solo'
             });
             this.refs.notifCsgoSearch.style.display = 'inline';
             this.refs.notifCsgoEstimation.style.display = 'inline';
@@ -290,7 +295,17 @@ class CounterStrike extends Component {
                             >Parier
                         </button>
                         <DotsLoader loading={this.state.loading} />
-                        <p ref="reponseError" className="error-input"></p>
+
+                        <p ref="notifCsgoNoEcoin" className="notif">
+                            Vous n'avez plus assez d'eCoins, vous pouvez en&nbsp;
+                            <Link
+                                className="grey-link no-ecoin"
+                                title="Obtenir eCoins"
+                                to="/ecoin"
+                                >obtenir ici
+                            </Link>
+                        </p>
+
                         <p ref="notifCsgoBet" className="notif">
                             Pari en cours... il vous reste&nbsp;
                             <span ref="countDown"></span>&nbsp;
@@ -372,11 +387,12 @@ class CounterStrike extends Component {
                             </div>
 
                             <button className="e-button" onClick={this.confirmCsgoAccount}>Valider</button>
-                            <p ref="errorInputToken" className="error-input wrong-code-jeton">Code ou Jeton invalide</p>
                             <DotsLoader loading={this.state.loading}/>
                             </>
                         )
                     }
+                    <p ref="reponseError" className="error-button"></p>
+                    <div className="pusher"></div>
                 </div>
             </div>
         );
@@ -389,7 +405,7 @@ function mapDispatchToProps(dispatch) {
             return dispatch(confirmCsgoAccount(steamId64, authenticationCode, lastMatchToken));
         },
         addCsgoBet: function(type, ecoin) {
-            dispatch(addCsgoBet(type, ecoin));
+            return dispatch(addCsgoBet(type, ecoin));
         },
         loggedInCheck: function() {
             dispatch(loggedInCheck());
@@ -398,7 +414,8 @@ function mapDispatchToProps(dispatch) {
 }
 function mapStateToProps(reduxState) {
     return {
-        pendingBets: reduxState.pendingBets
+        pendingBets: reduxState.pendingBets,
+        user: reduxState.user
     };
 }
 CounterStrike = withRouter(CounterStrike);

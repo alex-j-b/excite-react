@@ -134,7 +134,7 @@ class Cart extends Component {
 
         this.refs.errorAddress1.style.display = address1.length >= 10 ? 'none' : 'inline';
         this.refs.errorPhoneNumber.style.display = phoneNumber.length === 12 ? 'none' : 'inline';
-        this.refs.errorGameAccounts.style.display = 'none';
+        this.refs.errorCommand.style.display = 'none';
 
         if (address1.length >= 10 && phoneNumber.length === 12) {
             this.setState({ loading: true });
@@ -161,8 +161,8 @@ class Cart extends Component {
                     this.props.switchTab('commandes');
                 }
                 else {
-                    this.refs.errorGameAccounts.style.display = 'inline';
-                    this.refs.errorGameAccounts.innerHTML = response.body.error;
+                    this.refs.errorCommand.style.display = 'inline';
+                    this.refs.errorCommand.innerHTML = response.body.error;
                 }
                 this.setState({ loading: false });
             });
@@ -244,7 +244,7 @@ class Cart extends Component {
                                 Passer commande
                             </button>
                         </div>
-                        <span ref="errorCart" className="error-input cart">eCoins insuffisant</span>
+                        <span ref="errorCart" className="error-button cart">eCoins insuffisant</span>
                         </>
                         :
                         <span className="empty-cart">Panier vide ¯\_(ツ)_/¯</span>
@@ -254,7 +254,7 @@ class Cart extends Component {
             { this.state.step === 2 && 
                 <div className="shop-expedition">
                     <p className="title"><span className="purple">A</span>dresse d'expédition</p>
-                    <form className="account-form" onSubmit={this.onSubmit}>
+                    <form onSubmit={this.onSubmit}>
                         <div>
                             <div className="label-input">
                                 <label htmlFor="givenName">
@@ -382,7 +382,7 @@ class Cart extends Component {
                         </div>
 
                         <button className="e-button">Valider</button>
-                        <p ref="errorGameAccounts" className="error-input command-invalid"></p>
+                        <p ref="errorCommand" className="error-button command-invalid"></p>
                         <DotsLoader loading={this.state.loading}/>
                     </form>
                 </div>

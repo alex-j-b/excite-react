@@ -1,14 +1,15 @@
 //React
-import React, { Component } from "react";
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 //Redux
-import { connect } from "react-redux";
+import { connect } from 'react-redux';
 import {
     loggedInCheck,
     confirmFifa20Account,
     joinFifa20Queue,
     updateBetLost,
     addScreenshot
-} from "../actions";
+} from '../actions';
 //libs
 import { onBetPending, offBetPending } from '../libs/betPending';
 import { odds } from '../libs/infos';
@@ -21,8 +22,8 @@ import Popup from "reactjs-popup";
 import SwitchPlay from '../components/SwitchPlay';
 import DotsLoader from '../components/DotsLoader';
 //Images
-import ecoin from "../images/e-coin.png";
-import fifa20Zizou from "../images/fifa20-zizou.png";
+import ecoin from '../images/e-coin.png';
+import fifa20Zizou from '../images/fifa20-zizou.png';
 
 const ecoinOptions = [
     { value: 5, label: '5' },
@@ -75,7 +76,8 @@ class Fifa20 extends Component {
         type: 'fifa20-1v1-private-solo',
         popUpBetWin: false,
         popUpBetLost: false,
-        uploadLoading: false,
+        popUpConfirmLost: false,
+        popUpLoading: false,
         loading: false
     }
 
@@ -93,24 +95,26 @@ class Fifa20 extends Component {
 
     confirmFifa20Account() {
         const { plateform, accountId } = this.state;
-        console.log({ plateform, accountId })
-        this.refs.errorInputId.style.display = 'none';
-        if (accountId === '') {
-            this.refs.errorInputId.style.display = 'inline';
-        }
-        else {
-            this.setState({ loading: true });
-            this.props.confirmFifa20Account(plateform, accountId).then(response => {
-                this.setState({ loading: false });
-                if (response.statusCode === 500) {
-                    this.refs.errorInputId.style.display = 'inline';
-                    this.refs.errorInputId.innerHTML = response.body.error;
-                }
-            });
-        }
+        this.refs.reponseError.style.display = 'none';
+        this.setState({ loading: true });
+        this.props.confirmFifa20Account(plateform, accountId).then(response => {
+            this.setState({ loading: false });
+            if (response.statusCode === 500) {
+                this.refs.reponseError.style.display = 'inline';
+                this.refs.reponseError.innerHTML = response.body.error;
+            }
+        });
     }
 
     addFifa20Bet() {
+        this.refs.reponseError.style.display = 'none';
+        this.refs.notifFifa20NoEcoin.style.display = 'none';
+        const userEcoins = Number(this.props.user['custom:ecoin']);
+        if (userEcoins < this.state.ecoinOption) {
+            this.refs.notifFifa20NoEcoin.style.display = 'inline';
+            return;
+        }
+
         if (!this.state.searching) {
             this.setState({ searching: true });
             this.refs.notifFifa20Search.style.display = 'inline';
@@ -118,7 +122,7 @@ class Fifa20 extends Component {
             this.refs.buttonFifa20Bet.innerHTML = 'Annuler';
             this.refs.buttonFifa20Bet.classList.add('grey');
             let start;
-            window.intervalFifa20Bet = setInterval(() => {
+            window.intervalSearchingFifa20CountDown = setInterval(() => {
                 if (!start) {
                     start = new Date();
                     start.setSeconds(start.getSeconds() - 1);
@@ -144,29 +148,9 @@ class Fifa20 extends Component {
                     this.refs.buttonFifa20Bet.innerHTML = 'Parier';
                     this.refs.buttonFifa20Bet.classList.remove('grey');
                     this.refs.chrono.innerHTML = '00:00';
-                    clearInterval(window.intervalFifa20Bet);
+                    clearInterval(window.intervalSearchingFifa20CountDown);
                 }
             })
-        }
-        else if (true) {
-            this.setState({ searching: false });
-            this.refs.notifFifa20Search.style.display = 'none';
-            this.refs.notifFifa20Estimation.style.display = 'none';
-
-            this.refs.buttonFifa20Bet.style.display = 'none';
-            this.refs.buttonFifa20Bet.innerHTML = 'Parier';
-            this.refs.buttonFifa20Bet.classList.remove('grey');
-
-            this.refs.chrono.innerHTML = '00:00';
-            clearInterval(window.intervalFifa20Bet);
-
-            this.refs.notifGameFound.style.display = 'inline';
-            this.refs.notifFifa20Screenshot.style.display = 'inline';
-            this.refs.notifFifa20Opponent.style.display = 'inline';
-            this.refs.notifFifa20Opponent.innerHTML = `Ajoutez et Affrontez ${'bet.opponentAccountId'}`;
-
-            this.refs.notifDiscord.style.display = 'inline';
-            this.refs.discordLink.style.display = 'inline';
         }
         else {
             joinFifa20Queue(false, false);
@@ -176,22 +160,31 @@ class Fifa20 extends Component {
             this.refs.buttonFifa20Bet.innerHTML = 'Parier';
             this.refs.buttonFifa20Bet.classList.remove('grey');
             this.refs.chrono.innerHTML = '00:00';
-            clearInterval(window.intervalFifa20Bet);
+            clearInterval(window.intervalSearchingFifa20CountDown);
         }
     }
 
     togglePopUp(popUpType) {
+        if (popUpType === 'popUpConfirmLost') {
+            clearInterval(window.intervalFifa20ConfirmCountDown);
+        }
         this.setState({ [popUpType]: !this.state[popUpType] });
     }
 
     betLost() {
-        this.setState({
-            loading: true,
-            popUpBetLost: false
-        });
-        console.log(this.props.pendingBets.fifa20.betId)
+        this.setState({ popUpLoading: true });
         this.props.updateBetLost('fifa20', this.props.pendingBets.fifa20.betId).then(response => {
-            this.setState({ loading: false });
+            this.setState({ popUpLoading: false });
+            if (response.statusCode === 500) {
+                this.refs.popUpError.style.display = 'inline';
+                this.refs.popUpError.innerHTML = response.body.error;
+            }
+            else {
+                this.setState({
+                    popUpBetLost: false,
+                    popUpConfirmLost: false
+                });
+            }
         });
     }
 
@@ -209,7 +202,7 @@ class Fifa20 extends Component {
             }
 
             this.refs.popUpError.style.display = 'none';
-            this.setState({ uploadLoading: true });
+            this.setState({ popUpLoading: true });
 
             const userId = this.props.user.sub;
             const betId = this.props.pendingBets.fifa20.betId;
@@ -223,7 +216,7 @@ class Fifa20 extends Component {
                 type: file.type,
             };
             this.props.addScreenshot(betId, 'fifa20', fileObj).then(response => {
-                this.setState({ uploadLoading: false });
+                this.setState({ popUpLoading: false });
                 if (response.statusCode === 500) {
                     this.refs.popUpError.style.display = 'inline';
                     this.refs.popUpError.innerHTML = response.body.error;
@@ -255,6 +248,7 @@ class Fifa20 extends Component {
         const thisBets = this.props.pendingBets;
         if (!isEqual(prevBets, thisBets)) {
             if ("fifa20" in thisBets && !isEqual(prevBets.fifa20, thisBets.fifa20)) {
+                console.log('this.onBetPending')
                 this.onBetPending('fifa20', thisBets.fifa20);
             }
             else if ("fifa20" in prevBets && !("fifa20" in thisBets)) {
@@ -276,7 +270,7 @@ class Fifa20 extends Component {
             this.refs.buttonFifa20Bet.innerHTML = 'Annuler';
             this.refs.buttonFifa20Bet.classList.add('grey');
             let start;
-            window.intervalFifa20Bet = setInterval(() => {
+            window.intervalSearchingFifa20CountDown = setInterval(() => {
                 if (!start) {
                     start = new Date(this.props.queue.timestamp);
                     start.setSeconds(start.getSeconds() - 1);
@@ -303,8 +297,9 @@ class Fifa20 extends Component {
     componentWillUnmount() {
         if (this.props.accountConfirmed) {
             this.refs.buttonFifa20Bet.disabled = false;
-            this.refs.notifFifa20Bet.style.display = 'none';
-            clearInterval(window.intervalFifa20Bet);
+            clearInterval(window.intervalSearchingFifa20CountDown);
+            clearInterval(window.intervalFifa20ConfirmCountDown);
+            clearInterval(window.intervalPopUpCountDown);
         }
         document.removeEventListener("keydown", this.handleEnter, false);
     }
@@ -344,12 +339,13 @@ class Fifa20 extends Component {
                             </div>
 
                             <button ref="buttonFifa20Bet" className="e-button" onClick={this.addFifa20Bet}>Parier</button>
+                            <DotsLoader loading={this.state.loading} />
 
-
-                            <div>
+                            <div ref="resultButtonsFifa20" className="report-result-buttons">
                                 <button ref="buttonFifa20Win" className="yes" onClick={() => this.togglePopUp('popUpBetWin')}>Gagné</button>
                                 <button ref="buttonFifa20Lose" className="no" onClick={() => this.togglePopUp('popUpBetLost')}>Perdu</button>
                             </div>
+
                             <Popup
                                 open={this.state.popUpBetWin}
                                 contentStyle={{ width: 'fit-content' }}
@@ -369,11 +365,12 @@ class Fifa20 extends Component {
                                             accept="image/*"
                                         />
                                         <button className="e-button" onClick={this.onImageUpload}>Envoyer</button>
-                                        <DotsLoader loading={this.state.uploadLoading} />
-                                        <p ref="popUpError" className="error-input"></p>
+                                        <DotsLoader loading={this.state.popUpLoading} />
+                                        <p ref="popUpError" className="error-button"></p>
                                     </div>
                                 </div>
                             </Popup>
+
                             <Popup
                                 open={this.state.popUpBetLost}
                                 contentStyle={{ width: 'fit-content' }}
@@ -388,16 +385,46 @@ class Fifa20 extends Component {
                                         <button className="yes" type="button" onClick={this.betLost}>Oui</button>
                                         <button className="no" type="button" onClick={() => this.togglePopUp('popUpBetLost')}>Non</button>
                                     </div>
+                                    <DotsLoader loading={this.state.popUpLoading} />
+                                    <p ref="popUpError" className="error-button"></p>
                                 </div>
                             </Popup>
 
-                            <DotsLoader loading={this.state.loading} />
+                            <Popup
+                                open={this.state.popUpConfirmLost}
+                                contentStyle={{ width: 'fit-content' }}
+                                closeOnDocumentClick
+                            >
+                                <div className="yes-no-popup">
+                                    <div className="close" onClick={() => this.togglePopUp('popUpConfirmLost')}>
+                                        &times;
+                                    </div>
+                                    <p>Votre adversaire a déclarer sa victoire. Voulez-vous confirmer votre <b>défaite</b> ?</p>
+                                    <p ref="notifConfirmFifa20" className="notif" style={{ display: 'inline' }}>
+                                        Il vous reste&nbsp;<span ref="countDown"></span>&nbsp;pour donner votre réponse
+                                    </p>
+                                    <div className="wrap-buttons">
+                                        <button className="yes" type="button" onClick={this.betLost}>Oui</button>
+                                        <button
+                                            className="no"
+                                            type="button"
+                                            onClick={() => { this.togglePopUp('popUpConfirmLost'); this.togglePopUp('popUpBetWin'); }}
+                                            >Non + preuve
+                                        </button>
+                                    </div>
+                                    <DotsLoader loading={this.state.popUpLoading} />
+                                    <p ref="popUpError" className="error-button"></p>
+                                </div>
+                            </Popup>
 
-                            <p ref="reponseError" className="error-input"></p>
-                            <p ref="notifFifa20Bet" className="notif">
-                                Pari en cours... il vous reste&nbsp;
-                                <span ref="countDown"></span>&nbsp;
-                                pour rejoindre un match compétitif
+                            <p ref="notifFifa20NoEcoin" className="notif">
+                                Vous n'avez plus assez d'eCoins, vous pouvez en&nbsp;
+                                <Link
+                                    className="grey-link no-ecoin"
+                                    title="Obtenir eCoins"
+                                    to="/ecoin"
+                                    >obtenir ici
+                                </Link>
                             </p>
 
                             <p ref="notifFifa20Estimation" className="notif">Estimation : 05:21</p>
@@ -453,10 +480,11 @@ class Fifa20 extends Component {
                             </div>
 
                             <button className="e-button" onClick={this.confirmFifa20Account}>Valider</button>
-                            <p ref="errorInputId" className="error-input wrong-id">{placeholders[this.state.plateform]} invalide</p>
                             <DotsLoader loading={this.state.loading} />
                         </>
                     }
+                    <p ref="reponseError" className="error-button"></p>
+                    <div className="pusher"></div>
                 </div>
             </div>
         );

@@ -50,7 +50,9 @@ class Contact extends Component {
     }
 
     componentDidUpdate() {
-        this.refs.emailSent.style.display = 'none';
+        if (this.refs.emailSent.style.display === 'inline') {
+            this.refs.emailSent.style.display = 'none';
+        }
     }
 
     componentDidMount() {
@@ -64,7 +66,8 @@ class Contact extends Component {
 
                 <form onSubmit={this.onSubmit}>
                     <p className="title"><span className="purple">C</span>ontactez-nous</p>
-                    <span>Rejoingez Discord :&nbsp;
+                    <h5>Si vous avez une question, n'hésitez pas à nous écrire, nous vous répondrons rapidement.</h5>
+                    <span className="discord-infos">Vous pouvez aussi nous rejoindre sur&nbsp;
                         <a 
                             ref="discordLink"
                             className="grey-link"
@@ -72,10 +75,9 @@ class Contact extends Component {
                             href="https://discord.gg/q2an7Sk"
                             target="_blank"
                             rel="noopener noreferrer"
-                            >https://discord.gg/q2an7Sk
+                            >Discord
                         </a>
                     </span>
-                    <h5>Si vous avez une question, n'hésitez pas à nous écrire, nous vous répondrons rapidement.</h5>
 
                     { !(this.props.isLogging || this.props.isLogged) &&
                         <>
@@ -108,8 +110,8 @@ class Contact extends Component {
                     ></textarea>
 
                     <button className="e-button">Envoyer</button>
-                    <span ref="emailNotSent" className="error-input email-notsent">Erreur, veuillez réessayer</span>
-                    <span ref="emailSent" className="confirmation-modif email-sent">Message envoyé &#10004;</span>
+                    <span ref="emailNotSent" className="error-button">Erreur, veuillez réessayer</span>
+                    <span ref="emailSent" className="confirmation-button email-sent">Message envoyé &#10004;</span>
                     <DotsLoader loading={this.state.loading}/>
                 </form>
 

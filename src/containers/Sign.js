@@ -16,6 +16,7 @@ import authBG from "../images/mystique-statue.jpg";
 import lolLogo from "../images/lol-logo.png";
 import fortniteLogo from "../images/fortnite-logo.png";
 import csgoLogo from "../images/csgo-logo.png";
+import fifa20Logo from "../images/fifa20-logo.png";
 
 
 class Sign extends Component {
@@ -327,6 +328,7 @@ class Sign extends Component {
                         <img className="lol-logo" src={lolLogo} alt="lolLogo"></img>
                         <img className="fortnite-logo" src={fortniteLogo} alt="fortniteLogo"></img>
                         <img className="csgo-logo" src={csgoLogo} alt="csgoLogo"></img>
+                        <img className="fifa20-logo" src={fifa20Logo} alt="fifa20Logo"></img>
                     </div>
                     {this.state.stepTwo ? secondStep : firstStep}
                 </form>

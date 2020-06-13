@@ -53,6 +53,38 @@ let csgoCountDown = function(bet) {
     }
 }
 
+let popUpCountDown = function(refs, timer, innerHTML) {
+    if (timer && refs.countDown) {
+        refs.countDown.innerHTML = innerHTML;
+    }
+    else if (!timer && refs.notifConfirmFifa20) {
+        refs.notifConfirmFifa20.innerHTML = innerHTML;
+    }
+    if (refs.countDown || refs.notifConfirmFifa20) {
+        clearInterval(window.intervalPopUpCountDown);
+    }
+};
+let fifa20ConfirmCountDown = function(refs, bet) {
+    const timestamp = bet.timestampTimer;
+    const timeRemaining = 1800 - ((Date.now() - timestamp) / 1000);
+
+    if (timeRemaining < 0) {
+        window.intervalPopUpCountDown = setInterval(() => {
+            popUpCountDown(refs, false, 'Confirmation imminente...');
+        }, 100);
+    }
+    else {
+        const hour = Math.floor(timeRemaining / 3600);
+        const hourString = hour > 0 ? `${hour}h` : '';
+        const min = Math.floor(timeRemaining % 3600 / 60);
+        const minString = min > 0 ? `${min}min` : '';
+
+        window.intervalPopUpCountDown = setInterval(() => {
+            popUpCountDown(refs, true, hourString + minString);
+        }, 100);
+    }
+}
+
 
 export function onBetPending(game, bet) {
     const ecoinValue = bet.ecoin.toString();
@@ -68,7 +100,7 @@ export function onBetPending(game, bet) {
         case 'leagueoflegends':
             this.refs.buttonLolBet.disabled = true;
 
-            if (bet.type === 'lol-5v5-ranked-solo') {
+            if (bet.type === 'leagueoflegends-5v5-ranked-solo') {
                 this.setState({
                     multiplayer: false,
                     searching: false
@@ -81,7 +113,7 @@ export function onBetPending(game, bet) {
                     lolCountDown(bet);
                 }, 60000);
             }
-            else if (bet.type === 'lol-5v5-private-solo') {
+            else if (bet.type === 'leagueoflegends-5v5-private-solo') {
                 this.setState({
                     multiplayer: true,
                     searching: false
@@ -95,7 +127,7 @@ export function onBetPending(game, bet) {
 
                 this.refs.notifGameFound.style.display = 'inline';
                 this.refs.notifLolTournCode.style.display = 'inline';
-                //this.refs.notifLolTournCode.innerHTML = bet.code;
+                this.refs.notifLolTournCode.innerHTML = bet.code;
                 this.refs.notifLolJoin.style.display = 'inline';
                 this.refs.linkLolHelp.style.display = 'inline';
                 this.refs.notifDiscord.style.display = 'inline';
@@ -118,7 +150,7 @@ export function onBetPending(game, bet) {
         case 'counterstrikego':
             this.refs.buttonCsgoBet.disabled = true;
 
-            if (bet.type === 'csgo-5v5-competitive-solo') {
+            if (bet.type === 'counterstrikego-5v5-competitive-solo') {
                 this.setState({
                     multiplayer: false,
                     searching: false
@@ -131,8 +163,8 @@ export function onBetPending(game, bet) {
                     csgoCountDown(bet);
                 }, 60000);
             }
-            else if (bet.type === 'csgo-5v5-private-solo') {
-                console.log("bet.type === 'csgo-5v5-private-solo'")
+            else if (bet.type === 'counterstrikego-5v5-private-solo') {
+                console.log("bet.type === 'counterstrikego-5v5-private-solo'")
                 this.setState({
                     multiplayer: true,
                     searching: false
@@ -175,6 +207,8 @@ export function onBetPending(game, bet) {
             this.refs.notifFifa20Search.style.display = 'none';
             this.refs.notifFifa20Estimation.style.display = 'none';
 
+            this.refs.resultButtonsFifa20.style.display = 'inline';
+
             this.refs.buttonFifa20Bet.style.display = 'none';
             this.refs.buttonFifa20Bet.innerHTML = 'Parier';
             this.refs.buttonFifa20Bet.classList.remove('grey');
@@ -186,9 +220,17 @@ export function onBetPending(game, bet) {
             this.refs.notifFifa20Screenshot.style.display = 'inline';
             this.refs.notifFifa20Opponent.style.display = 'inline';
             this.refs.notifFifa20Opponent.innerHTML = `Ajoutez et Affrontez ${bet.opponentAccountId}`;
-
             this.refs.notifDiscord.style.display = 'inline';
             this.refs.discordLink.style.display = 'inline';
+
+            if (bet.status === 'confirmLost') {
+                this.setState({ popUpConfirmLost: true }, () => {
+                    fifa20ConfirmCountDown(this.refs, bet);
+                    window.intervalFifa20ConfirmCountDown = setInterval(() => {
+                        fifa20ConfirmCountDown(this.refs, bet);
+                    }, 60000);
+                });
+            }
             break;
 
         default:
@@ -230,14 +272,18 @@ export function offBetPending(game) {
             break;
 
         case 'fifa20':
+            this.setState({ popUpConfirmLost: false });
             this.refs.buttonFifa20Bet.disabled = false;
-            this.refs.notifFifa20Bet.style.display = 'none';
+            this.refs.resultButtonsFifa20.style.display = 'none';
+            this.refs.buttonFifa20Bet.style.display = 'inline';
+
             this.refs.notifGameFound.style.display = 'none';
             this.refs.notifFifa20Screenshot.style.display = 'none';
             this.refs.notifFifa20Opponent.style.display = 'none';
             this.refs.notifDiscord.style.display = 'none';
             this.refs.discordLink.style.display = 'none';
-            clearInterval(window.intervalFifa20Bet);
+            clearInterval(window.intervalPopUpCountDown);
+            clearInterval(window.intervalFifa20ConfirmCountDown);
             break;
 
         default:

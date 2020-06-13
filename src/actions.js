@@ -270,7 +270,7 @@ export function setAddLolBet(body) {
 }
 export function addLolBet(type, ecoin) {
     return dispatch => {
-        API.post('exciteAPI', '/lol/addBet', {
+        return API.post('exciteAPI', '/lol/addBet', {
             'body': {
                 'type': type,
                 'ecoin': ecoin
@@ -279,6 +279,7 @@ export function addLolBet(type, ecoin) {
             if (response.statusCode === 200) {
                 dispatch(setAddLolBet(response.body));
             }
+            return response;
         });
     }
 }
@@ -342,7 +343,7 @@ export function setAddFortniteBet(body) {
 }
 export function addFortniteBet(type, ecoin) {
     return dispatch => {
-        API.post('exciteAPI', '/fortnite/addBet', {
+        return API.post('exciteAPI', '/fortnite/addBet', {
             'body': {
                 'type': type,
                 'ecoin': ecoin
@@ -351,6 +352,7 @@ export function addFortniteBet(type, ecoin) {
             if (response.statusCode === 200) {
                 dispatch(setAddFortniteBet(response.body));
             }
+            return response;
         });
     }
 }
@@ -416,7 +418,7 @@ export function setAddCsgoBet(body) {
 }
 export function addCsgoBet(type, ecoin) {
     return dispatch => {
-        API.post('exciteAPI', '/csgo/addBet', {
+        return API.post('exciteAPI', '/csgo/addBet', {
             'body': {
                 'type': type,
                 'ecoin': ecoin
@@ -425,6 +427,7 @@ export function addCsgoBet(type, ecoin) {
             if (response.statusCode === 200) {
                 dispatch(setAddCsgoBet(response.body));
             }
+            return response;
         });
     }
 }

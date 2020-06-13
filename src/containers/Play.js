@@ -1,16 +1,16 @@
 //React
-import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import "./Play.css";
 //Redux
-import { connect } from "react-redux";
+import { connect } from 'react-redux';
 import {
     getLolBets,
     getFortniteBets,
     getCsgoBets,
     getFifa20Bets,
     checkQueue
-} from "../actions";
+} from '../actions';
 //Libs
 import { odds, goals, gameNames } from '../libs/infos';
 //Components

@@ -1,21 +1,21 @@
 //React
 import React, { Component } from 'react'
-import { withRouter, Link, NavLink } from "react-router-dom";
+import { withRouter, Link, NavLink } from 'react-router-dom';
 import { HamburgerSqueeze } from './hamburger/HamburgerSqueeze/HamburgerSqueeze.js'
-import Routes from "./Routes";
-import "./App.css";
+import Routes from './Routes';
+import './App.css';
 //Redux
-import { connect } from "react-redux";
-import { loggedInCheck } from "./actions";
+import { connect } from 'react-redux';
+import { loggedInCheck } from './actions';
 //WebSocket
 import WebSocketProvider from './WebSocket';
 //Google Analytics
 import ReactGA from 'react-ga';
 //Images
-import ecoin from "./images/e-coin.png";
-import fbLogo from "./images/fb-logo.png";
-import twitterLogo from "./images/twitter-logo.svg";
-import logoExcite from "./images/logo-excite.png";
+import ecoin from './images/e-coin.png';
+import fbLogo from './images/fb-logo.png';
+import twitterLogo from './images/twitter-logo.svg';
+import logoExcite from './images/logo-excite.png';
 
 function initializeReactGA() {
     if (process.env.REACT_APP_STAGE === 'prod') {

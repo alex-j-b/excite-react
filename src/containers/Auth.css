@@ -44,6 +44,11 @@
 }
 .auth .games-icons > .csgo-logo {
     height: 34px;
+    margin-right: 16px;
+    filter: invert(100%);
+}
+.auth .games-icons > .fifa20-logo {
+    height: 42px;
     filter: invert(100%);
 }
 
@@ -52,12 +57,6 @@
     width: fit-content;
     margin: 40px 0 0 0;
     font-size: 22px; -webkit-text-stroke: 0.75px; text-align: center;
-}
-
-/* -------------------- Notifs -------------------- */
-.error-input.log-attempt {
-    margin: 6px 0 -22px 0;
-    -webkit-text-stroke: 0.2px;
 }
 
 /* -------------------- Inputs -------------------- */

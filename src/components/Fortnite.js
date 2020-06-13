@@ -1,26 +1,27 @@
 //React
-import React, { Component } from "react";
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 //Redux
-import { connect } from "react-redux";
+import { connect } from 'react-redux';
 import {
     loggedInCheck,
     confirmFortniteAccount,
     addFortniteBet,
     updateBetLost
-} from "../actions";
+} from '../actions';
 //libs
 import { onBetPending, offBetPending } from '../libs/betPending';
 import { odds } from '../libs/infos';
 import { isEqual } from 'lodash';
 import Select from 'react-select';
 import ImageFadeIn from 'react-image-fade-in';
-import Popup from "reactjs-popup";
+import Popup from 'reactjs-popup';
 //Components
 import SwitchPlay from '../components/SwitchPlay';
 import DotsLoader from '../components/DotsLoader';
 //Images
-import ecoin from "../images/e-coin.png";
-import fortniteChar from "../images/fortnite-char.png";
+import ecoin from '../images/e-coin.png';
+import fortniteChar from '../images/fortnite-char.png';
 
 const ecoinOptions = [
     { value: 5, label: '5' },
@@ -57,6 +58,7 @@ class Fortnite extends Component {
         betIsPending: false,
         multiplayer: false,
         type: 'fortnite-top10-BR-solo',
+        popUpLoading: false,
         loading: false
     }
 
@@ -74,33 +76,34 @@ class Fortnite extends Component {
 
     confirmFortniteAccount() {
         const { fortniteId } = this.state;
-        this.refs.errorInputId.style.display = 'none';
-        if (fortniteId === '') {
-            this.refs.errorInputId.style.display = 'inline';
-        }
-        else {
-            this.setState({ loading: true });
-            this.props.confirmFortniteAccount(fortniteId).then(response => {
-                this.setState({ loading: false });
-                if (response.statusCode === 500) {
-                    this.refs.errorInputId.style.display = 'inline';
-                    this.refs.errorInputId.innerHTML = response.body.error;
-                }
-            });
-        }
+        this.refs.reponseError.style.display = 'none';
+        this.setState({ loading: true });
+        this.props.confirmFortniteAccount(fortniteId).then(response => {
+            this.setState({ loading: false });
+            if (response.statusCode === 500) {
+                this.refs.reponseError.style.display = 'inline';
+                this.refs.reponseError.innerHTML = response.body.error;
+            }
+        });
     }
 
     addFortniteBet() {
-        this.refs.errorEcoin.style.display = 'none';
-        if (Number(this.props.user['custom:ecoin']) >= this.state.ecoinOption) {
-            this.setState({ loading: true });
-            this.props.addFortniteBet(
-                this.state.type,
-                this.state.ecoinOption
-            );
+        this.refs.reponseError.style.display = 'none';
+        this.refs.notifFortniteNoEcoin.style.display = 'none';
+        const userEcoins = Number(this.props.user['custom:ecoin']);
+        if (userEcoins < this.state.ecoinOption) {
+            this.refs.notifFortniteNoEcoin.style.display = 'inline';
+            return;
         }
         else {
-            this.refs.errorEcoin.style.display = 'inline';
+            this.setState({ loading: true });
+            this.props.addFortniteBet(this.state.type, this.state.ecoinOption).then(response => {
+                this.setState({ loading: false });
+                if (response.statusCode === 500) {
+                    this.refs.reponseError.style.display = 'inline';
+                    this.refs.reponseError.innerHTML = response.body.error;
+                }
+            });
         }
     }
 
@@ -109,12 +112,16 @@ class Fortnite extends Component {
     }
 
     betLost() {
-        this.setState({
-            loading: true,
-            popUpBetLost: false
-        });
+        this.setState({ popUpLoading: true });
         this.props.updateBetLost('fortnite', this.props.pendingBets.fortnite.betId).then(response => {
-            this.setState({ loading: false });
+            this.setState({ popUpLoading: false });
+            if (response.statusCode === 500) {
+                this.refs.popUpError.style.display = 'inline';
+                this.refs.popUpError.innerHTML = response.body.error;
+            }
+            else {
+                this.setState({ popUpBetLost: false });
+            }
         });
     }
 
@@ -197,7 +204,16 @@ class Fortnite extends Component {
                             <button ref="buttonFortniteBet" className="e-button" onClick={this.addFortniteBet}>Parier</button>
                             <DotsLoader loading={this.state.loading} />
 
-                            <p ref="errorEcoin" className="error-input not-enough-ecoin">eCoins insuffisant</p>
+                            <p ref="notifFortniteNoEcoin" className="notif">
+                                Vous n'avez plus assez d'eCoins, vous pouvez en&nbsp;
+                                <Link
+                                    className="grey-link no-ecoin"
+                                    title="Obtenir eCoins"
+                                    to="/ecoin"
+                                    >obtenir ici
+                                </Link>
+                            </p>
+
                             <p ref="lostBetLink" className="grey-link" onClick={this.togglePopUp}>Pari perdu ?</p>
                             <Popup
                                 open={this.state.popUpBetLost}
@@ -214,6 +230,8 @@ class Fortnite extends Component {
                                         <button className="yes" type="button" onClick={this.betLost}>Oui</button>
                                         <button className="no" type="button" onClick={this.togglePopUp}>Non</button>
                                     </div>
+                                    <DotsLoader loading={this.state.popUpLoading} />
+                                    <p ref="popUpError" className="error-button"></p>
                                 </div>
                             </Popup>
                             
@@ -224,7 +242,7 @@ class Fortnite extends Component {
                             </p>
                             <p 
                                 ref="unconfirmedGameAccount"
-                                className="error-input unconfirmed-game-account"
+                                className="error-button unconfirmed-game-account"
                                 style={{ display: `${this.props.isLogged && this.props.user.game_accounts.fortnite.confirmed === 'false' ? 'inline' : 'none'}` }}
                                 >Pour commander dans la boutique Excite, ajoutez en ami DarjGG sur Fortnite afin de confirmer votre compte
                             </p>
@@ -257,9 +275,10 @@ class Fortnite extends Component {
 
                             <button className="e-button" onClick={this.confirmFortniteAccount}>Valider</button>
                             <DotsLoader loading={this.state.loading} />
-                            <p ref="errorInputId" className="error-input wrong-id">ID de compte invalide</p>
                         </>
                     }
+                    <p ref="reponseError" className="error-button"></p>
+                    <div className="pusher"></div>
                 </div>
             </div>
         );
@@ -272,7 +291,7 @@ function mapDispatchToProps(dispatch) {
             return dispatch(confirmFortniteAccount(summonerName, region));
         },
         addFortniteBet: function(type, ecoin) {
-            dispatch(addFortniteBet(type, ecoin));
+            return dispatch(addFortniteBet(type, ecoin));
         },
         updateBetLost: function(game, betId) {
             return dispatch(updateBetLost(game, betId));
