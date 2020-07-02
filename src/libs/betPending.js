@@ -66,7 +66,7 @@ let popUpCountDown = function(refs, timer, innerHTML) {
 };
 let fifa20ConfirmCountDown = function(refs, bet) {
     const timestamp = bet.timestampTimer;
-    const timeRemaining = 1800 - ((Date.now() - timestamp) / 1000);
+    const timeRemaining = 900 - ((Date.now() - timestamp) / 1000);
 
     if (timeRemaining < 0) {
         window.intervalPopUpCountDown = setInterval(() => {
@@ -87,14 +87,18 @@ let fifa20ConfirmCountDown = function(refs, bet) {
 
 
 export function onBetPending(game, bet) {
-    const ecoinValue = bet.ecoin.toString();
-    const optionIndex = ecoinOptions.findIndex(option => option.value === ecoinValue);
+    const ecoinOptionIdx = ecoinOptions.findIndex(option => Number(option.value) === Number(bet.ecoin));
     this.setState({
         loading: false,
         betIsPending: true,
-        defaultEcoinOption: ecoinOptions[optionIndex],
+        ecoinOption: ecoinOptions[ecoinOptionIdx],
         type: bet.type
     });
+    console.log('ICI')
+    console.log('')
+    console.log('bet: ', bet)
+    console.log('ecoinOption: ', ecoinOptions[ecoinOptionIdx])
+    console.log('')
 
     switch (game) {
         case 'leagueoflegends':
@@ -170,7 +174,6 @@ export function onBetPending(game, bet) {
                     searching: false
                 });
                 this.refs.notifCsgoSearch.style.display = 'none';
-                this.refs.notifCsgoEstimation.style.display = 'none';
                 this.refs.buttonCsgoBet.innerHTML = 'Parier';
                 this.refs.buttonCsgoBet.classList.remove('grey');
                 this.refs.chrono.innerHTML = '00:00';
@@ -205,7 +208,6 @@ export function onBetPending(game, bet) {
             });
 
             this.refs.notifFifa20Search.style.display = 'none';
-            this.refs.notifFifa20Estimation.style.display = 'none';
 
             this.refs.resultButtonsFifa20.style.display = 'inline';
 
@@ -239,10 +241,7 @@ export function onBetPending(game, bet) {
 }
 
 export function offBetPending(game) {
-    this.setState({
-        betIsPending: false,
-        defaultEcoinOption: undefined
-    });
+    this.setState({ betIsPending: false });
     this.props.loggedInCheck();
 
     switch (game) {
@@ -284,6 +283,8 @@ export function offBetPending(game) {
             this.refs.discordLink.style.display = 'none';
             clearInterval(window.intervalPopUpCountDown);
             clearInterval(window.intervalFifa20ConfirmCountDown);
+            this.refs.chrono.innerHTML = '00:00';
+            clearInterval(window.intervalSearchingFifa20CountDown);
             break;
 
         default:

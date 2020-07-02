@@ -78,7 +78,7 @@ class Play extends Component {
             this.props.getCsgoBets();
             this.props.getFifa20Bets();
             checkQueue().then(response => {
-                if (response.statusCode === 200) {
+                if (Number(response.statusCode) === 200) {
                     this.setState({ queue: response.body.game });
                     if (tab !== response.body.game) {
                         this.setState({ tab: tab });
@@ -128,7 +128,7 @@ class Play extends Component {
             this.props.getFifa20Bets();
             checkQueue().then(response => {
                 console.log('checkQueue(): ', response)
-                if (response.statusCode === 200) {
+                if (Number(response.statusCode) === 200) {
                     const game = response.body.game;
                     let newQueue = this.state.queue;
                     newQueue[game] = response.body;

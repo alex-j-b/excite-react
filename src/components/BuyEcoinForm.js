@@ -77,7 +77,7 @@ class BuyEcoinForm extends Component {
 
         this.props.buyEcoin(this.state.method, ecoinOption, source).then(response => {
             this.setState({ loading: false });
-            if (response.statusCode === 200) {
+            if (Number(response.statusCode) === 200) {
                 let urlParams = (new URL(document.location)).searchParams;
                 if (urlParams.get('redirect') !== null) {
                     this.props.history.push(urlParams.get('redirect'));
@@ -176,8 +176,7 @@ class BuyEcoinForm extends Component {
                             clientId: config.paypal.CLIENT_ID,
                             currency: "EUR"
                         }}
-                        //amount={Number(this.state.ecoinOption)/100}
-                        amount={0.01}
+                        amount={process.env.REACT_APP_STAGE === 'prod' ? Number(this.state.ecoinOption)/100 : 0.01}
                         shippingPreference="NO_SHIPPING"
                         onSuccess={(details, data) => {
                             this.setState({ loading: true });

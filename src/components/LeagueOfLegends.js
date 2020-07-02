@@ -29,7 +29,7 @@ const ecoinOptions = [
     { value: 50, label: '50' }
 ]
 
-const lolRegionsOptions = [
+const regionOptions = [
     { value: 'euw1', label: 'EUW' },
     { value: 'eun1', label: 'EUN' },
     { value: 'ru', label: 'Russia' },
@@ -63,10 +63,9 @@ class LeagueOfLegends extends Component {
     onBetPending = onBetPending.bind(this);
     offBetPending = offBetPending.bind(this);
     state = {
-        ecoinOption: 5,
         summonerName: '',
-        region: 'euw1',
-        defaultEcoinOption: undefined,
+        regionOption: regionOptions[0],
+        ecoinOption: ecoinOptions[0],
         multiplayer: false,
         type: 'leagueoflegends-5v5-ranked-solo',
         searching: false,
@@ -91,12 +90,12 @@ class LeagueOfLegends extends Component {
     }
 
     confirmLolAccount() {
-        const { summonerName, region } = this.state;
+        const { summonerName, regionOption } = this.state;
         this.refs.reponseError.style.display = 'none';
         this.setState({ loading: true });
-        this.props.confirmLolAccount(summonerName, region).then(response => {
+        this.props.confirmLolAccount(summonerName, regionOption.value).then(response => {
             this.setState({ loading: false });
-            if (response.statusCode === 500) {
+            if (Number(response.statusCode) === 500) {
                 this.refs.reponseError.style.display = 'inline';
                 this.refs.reponseError.innerHTML = response.body.error;
             }
@@ -107,16 +106,16 @@ class LeagueOfLegends extends Component {
         this.refs.reponseError.style.display = 'none';
         this.refs.notifLolNoEcoin.style.display = 'none';
         const userEcoins = Number(this.props.user['custom:ecoin']);
-        if (userEcoins < this.state.ecoinOption) {
+        if (userEcoins < this.state.ecoinOption.value) {
             this.refs.notifLolNoEcoin.style.display = 'inline';
             return;
         }
 
         if (!this.state.multiplayer) {
             this.setState({ loading: true });
-            this.props.addLolBet(this.state.type, this.state.ecoinOption).then(response => {
+            this.props.addLolBet(this.state.type, this.state.ecoinOption.value).then(response => {
                 this.setState({ loading: false });
-                if (response.statusCode === 500) {
+                if (Number(response.statusCode) === 500) {
                     this.refs.reponseError.style.display = 'inline';
                     this.refs.reponseError.innerHTML = response.body.error;
                 }
@@ -159,7 +158,7 @@ class LeagueOfLegends extends Component {
     }
 
     handleEnter(e) {
-        if (this.props.display && e.keyCode === 13) {
+        if (this.props.display && Number(e.keyCode) === 13) {
             if (this.props.accountConfirmed) {
                 this.addLolBet();
             }
@@ -208,7 +207,8 @@ class LeagueOfLegends extends Component {
                 <div className="right">
                     <SwitchPlay
                         display={this.props.accountConfirmed}
-                        disabled={this.state.searching || this.state.betIsPending}
+                        //disabled={this.state.searching || this.state.betIsPending}
+                        disabled={true}
                         multiplayer={this.state.multiplayer}
                         onSwitch={this.onSwitch}
                     />
@@ -219,21 +219,21 @@ class LeagueOfLegends extends Component {
                             <Select
                                 className="select-ecoin"
                                 options={ecoinOptions}
-                                defaultValue={ecoinOptions[0]}
-                                value={this.state.defaultEcoinOption}
+                                value={this.state.ecoinOption}
                                 components={{ SingleValue: CustomSingleValue }}
                                 blurInputOnSelect={true}
                                 isSearchable={false}
                                 isDisabled={this.state.betIsPending}
-                                onChange={obj => this.selectChange('ecoinOption', obj.value)}
+                                onChange={obj => this.selectChange('ecoinOption', obj)}
                             />
-                            <div>
+                            <div className="bet-infos">
                                 <span className="goal-price">
                                     { !this.state.multiplayer && 'Gagne une partie classée :' }
                                     { this.state.multiplayer && 'Gagne une partie privée entre joueurs Excite :' }
-                                    &nbsp;<span className="number">{this.state.ecoinOption * odds[this.state.type]}</span>
+                                    &nbsp;<span className="number">{this.state.ecoinOption.value * odds[this.state.type]}</span>
                                     <img className="ecoin" src={ecoin} alt="ecoin"></img>
                                 </span>
+                                { !this.state.multiplayer && <p className="tips">(Lancez votre pari avant la recherche de partie)</p> }
                             </div>
                             <button className="e-button" ref="buttonLolBet" onClick={this.addLolBet}>Parier</button>
                             <DotsLoader loading={this.state.loading} />
@@ -250,8 +250,8 @@ class LeagueOfLegends extends Component {
 
                             <p ref="notifLolBet" className="notif">
                                 Pari en cours... il vous reste&nbsp;
-                                <span ref="countDown"></span>&nbsp;
-                                pour rejoindre une partie classée
+                                <span ref="countDown"></span>
+                                &nbsp;pour rejoindre une partie classée
                             </p>
                             <p ref="notifLolEstimation" className="notif">Estimation : 05:21</p>
                             <p ref="notifLolSearch" className="notif search">Recherche d'une partie...<span ref="chrono">00:00</span></p>
@@ -306,11 +306,11 @@ class LeagueOfLegends extends Component {
                                     </label>
                                     <Select
                                         className="select"
-                                        options={lolRegionsOptions}
-                                        defaultValue={lolRegionsOptions[0]}
+                                        options={regionOptions}
+                                        value={this.state.regionOption}
                                         blurInputOnSelect={true}
                                         isSearchable={false}
-                                        onChange={obj => this.selectChange('regionOption', obj.value)}
+                                        onChange={obj => this.selectChange('regionOption', obj)}
                                     />
                                 </div>
                             </div>

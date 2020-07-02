@@ -240,8 +240,8 @@ class Sign extends Component {
                     <button className="e-button">Démarrer</button>
                     <DotsLoader loading={this.state.loading}/>
                 </div>
-                <p ref="errorMailExist" className="error-input log-attempt">Cet email existe déjà</p>
-                <p ref="errorUnknown" className="error-input log-attempt"></p>
+                <p ref="errorMailExist" className="error-button log-attempt">Cet email existe déjà</p>
+                <p ref="errorUnknown" className="error-button log-attempt"></p>
             </>;
 
 

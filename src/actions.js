@@ -25,7 +25,7 @@ export const SET_MESSAGE_RECEIVED = 'SET_MESSAGE_RECEIVED';
 
 
 const rmvEmptyValues = (obj) => {
-    Object.keys(obj).forEach((key) => (obj[key]==='') && delete obj[key]);
+    Object.keys(obj).forEach((key) => (obj[key] === '') && delete obj[key]);
     return obj;
 }
 
@@ -44,7 +44,6 @@ export function loggedInCheck() {
     return async dispatch => {
         try {
             const currentAuthenticatedUser = await Auth.currentAuthenticatedUser();
-            console.log(currentAuthenticatedUser)
             const attributes = await Auth.userAttributes(currentAuthenticatedUser);
             let user = {};
             attributes.forEach(el => {
@@ -229,7 +228,7 @@ export function confirmLolAccount(summonerName, region) {
             }
         }).then(response => {
             console.log(response)
-            if (response.statusCode === 200) {
+            if (Number(response.statusCode) === 200) {
                 dispatch(setConfirmLolAccount(response.body));
             }
             return response;
@@ -251,7 +250,7 @@ export function getLolBets() {
     return dispatch => {
         API.get('exciteAPI', '/lol/getBets')
         .then(response => {
-            if (response.statusCode === 200) {
+            if (Number(response.statusCode) === 200) {
                 dispatch(setGetLolBets(response.body));
             }
         });
@@ -276,7 +275,7 @@ export function addLolBet(type, ecoin) {
                 'ecoin': ecoin
             }
         }).then(response => {
-            if (response.statusCode === 200) {
+            if (Number(response.statusCode) === 200) {
                 dispatch(setAddLolBet(response.body));
             }
             return response;
@@ -302,7 +301,7 @@ export function confirmFortniteAccount(accountId) {
             }
         }).then(response => {
             console.log(response)
-            if (response.statusCode === 200) {
+            if (Number(response.statusCode) === 200) {
                 dispatch(setConfirmFortniteAccount(response.body));
             }
             return response;
@@ -324,7 +323,7 @@ export function getFortniteBets() {
     return dispatch => {
         API.get('exciteAPI', '/fortnite/getBets')
         .then(response => {
-            if (response.statusCode === 200) {
+            if (Number(response.statusCode) === 200) {
                 dispatch(setGetFortniteBets(response.body));
             }
         });
@@ -349,7 +348,7 @@ export function addFortniteBet(type, ecoin) {
                 'ecoin': ecoin
             }
         }).then(response => {
-            if (response.statusCode === 200) {
+            if (Number(response.statusCode) === 200) {
                 dispatch(setAddFortniteBet(response.body));
             }
             return response;
@@ -377,7 +376,7 @@ export function confirmCsgoAccount(steamId64, authenticationCode, lastMatchToken
             }
         }).then(response => {
             console.log(response)
-            if (response.statusCode === 200) {
+            if (Number(response.statusCode) === 200) {
                 dispatch(setConfirmCsgoAccount(response.body));
             }
             return response;
@@ -399,7 +398,7 @@ export function getCsgoBets() {
     return dispatch => {
         API.get('exciteAPI', '/csgo/getBets')
         .then(response => {
-            if (response.statusCode === 200) {
+            if (Number(response.statusCode) === 200) {
                 dispatch(setGetCsgoBets(response.body));
             }
         });
@@ -424,7 +423,7 @@ export function addCsgoBet(type, ecoin) {
                 'ecoin': ecoin
             }
         }).then(response => {
-            if (response.statusCode === 200) {
+            if (Number(response.statusCode) === 200) {
                 dispatch(setAddCsgoBet(response.body));
             }
             return response;
@@ -454,16 +453,16 @@ export function setConfirmFifa20Account(body) {
         body: body
     };
 }
-export function confirmFifa20Account(plateform, accountId) {
+export function confirmFifa20Account(accountId, plateform) {
     return dispatch => {
         return API.get('exciteAPI', '/fifa20/confirmAccount', {
             'queryStringParameters': {
-                'plateform': plateform,
-                'accountId': accountId
+                'accountId': accountId,
+                'plateform': plateform
             }
         }).then(response => {
             console.log(response)
-            if (response.statusCode === 200) {
+            if (Number(response.statusCode) === 200) {
                 dispatch(setConfirmFifa20Account(response.body));
             }
             return response;
@@ -485,7 +484,7 @@ export function getFifa20Bets() {
     return dispatch => {
         API.get('exciteAPI', '/fifa20/getBets')
         .then(response => {
-            if (response.statusCode === 200) {
+            if (Number(response.statusCode) === 200) {
                 dispatch(setGetFifa20Bets(response.body));
             }
         });
@@ -523,7 +522,7 @@ export function updateBetLost(game, betId) {
             }
         }).then(response => {
             console.log(response)
-            if (response.statusCode === 200) {
+            if (Number(response.statusCode) === 200) {
                 dispatch(setUpdateBetLost(game, response.body));
             }
             return response;
@@ -549,7 +548,7 @@ export function addScreenshot(betId, game, file) {
             'body': body
         }).then(response => {
             console.log(response)
-            if (response.statusCode === 200) {
+            if (Number(response.statusCode) === 200) {
                 dispatch(setAddScreenshot(body));
             }
             return response;
@@ -573,7 +572,7 @@ export function getShopArticles() {
     return dispatch => {
         return API.get('exciteAPI', '/shop/getArticles')
         .then(response => {
-            if (response.statusCode === 200) {
+            if (Number(response.statusCode) === 200) {
                 dispatch(setGetShopArticles(response.body));
             }
             return response;
@@ -588,17 +587,18 @@ export function setAddCart(body) {
         body: body
     };
 }
-export function addCart(articleId, quantity, changeQuantity) {
+export function addCart(articleId, options, quantity, changeQuantity) {
     return dispatch => {
         return API.post('exciteAPI', '/shop/addCart', {
             'body': {
                 'articleId': articleId,
+                'options': options,
                 'quantity': quantity,
                 'changeQuantity': changeQuantity
             }
         }).then(response => {
             console.log(response)
-            if (response.statusCode === 200) {
+            if (Number(response.statusCode) === 200) {
                 dispatch(setAddCart(response.body));
             }
             return response;
@@ -621,7 +621,7 @@ export function deleteCart(articleId) {
             }
         }).then(response => {
             console.log(response)
-            if (response.statusCode === 200) {
+            if (Number(response.statusCode) === 200) {
                 response.body.articleId = articleId;
                 dispatch(setDeleteCart(response.body));
             }
@@ -641,7 +641,7 @@ export function getCart() {
         return API.get('exciteAPI', '/shop/getCart')
         .then(response => {
             console.log(response)
-            if (response.statusCode === 200) {
+            if (Number(response.statusCode) === 200) {
                 dispatch(setGetCart(response.body));
             }
             return response;
@@ -674,7 +674,7 @@ export function addCommand(articles, givenName,familyName, address1, address2, p
             }
         }).then(response => {
             console.log(response)
-            if (response.statusCode === 200) {
+            if (Number(response.statusCode) === 200) {
                 dispatch(setAddCommand(response.body));
             }
             return response;
@@ -694,7 +694,7 @@ export function getCommand() {
         return API.get('exciteAPI', '/shop/getCommand')
         .then(response => {
             console.log(response)
-            if (response.statusCode === 200) {
+            if (Number(response.statusCode) === 200) {
                 dispatch(setGetCommand(response.body));
             }
             return response;
@@ -719,7 +719,7 @@ export function buyEcoin(method, ecoinAmount, source) {
             }
         }).then(response => {
             console.log(response)
-            if (response.statusCode === 200) {
+            if (Number(response.statusCode) === 200) {
                 dispatch(setBuyEcoin(ecoinAmount));
             }
             return response;

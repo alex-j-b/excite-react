@@ -8,6 +8,7 @@ import DotsLoader from '../components/DotsLoader';
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
 //Libs
+import { isEqual } from 'lodash';
 import { useTable } from 'react-table'
 //Images
 import ecoin from "../images/e-coin.png";
@@ -77,12 +78,56 @@ class Cart extends Component {
     }
 
     quantityChange(e) {
-        this.setState({ [e.target.name]: e.target.value });
-        this.props.addCart(e.target.name, e.target.value, true);
+        let articleId = e.target.name.includes('|') ? e.target.name.split('|')[0] : e.target.name;
+        let inputValue = Number(e.target.value);
+        let quantity = inputValue;
+        let options = false;
+        console.log('inputValue: ', inputValue);
+
+        if (inputValue > 0) {
+            if (e.target.name.includes('|')) {
+                const articleIndex = this.props.cartArticles.findIndex(el => el.articleId === articleId);
+                const oldOptions = JSON.parse(JSON.stringify(this.props.cartArticles[articleIndex].options));
+                console.log('oldOptions: ', oldOptions);
+                
+                const optionChange = JSON.parse(e.target.name.split('|')[1]);
+                options = oldOptions.filter(el => !isEqual(el, optionChange));
+                console.log('options filter: ', options);
+                options = [...options, ...Array(inputValue).fill(optionChange)];
+                console.log('options final: ', options);
+                quantity = options.length;
+            }
+
+            console.log('');
+            this.setState({ [e.target.name]: inputValue });
+            this.props.addCart(articleId, options, quantity, true);
+            console.log('addCart: ', [articleId, options, quantity, true]);
+        }
+        else {
+            this.setState({ [e.target.name]: inputValue });
+        }
     }
 
     deleteCart(articleId) {
-        this.props.deleteCart(articleId);
+        if (articleId.includes('|')) {
+            const fullArticleId = articleId;
+            articleId = fullArticleId.split('|')[0];
+            const articleIndex = this.props.cartArticles.findIndex(el => el.articleId === articleId);
+            const oldOptions = JSON.parse(JSON.stringify(this.props.cartArticles[articleIndex].options));
+            
+            const optionChange = JSON.parse(fullArticleId.split('|')[1]);
+            const options = oldOptions.filter(el => !isEqual(el, optionChange));
+            const quantity = options.length;
+
+            if (quantity === 0) {
+                this.props.deleteCart(articleId);
+                return;
+            }
+            this.props.addCart(articleId, options, quantity, true);
+        }
+        else {
+            this.props.deleteCart(articleId);
+        }
     }
 
     navToStep2() {
@@ -141,7 +186,9 @@ class Cart extends Component {
 
             let articles = {};
             this.props.cartArticles.forEach(el => {
-                articles[el.articleId] = el.quantity;
+                articles[el.articleId] = {};
+                articles[el.articleId].quantity = el.quantity;
+                articles[el.articleId].options = el.options;
             });
 
             this.props.addCommand(
@@ -156,7 +203,7 @@ class Cart extends Component {
                 phoneNumber,
                 promoCode
             ).then(response => {
-                if (response.statusCode === 200) {
+                if (Number(response.statusCode) === 200) {
                     this.props.history.push('/boutique?tab=commandes');
                     this.props.switchTab('commandes');
                 }
@@ -175,14 +222,63 @@ class Cart extends Component {
     }
 
     render() {
+        let cartArticles = JSON.parse(JSON.stringify(this.props.cartArticles));
+        let cartParsed = [];
+        cartArticles.forEach(article => {
+            if (article.options) {
+                let allOptions = article.options.map(el => {
+                    return JSON.stringify(el);
+                });
+
+                let countOptions = {};
+                for (let i = 0; i < allOptions.length; i++) {
+                    countOptions[allOptions[i]] = (countOptions[allOptions[i]] + 1) || 1;
+                }
+    
+                for (let [key, value] of Object.entries(countOptions)) {
+                    let baseArticleId = (' ' + article.articleId).slice(1);
+                    article.articleId += `|${key}`;
+
+                    article.options = JSON.parse(key);
+                    article.quantity = value;
+
+                    let baseName = (' ' + article.name).slice(1);
+                    Object.values(article.options).forEach(value => {
+                        article.name += ` ${value}`;
+                    });
+
+                    cartParsed.push(JSON.parse(JSON.stringify(article)));
+                    article.name = baseName;
+                    article.articleId = baseArticleId;
+                }
+            }
+            else {
+                cartParsed.push(article);
+            }
+        });
+        cartParsed.sort((a, b) => {
+            return (a.name < b.name) ? -1 : (a.name > b.name) ? 1 : 0;
+        });
+
+
         let totalPrice = 0;
-        const dataDesktop = this.props.cartArticles.map(el => {
+        const dataDesktop = cartParsed.map(el => {
             totalPrice += el.price * el.quantity;
+
             return {
                 image: <div><img src={el.image[0]} alt="mouse"></img></div>,
                 name: <div>{el.name}</div>,
                 price: <div><span className="number">{el.price}<img className="ecoin" src={ecoin} alt="ecoin"></img></span></div>,
-                quantity: <div><input type="number" name={el.articleId} defaultValue={el.quantity} min="1" onChange={this.quantityChange}></input></div>,
+                quantity:
+                    <div>
+                        <input 
+                            type="number"
+                            name={el.articleId}
+                            value={el.articleId in this.state ? this.state[el.articleId] : el.quantity}
+                            min="1"
+                            onChange={this.quantityChange}
+                        ></input>
+                    </div>,
                 remove: <div><span className="remove-cross" onClick={() => this.deleteCart(el.articleId)}>✕</span></div>
             }
         });
@@ -195,14 +291,23 @@ class Cart extends Component {
         ];
 
         let dataPhone = [];
-        this.props.cartArticles.forEach(el => {
+        cartParsed.forEach(el => {
             const firstChunk = {
                 1: <div><img src={el.image[0]} alt="mouse"></img></div>,
                 2: <div>{el.name}</div>
             }
             const secondChunk = {
                 1: <div><span className="number">{el.price}<img className="ecoin" src={ecoin} alt="ecoin"></img></span></div>,
-                2: <div><input type="number" name={el.articleId} defaultValue={el.quantity} min="1" onChange={this.quantityChange}></input></div>,
+                2:
+                    <div>
+                        <input 
+                            type="number"
+                            name={el.articleId}
+                            value={el.articleId in this.state ? this.state[el.articleId] : el.quantity}
+                            min="1"
+                            onChange={this.quantityChange}
+                        ></input>
+                    </div>,
                 3: <div><span className="remove-cross" onClick={() => this.deleteCart(el.articleId)}>✕</span></div>
             }
             dataPhone.push(firstChunk);
@@ -394,8 +499,8 @@ class Cart extends Component {
 
 function mapDispatchToProps(dispatch) {
     return {
-        addCart: function (articleId, quantity, changeQuantity) {
-            return dispatch(addCart(articleId, quantity, changeQuantity));
+        addCart: function (articleId, options, quantity, changeQuantity) {
+            return dispatch(addCart(articleId, options, quantity, changeQuantity));
         },
         deleteCart: function (articleId) {
             dispatch(deleteCart(articleId));

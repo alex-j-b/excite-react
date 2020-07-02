@@ -51,11 +51,10 @@ class CounterStrike extends Component {
     onBetPending = onBetPending.bind(this);
     offBetPending = offBetPending.bind(this);
     state = {
-        ecoinOption: 5,
+        ecoinOption: ecoinOptions[0],
         steamId64: false,
         authenticationCode: '',
         lastMatchToken: '',
-        defaultEcoinOption: undefined,
         multiplayer: false,
         type: 'counterstrikego-5v5-competitive-solo',
         betIsPending: false,
@@ -89,7 +88,7 @@ class CounterStrike extends Component {
         this.setState({ loading: true });
         this.props.confirmCsgoAccount(steamId64, authenticationCode, lastMatchToken).then(response => {
             this.setState({ loading: false });
-            if (response.statusCode === 500) {
+            if (Number(response.statusCode) === 500) {
                 this.refs.reponseError.style.display = 'inline';
                 this.refs.reponseError.innerHTML = response.body.error;
             }
@@ -100,16 +99,16 @@ class CounterStrike extends Component {
         this.refs.reponseError.style.display = 'none';
         this.refs.notifCsgoNoEcoin.style.display = 'none';
         const userEcoins = Number(this.props.user['custom:ecoin']);
-        if (userEcoins < this.state.ecoinOption) {
+        if (userEcoins < this.state.ecoinOption.value) {
             this.refs.notifCsgoNoEcoin.style.display = 'inline';
             return;
         }
 
         if (!this.state.multiplayer) {
             this.setState({ loading: true });
-            this.props.addCsgoBet(this.state.type, this.state.ecoinOption).then(response => {
+            this.props.addCsgoBet(this.state.type, this.state.ecoinOption.value).then(response => {
                 this.setState({ loading: false });
-                if (response.statusCode === 500) {
+                if (Number(response.statusCode) === 500) {
                     this.refs.reponseError.style.display = 'inline';
                     this.refs.reponseError.innerHTML = response.body.error;
                 }
@@ -120,7 +119,6 @@ class CounterStrike extends Component {
             if (!this.state.searching) {
                 this.setState({ searching: true });
                 this.refs.notifCsgoSearch.style.display = 'inline';
-                this.refs.notifCsgoEstimation.style.display = 'inline';
                 this.refs.buttonCsgoBet.innerHTML = 'Annuler';
                 this.refs.buttonCsgoBet.classList.add('grey');
                 let start;
@@ -138,14 +136,13 @@ class CounterStrike extends Component {
                     this.refs.chrono.innerHTML = `${min}:${sec}`;
                 }, 1000);
 
-                joinCsgoQueue(this.state.type, this.state.ecoinOption).then(response => {
-                    if (response.statusCode === 500) {
+                joinCsgoQueue(this.state.type, this.state.ecoinOption.value).then(response => {
+                    if (Number(response.statusCode) === 500) {
                         this.refs.reponseError.style.display = 'inline';
                         this.refs.reponseError.innerHTML = response.body.error;
 
                         this.setState({ searching: false });
                         this.refs.notifCsgoSearch.style.display = 'none';
-                        this.refs.notifCsgoEstimation.style.display = 'none';
                         this.refs.buttonCsgoBet.innerHTML = 'Parier';
                         this.refs.buttonCsgoBet.classList.remove('grey');
                         this.refs.chrono.innerHTML = '00:00';
@@ -157,7 +154,6 @@ class CounterStrike extends Component {
                 joinCsgoQueue(false, false);
                 this.setState({ searching: false });
                 this.refs.notifCsgoSearch.style.display = 'none';
-                this.refs.notifCsgoEstimation.style.display = 'none';
                 this.refs.buttonCsgoBet.innerHTML = 'Parier';
                 this.refs.buttonCsgoBet.classList.remove('grey');
                 this.refs.chrono.innerHTML = '00:00';
@@ -167,7 +163,7 @@ class CounterStrike extends Component {
     }
 
     handleEnter(e) {
-        if (this.props.display && e.keyCode === 13) {
+        if (this.props.display && Number(e.keyCode) === 13) {
             if (this.props.accountConfirmed) {
                 this.addCsgoBet();
             }
@@ -198,7 +194,6 @@ class CounterStrike extends Component {
                 type: 'counterstrikego-5v5-private-solo'
             });
             this.refs.notifCsgoSearch.style.display = 'inline';
-            this.refs.notifCsgoEstimation.style.display = 'inline';
             this.refs.buttonCsgoBet.innerHTML = 'Annuler';
             this.refs.buttonCsgoBet.classList.add('grey');
             let start;
@@ -261,7 +256,8 @@ class CounterStrike extends Component {
                 <div className="right">
                     <SwitchPlay
                         display={this.props.accountConfirmed}
-                        disabled={this.state.searching || this.state.betIsPending}
+                        //disabled={this.state.searching || this.state.betIsPending}
+                        disabled={true}
                         multiplayer={this.state.multiplayer}
                         onSwitch={this.onSwitch}
                     />
@@ -272,21 +268,21 @@ class CounterStrike extends Component {
                         <Select
                             className="select-ecoin"
                             options={ecoinOptions}
-                            defaultValue={ecoinOptions[0]}
-                            value={this.state.defaultEcoinOption}
+                            value={this.state.ecoinOption}
                             components={{ SingleValue: CustomSingleValue }}
                             blurInputOnSelect={true}
                             isSearchable={false}
                             isDisabled={this.state.betIsPending}
-                            onChange={obj => this.selectChange('ecoinOption', obj.value)}
+                            onChange={obj => this.selectChange('ecoinOption', obj)}
                         />
-                        <div>
+                        <div className="bet-infos">
                             <span className="goal-price">
                                 { !this.state.multiplayer && 'Gagne un match compétitif :' }
                                 { this.state.multiplayer && 'Gagne un match privée entre joueurs Excite :' }
-                                &nbsp;<span className="number">{this.state.ecoinOption * odds[this.state.type]}</span>
+                                &nbsp;<span className="number">{this.state.ecoinOption.value * odds[this.state.type]}</span>
                                 <img className="ecoin" src={ecoin} alt="ecoin"></img>
                             </span>
+                            <p className="tips">(Lancez votre pari avant la recherche de partie)</p>
                         </div>
                         <button 
                             className="e-button"
@@ -312,7 +308,6 @@ class CounterStrike extends Component {
                             pour rejoindre un match compétitif
                         </p>
 
-                        <p ref="notifCsgoEstimation" className="notif">Estimation : 05:21</p>
                         <p ref="notifCsgoSearch" className="notif search">Recherche d'une partie...<span ref="chrono">00:00</span></p>
 
                         <p ref="notifGameFound" className="notif">Partie trouvée !</p>

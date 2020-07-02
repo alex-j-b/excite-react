@@ -140,18 +140,16 @@
 }
 
 /*------------ Place bet ---------- */
-.play .right div > span {
-    margin-right: 2px;
+.play .right .bet-infos {
+    display: flex; flex-direction: column; align-items: center;
+    margin: 14px 0 16px 0;
+}
+.play .right .bet-infos > span {
     font-size: 18px; -webkit-text-stroke: 0.4px;
 }
-.play .right .goal-price {
-    display: inline-block;
-    max-width: 300px;
+.play .right .tips {
     vertical-align: middle; text-align: center;
-    margin: 20px 2px 20px 0;
-}
-.play .wrap-fortnite .right .goal-price {
-    max-width: none;
+    font-size: 13px; -webkit-text-stroke: 0px;
 }
 
 .play div.report-result-buttons {
@@ -201,7 +199,7 @@
     max-width: 300px;
 }
 .play .error-button {
-    margin: -10px 0 -6px 0 !important;
+    margin: 0 !important;
 }
 .play .error-button.unconfirmed-game-account {
     max-width: 310px;
@@ -241,10 +239,6 @@
     display: flex; justify-content: center; align-items: center;
     margin: 10px 0 15px 0;
 }
-.play .wrap-games .right .error-button {
-    margin: 0 0 -16px 0;
-    -webkit-text-stroke: 0.2px;
-}
 .play .wrap-games .right .confirm-instructions > p > a {
     color: #0000EE;
 }
@@ -265,6 +259,7 @@
 .play .wrap-fortnite .right .confirm-inputs p {
     margin: -25px 0 30px 0;
     align-self: center;
+    font-size: 13px; -webkit-text-stroke: 0.1px;
 }
 .play .wrap-fortnite .right .confirm-inputs input {
     min-width: 250px;
@@ -394,7 +389,7 @@
         display: inline-block;
     }
     .play .header .wallet-ecoin {
-        margin-right: 10px;
+        margin: 0;
     }
     .play .header label {
         display: none;
@@ -443,7 +438,7 @@
     .play .right .goal-price .ecoin {
         margin-left: 1px;
     }
-    .play .right div > span {
+    .play .right .bet-infos > span {
         margin-right: 2px;
         font-size: 16px; -webkit-text-stroke: 0.4px;
     }
@@ -473,9 +468,6 @@
     }
     .play .wrap-counterstrikego .right .confirm-instructions > p {
         max-width: 265px;
-    }
-    .play .wrap-games .right .error-button {
-        margin: 0;
     }
 
     /* -------------------- History -------------------- */

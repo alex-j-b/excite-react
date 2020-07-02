@@ -55,8 +55,52 @@ class Commands extends Component {
     }
 
     render() {
+        let commandArticles = JSON.parse(JSON.stringify(this.props.commandArticles));
+        if (commandArticles.length > 0) {
+            commandArticles.forEach(command => {
+                let commandParsed = [];
+                command.articles.forEach(article => {
+                    if (article.options) {
+                        let allOptions = article.options.map(el => {
+                            return JSON.stringify(el);
+                        });
+        
+                        let countOptions = {};
+                        for (let i = 0; i < allOptions.length; i++) {
+                            countOptions[allOptions[i]] = (countOptions[allOptions[i]] + 1) || 1;
+                        }
+            
+                        for (let [key, value] of Object.entries(countOptions)) {
+                            let baseArticleId = (' ' + article.articleId).slice(1);
+                            article.articleId += `|${key}`;
+        
+                            article.options = JSON.parse(key);
+                            article.quantity = value;
+        
+                            let baseName = (' ' + article.name).slice(1);
+                            Object.values(article.options).forEach(value => {
+                                article.name += ` ${value}`;
+                            });
+        
+                            commandParsed.push(JSON.parse(JSON.stringify(article)));
+                            article.name = baseName;
+                            article.articleId = baseArticleId;
+                        }
+                    }
+                    else {
+                        commandParsed.push(article);
+                    }
+                });
+                commandParsed.sort((a, b) => {
+                    return (a.name < b.name) ? -1 : (a.name > b.name) ? 1 : 0;
+                });
+                command.articles = commandParsed;
+            });
+        }
+
+
         let dataDesktop = [];
-        this.props.commandArticles.forEach(elCommand => {
+        commandArticles.forEach(elCommand => {
             elCommand.articles.forEach((elArticle, idx) => {
                 let withDate = <div><span className="number">{elCommand.date}</span><img src={elArticle.image[0]} alt="mouse"></img></div>;
                 let withoutDate = <div><img src={elArticle.image[0]} alt="mouse"></img></div>;
@@ -81,7 +125,7 @@ class Commands extends Component {
         ];
 
         let dataPhone = [];
-        this.props.commandArticles.forEach(elCommand => {
+        commandArticles.forEach(elCommand => {
             elCommand.articles.forEach((elArticle, idx) => {
                 let withDate = <div><span className="number">{elCommand.date}</span><img src={elArticle.image[0]} alt="mouse"></img></div>;
                 let withoutDate = <div><img src={elArticle.image[0]} alt="mouse"></img></div>;

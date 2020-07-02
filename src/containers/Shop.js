@@ -42,8 +42,17 @@ class Shop extends Component {
         }
 
         let urlParams = (new URL(document.location)).searchParams;
-        if ((urlParams.get('id') !== this.state.id)) {
-            this.setState({ id: urlParams.get('id') });
+        if ((urlParams.get('tab') !== this.state.tab) || (urlParams.get('id') !== this.state.id)) {
+            if (urlParams.get('tab') !== null) {
+                this.setState({ 
+                    tab: urlParams.get('tab'),
+                    id: urlParams.get('id')
+                });
+            }
+            else {
+                this.setState({ tab: 'articles' });
+                this.props.history.push('/boutique?tab=articles');
+            }
         }
     }
 

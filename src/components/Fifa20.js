@@ -32,17 +32,11 @@ const ecoinOptions = [
     { value: 50, label: '50' }
 ]
 
-const fifaPlateformsOptions = [
+const plateformOptions = [
     { value: 'ps4', label: 'PS4', placeholder: 'PSN ID' },
     { value: 'xbox', label: 'Xbox', placeholder: 'Gamertag' },
     { value: 'pc', label: 'PC', placeholder: 'EA ID' }
 ]
-
-const placeholders = {
-    ps4: 'PSN ID',
-    xbox: 'Gamertag',
-    pc: 'EA ID'
-}
 
 const CustomSingleValue = ({ data }) => (
     <div className="input-select">
@@ -67,10 +61,9 @@ class Fifa20 extends Component {
     onBetPending = onBetPending.bind(this);
     offBetPending = offBetPending.bind(this);
     state = {
-        ecoinOption: 5,
-        plateform: 'ps4',
+        ecoinOption: ecoinOptions[0],
+        plateformOption: plateformOptions[0],
         accountId: '',
-        defaultEcoinOption: undefined,
         betIsPending: false,
         multiplayer: false,
         type: 'fifa20-1v1-private-solo',
@@ -94,12 +87,12 @@ class Fifa20 extends Component {
     }
 
     confirmFifa20Account() {
-        const { plateform, accountId } = this.state;
+        const { plateformOption, accountId } = this.state;
         this.refs.reponseError.style.display = 'none';
         this.setState({ loading: true });
-        this.props.confirmFifa20Account(plateform, accountId).then(response => {
+        this.props.confirmFifa20Account(accountId, plateformOption.value).then(response => {
             this.setState({ loading: false });
-            if (response.statusCode === 500) {
+            if (Number(response.statusCode) === 500) {
                 this.refs.reponseError.style.display = 'inline';
                 this.refs.reponseError.innerHTML = response.body.error;
             }
@@ -110,7 +103,7 @@ class Fifa20 extends Component {
         this.refs.reponseError.style.display = 'none';
         this.refs.notifFifa20NoEcoin.style.display = 'none';
         const userEcoins = Number(this.props.user['custom:ecoin']);
-        if (userEcoins < this.state.ecoinOption) {
+        if (userEcoins < this.state.ecoinOption.value) {
             this.refs.notifFifa20NoEcoin.style.display = 'inline';
             return;
         }
@@ -118,7 +111,6 @@ class Fifa20 extends Component {
         if (!this.state.searching) {
             this.setState({ searching: true });
             this.refs.notifFifa20Search.style.display = 'inline';
-            this.refs.notifFifa20Estimation.style.display = 'inline';
             this.refs.buttonFifa20Bet.innerHTML = 'Annuler';
             this.refs.buttonFifa20Bet.classList.add('grey');
             let start;
@@ -136,15 +128,14 @@ class Fifa20 extends Component {
                 this.refs.chrono.innerHTML = `${min}:${sec}`;
             }, 1000);
 
-            joinFifa20Queue(this.state.type, this.state.ecoinOption).then(response => {
+            joinFifa20Queue(this.state.type, this.state.ecoinOption.value).then(response => {
                 console.log(response);
-                if (response.statusCode === 500) {
+                if (Number(response.statusCode) === 500) {
                     this.refs.reponseError.style.display = 'inline';
                     this.refs.reponseError.innerHTML = response.body.error;
 
                     this.setState({ searching: false });
                     this.refs.notifFifa20Search.style.display = 'none';
-                    this.refs.notifFifa20Estimation.style.display = 'none';
                     this.refs.buttonFifa20Bet.innerHTML = 'Parier';
                     this.refs.buttonFifa20Bet.classList.remove('grey');
                     this.refs.chrono.innerHTML = '00:00';
@@ -156,7 +147,6 @@ class Fifa20 extends Component {
             joinFifa20Queue(false, false);
             this.setState({ searching: false });
             this.refs.notifFifa20Search.style.display = 'none';
-            this.refs.notifFifa20Estimation.style.display = 'none';
             this.refs.buttonFifa20Bet.innerHTML = 'Parier';
             this.refs.buttonFifa20Bet.classList.remove('grey');
             this.refs.chrono.innerHTML = '00:00';
@@ -175,7 +165,7 @@ class Fifa20 extends Component {
         this.setState({ popUpLoading: true });
         this.props.updateBetLost('fifa20', this.props.pendingBets.fifa20.betId).then(response => {
             this.setState({ popUpLoading: false });
-            if (response.statusCode === 500) {
+            if (Number(response.statusCode) === 500) {
                 this.refs.popUpError.style.display = 'inline';
                 this.refs.popUpError.innerHTML = response.body.error;
             }
@@ -217,7 +207,7 @@ class Fifa20 extends Component {
             };
             this.props.addScreenshot(betId, 'fifa20', fileObj).then(response => {
                 this.setState({ popUpLoading: false });
-                if (response.statusCode === 500) {
+                if (Number(response.statusCode) === 500) {
                     this.refs.popUpError.style.display = 'inline';
                     this.refs.popUpError.innerHTML = response.body.error;
                 }
@@ -233,7 +223,7 @@ class Fifa20 extends Component {
     }
 
     handleEnter(e) {
-        if (this.props.display && e.keyCode === 13) {
+        if (this.props.display && Number(e.keyCode) === 13) {
             if (this.props.accountConfirmed) {
                 this.addFifa20Bet();
             }
@@ -266,7 +256,6 @@ class Fifa20 extends Component {
                 type: 'fifa20-1v1-private-solo',
             });
             this.refs.notifFifa20Search.style.display = 'inline';
-            this.refs.notifFifa20Estimation.style.display = 'inline';
             this.refs.buttonFifa20Bet.innerHTML = 'Annuler';
             this.refs.buttonFifa20Bet.classList.add('grey');
             let start;
@@ -324,16 +313,15 @@ class Fifa20 extends Component {
                             <Select
                                 className="select-ecoin"
                                 options={ecoinOptions}
-                                defaultValue={ecoinOptions[0]}
-                                value={this.state.defaultEcoinOption}
+                                value={this.state.ecoinOption}
                                 components={{ SingleValue: CustomSingleValue }}
                                 blurInputOnSelect={true}
                                 isSearchable={false}
                                 isDisabled={this.state.betIsPending}
-                                onChange={obj => this.selectChange('ecoinOption', obj.value)}
+                                onChange={obj => this.selectChange('ecoinOption', obj)}
                             />
-                            <div>
-                                <span className="goal-price">Gagne un match contre un joueur Excite : <span className="number">{this.state.ecoinOption * odds[this.state.type]}</span>
+                            <div className="bet-infos">
+                                <span className="goal-price">Gagne un match contre un joueur Excite : <span className="number">{this.state.ecoinOption.value * odds[this.state.type]}</span>
                                     <img className="ecoin" src={ecoin} alt="ecoin"></img>
                                 </span>
                             </div>
@@ -357,17 +345,15 @@ class Fifa20 extends Component {
                                     </div>
                                     <p>Afin de confirmer votre <b>victoire</b>, veuillez envoyer une photo ou capture d'écran du résultat du match.</p>
                                     <p>Vos eCoins vous seront envoyés rapidement.</p>
-                                    <div className="wrap-buttons">
-                                        <input
-                                            ref="uploadInput"
-                                            id="file-input"
-                                            type="file"
-                                            accept="image/*"
-                                        />
-                                        <button className="e-button" onClick={this.onImageUpload}>Envoyer</button>
-                                        <DotsLoader loading={this.state.popUpLoading} />
-                                        <p ref="popUpError" className="error-button"></p>
-                                    </div>
+                                    <input
+                                        ref="uploadInput"
+                                        id="file-input"
+                                        type="file"
+                                        accept="image/*"
+                                    />
+                                    <button className="e-button" onClick={this.onImageUpload}>Envoyer</button>
+                                    <DotsLoader loading={this.state.popUpLoading} />
+                                    <p ref="popUpError" className="error-button"></p>
                                 </div>
                             </Popup>
 
@@ -427,7 +413,6 @@ class Fifa20 extends Component {
                                 </Link>
                             </p>
 
-                            <p ref="notifFifa20Estimation" className="notif">Estimation : 05:21</p>
                             <p ref="notifFifa20Search" className="notif search">Recherche d'une partie...<span ref="chrono">00:00</span></p>
 
                             <p ref="notifGameFound" className="notif">Partie trouvée !</p>
@@ -455,7 +440,7 @@ class Fifa20 extends Component {
                                     </label>
                                     <input
                                         type="text"
-                                        placeholder={placeholders[this.state.plateform]}
+                                        placeholder={this.state.plateformOption.placeholder}
                                         name="accountId"
                                         onChange={this.onChange}
                                         value={this.state.accountId}
@@ -470,11 +455,11 @@ class Fifa20 extends Component {
                                     </label>
                                     <Select
                                         className="select"
-                                        options={fifaPlateformsOptions}
-                                        defaultValue={fifaPlateformsOptions[0]}
+                                        options={plateformOptions}
+                                        value={this.state.plateformOption}
                                         blurInputOnSelect={true}
                                         isSearchable={false}
-                                        onChange={obj => this.selectChange('plateform', obj.value)}
+                                        onChange={obj => this.selectChange('plateformOption', obj)}
                                     />
                                 </div>
                             </div>
@@ -493,8 +478,8 @@ class Fifa20 extends Component {
 
 function mapDispatchToProps(dispatch) {
     return {
-        confirmFifa20Account: function(summonerName, region) {
-            return dispatch(confirmFifa20Account(summonerName, region));
+        confirmFifa20Account: function(accountId, plateform) {
+            return dispatch(confirmFifa20Account(accountId, plateform));
         },
         addScreenshot: function(betId, game, file) {
             return dispatch(addScreenshot(betId, game, file));

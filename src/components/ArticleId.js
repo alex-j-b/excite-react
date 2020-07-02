@@ -6,6 +6,7 @@ import { addCart } from "../actions";
 //libs
 import DotsLoader from '../components/DotsLoader';
 import Slider from 'react-slick';
+import Select from 'react-select';
 import "../../node_modules/slick-carousel/slick/slick.css"; 
 import "../../node_modules/slick-carousel/slick/slick-theme.css";
 //Images
@@ -17,20 +18,41 @@ class ArticleId extends Component {
     addCart = this.addCart.bind(this);
     state = {
         loading: false,
-        quantity: 1
+        quantity: 1,
+        sizeOption: 'S'
     }
 
     onChange(e) {
-        console.log(e.target.value);
         this.setState({ [e.target.name]: e.target.value });
+    }
+
+    selectChange(name, value) {
+        this.setState({ [name]: value });
     }
 
     addCart() {
         if (this.props.isLogged) {
             this.setState({ loading: true });
-            this.props.addCart(this.props.articleIdObj.articleId, this.state.quantity).then(response => {
+            const article = JSON.parse(JSON.stringify(this.props.articleIdObj));
+            const quantity = Number(this.state.quantity);
+
+            //Create array of selected options
+            let optionObj = {};
+            let options = false;
+            if (article.options) {
+                article.options.forEach(el => {
+                    let label = Object.keys(el)[0];
+                    let option = this.state[label] ? this.state[label] : el[label][0];
+                    optionObj[label] = option;
+                });
+                options = [...Array(quantity).fill(optionObj)];
+                console.log('options: ', options);
+            }
+            console.log('addCart: ', article)
+
+            this.props.addCart(article.articleId, options, quantity, false).then(response => {
                 this.setState({ loading: false });
-                if (response.statusCode === 500) {
+                if (Number(response.statusCode) === 500) {
                     this.refs.articleIdError.style.display = 'inline';
                     this.refs.articleIdError.innerHTML = response.body.error;
                 }
@@ -57,11 +79,39 @@ class ArticleId extends Component {
         };
 
         const articleIdObj = this.props.articleIdObj;
+
+        //Slider images
         const articleImages = articleIdObj.image.map((el, idx) => {
             return (
                 <img src={el} alt={el} key={el+idx}></img>
             );
         });
+
+        //Specific article options
+        let articleOptions = '';
+        if (!articleOptions && articleIdObj.options) {
+            articleOptions = articleIdObj.options.map((el) => {
+                let label = Object.keys(el)[0];
+                let options = el[Object.keys(el)[0]];
+                options = options.map((el) => {
+                    return { value: el, label: el };
+                });
+
+                return (
+                    <div className="article-option" key={label}>
+                        <label>{label}</label>
+                        <Select
+                            className="select"
+                            options={options}
+                            defaultValue={options[0]}
+                            blurInputOnSelect={true}
+                            isSearchable={false}
+                            onChange={obj => this.selectChange(Object.keys(el)[0], obj.value)}
+                        />
+                    </div>
+                );
+            });
+        }
 
         return (
             <div className="shop-article-id">
@@ -77,7 +127,11 @@ class ArticleId extends Component {
                         <span className="number">{articleIdObj.price}<img className="ecoin" src={ecoin} alt="ecoin"></img></span>
                         <p className="description">{articleIdObj.description}</p>
 
-                        <div className="options">
+
+                        {articleOptions}
+
+
+                        <div className="final">
                             <div className="quantity-picker">
                                 <label htmlFor="quantity">Quantité</label>
                                 <input 
@@ -89,10 +143,10 @@ class ArticleId extends Component {
                                     onChange={this.onChange}
                                 ></input>
                             </div>
-                            <div>
+                            <div className="add-button">
                                 <button className="e-button" onClick={this.addCart}>Ajouter au panier</button>
                                 <DotsLoader loading={this.state.loading} />
-                                <p ref="articleIdError" className="error-button">erreur test testing</p>
+                                <p ref="articleIdError" className="error-button"></p>
                             </div>
                         </div>
                     </div>
@@ -109,8 +163,8 @@ function mapStateToProps(reduxState) {
 }
 function mapDispatchToProps(dispatch) {
     return {
-        addCart: function (articleId, quantity, changeQuantity) {
-            return dispatch(addCart(articleId, quantity, changeQuantity));
+        addCart: function (articleId, options, quantity, changeQuantity) {
+            return dispatch(addCart(articleId, options, quantity, changeQuantity));
         }
     }
 }

@@ -91,7 +91,7 @@ export default function refresh(state = DEFAULT_STATE, action = {}) {
                 betsHistory: newState.betsHistory,
                 pendingBets: newState.pendingBets,
                 cartArticles: newState.cartArticles,
-                commandArticles: newState.commandArticle
+                commandArticles: newState.commandArticles
             };
 
         //////////////////////////////////////////////////////////////////// WEBSOCKET /////////////////////////////////////////////////////////////
@@ -109,8 +109,8 @@ export default function refresh(state = DEFAULT_STATE, action = {}) {
             console.log('messageReceived: ', messageReceived)
 
             if (messageReceived.action.includes('PendingBet')) {
-                let newPendingBet = messageReceived;
-                for (let [key, value] of Object.entries(messageReceived)) {
+                let newPendingBet = JSON.parse(JSON.stringify(messageReceived));
+                for (let [key, value] of Object.entries(newPendingBet)) {
                     if (typeof value === 'object') {
                         newPendingBet[key] = value[Object.keys(value)[0]];
                     }
@@ -120,17 +120,23 @@ export default function refresh(state = DEFAULT_STATE, action = {}) {
 
                 if (messageReceived.action === 'updatePendingBet') {
                     console.log('updatePendingBet')
-                    const betIndex = newState.betsHistory.findIndex(el => el.betId === messageReceived.betId);
+                    const betIndex = newState.betsHistory.findIndex(el => el.betId === newPendingBet.betId);
                     console.log(betIndex)
                     if (betIndex > -1) {
                         newState.betsHistory[betIndex] = newPendingBet;
                         if (pendingStatus.includes(newPendingBet.status)) {
                             console.log('pendingStatus.includes(newPendingBet.status)')
-                            newState.pendingBets[messageReceived.game] = newPendingBet;
+                            newState.pendingBets[newPendingBet.game] = newPendingBet;
                         }
                         else {
                             console.log('else {')
-                            delete newState.pendingBets[messageReceived.game];
+                            if (newPendingBet.game in newState.pendingBets) {
+                                delete newState.pendingBets[newPendingBet.game];
+                            }
+                            else {
+                                let ecoinToAdd = Number(newPendingBet.ecoin) * Number(newPendingBet.odds);
+                                newState.user['custom:ecoin'] = Number(newState.user['custom:ecoin']) + ecoinToAdd;
+                            }
                         }
                     }
                 }
@@ -208,7 +214,7 @@ export default function refresh(state = DEFAULT_STATE, action = {}) {
                 el.date = timestampToDate(Number(el.timestamp));
 
                 if (allTimestamps.includes(el.timestamp)) {
-                    const oldIndex = newState.betsHistory.findIndex(bet => bet.timestamp === el.timestamp);
+                    const oldIndex = newState.betsHistory.findIndex(bet => Number(bet.timestamp) === Number(el.timestamp));
                     newState.betsHistory[oldIndex] = el;
                 }
                 else {

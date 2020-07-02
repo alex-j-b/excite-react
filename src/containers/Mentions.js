@@ -18,8 +18,8 @@ export default class Conditions extends Component {
 
                 <h3>1. Présentation du site</h3>
                 <p>En vertu de l’article 6 de la loi n° 2004-575 du 21 juin 2004 pour la confiance dans l’économie numérique, il est précisé aux utilisateurs du site <a className="grey-link" title="https://excite.world/" href="https://excite.world/">excite.world</a> l’identité des différents intervenants dans le cadre de sa réalisation et de son suivi :</p>
-                <p><strong>Propriétaires : </strong>Leo Adragna - leo.adragna@excite.world | Alexis Boix - alexis.boix@excite.world</p>
-                <p><strong>Webmaster : </strong>Alexis Boix - alexis.boix@excite.world</p>
+                <p><strong>Propriétaires : </strong>Leo Adragna et Alexis Boix</p>
+                <p><strong>Webmaster : </strong>Alexis Boix - contact@excite.world</p>
                 <p><strong>Hébergeur : </strong>Amazon Web Services, Inc. – 2121 7th Avenue Seattle, Washington, U.S.</p>
 
                 <h3>2. Gestion des données personnelles</h3>
@@ -33,7 +33,7 @@ export default class Conditions extends Component {
                 </ul>
 
                 <p>L’utilisateur fournit ces informations en toute connaissance de cause, notamment lorsqu’il procède par lui-même à leur saisie.</p>
-                <p>Conformément aux dispositions des articles 38 et suivants de la loi 78-17 du 6 janvier 1978 relative à l’informatique, aux fichiers et aux libertés, tout utilisateur dispose d’un droit d’accès, de rectification et d’opposition aux données personnelles le concernant. Pour faire valoir ces droits, veuillez effectuer votre demande à partir de l'adresse mail utilisée lors de votre inscription au site <a className="grey-link" title="https://excite.world/" href="https://excite.world/">excite.world</a> vers l'adresse mail : alexis.boix@excite.world, en fournissant une copie du titre d’identité avec signature du titulaire de la pièce.</p>
+                <p>Conformément aux dispositions des articles 38 et suivants de la loi 78-17 du 6 janvier 1978 relative à l’informatique, aux fichiers et aux libertés, tout utilisateur dispose d’un droit d’accès, de rectification et d’opposition aux données personnelles le concernant. Pour faire valoir ces droits, veuillez effectuer votre demande à partir de l'adresse mail utilisée lors de votre inscription au site <a className="grey-link" title="https://excite.world/" href="https://excite.world/">excite.world</a> vers l'adresse mail : contact@excite.world, en fournissant une copie du titre d’identité avec signature du titulaire de la pièce.</p>
                 <p>Aucune information personnelle de l’utilisateur du site <a className="grey-link" title="https://excite.world/" href="https://excite.world/">excite.world</a> n’est publiée à l’insu de l’utilisateur, échangée, transférée, cédée ou vendue sur un support quelconque à des tiers. Seule l’hypothèse du rachat du site <a className="grey-link" title="https://excite.world/" href="https://excite.world/">excite.world</a> et de ses droits permettrait la transmission des dites informations à l’éventuel acquéreur qui serait à son tour tenu de la même obligation de conservation et de modification des données vis à vis de l’utilisateur du site <a className="grey-link" title="https://excite.world/" href="https://excite.world/">excite.world</a>.</p>
                 <p>Les bases de données sont protégées par les dispositions de la loi du 1er juillet 1998 transposant la directive 96/9 du 11 mars 1996 relative à la protection juridique des bases de données.</p>
                 <p>En cas d'utilisation des données personnelles non conforme avec la loi, l'utilisateur concerné peut déposer une réclamation auprès de la Cnil.</p>
@@ -54,7 +54,7 @@ export default class Conditions extends Component {
                     <li>Aux conditions d'utilisation de Stripe : <a className="grey-link" title="https://stripe.com/fr/legal" href="https://stripe.com/fr/legal">https://stripe.com/fr/legal</a></li>
                     <li>Aux règles de confidentialité de Google : <a className="grey-link" title="https://policies.google.com/privacy" href="https://policies.google.com/privacy">https://policies.google.com/privacy</a></li>
                 </ul>
-                <p>Si vous avez une question ou une demande à propos de l'utilisation d'applications tierces par le site <a className="grey-link" title="https://excite.world/" href="https://excite.world/">excite.world</a>, n'hésitez pas à envoyer un courriel à cette adresse : alexis.boix@excite.world</p>
+                <p>Si vous avez une question ou une demande à propos de l'utilisation d'applications tierces par le site <a className="grey-link" title="https://excite.world/" href="https://excite.world/">excite.world</a>, n'hésitez pas à envoyer un courriel à cette adresse : contact@excite.world</p>
 
                 <h3>5. Limitations contractuelles sur les données techniques</h3>
                 <p>Le site utilise la technologie JavaScript.</p>

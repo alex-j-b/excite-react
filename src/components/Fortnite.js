@@ -52,9 +52,8 @@ class Fortnite extends Component {
     onBetPending = onBetPending.bind(this);
     offBetPending = offBetPending.bind(this);
     state = {
-        ecoinOption: 5,
+        ecoinOption: ecoinOptions[0],
         fortniteId: '',
-        defaultEcoinOption: undefined,
         betIsPending: false,
         multiplayer: false,
         type: 'fortnite-top10-BR-solo',
@@ -80,7 +79,7 @@ class Fortnite extends Component {
         this.setState({ loading: true });
         this.props.confirmFortniteAccount(fortniteId).then(response => {
             this.setState({ loading: false });
-            if (response.statusCode === 500) {
+            if (Number(response.statusCode) === 500) {
                 this.refs.reponseError.style.display = 'inline';
                 this.refs.reponseError.innerHTML = response.body.error;
             }
@@ -91,15 +90,15 @@ class Fortnite extends Component {
         this.refs.reponseError.style.display = 'none';
         this.refs.notifFortniteNoEcoin.style.display = 'none';
         const userEcoins = Number(this.props.user['custom:ecoin']);
-        if (userEcoins < this.state.ecoinOption) {
+        if (userEcoins < this.state.ecoinOption.value) {
             this.refs.notifFortniteNoEcoin.style.display = 'inline';
             return;
         }
         else {
             this.setState({ loading: true });
-            this.props.addFortniteBet(this.state.type, this.state.ecoinOption).then(response => {
+            this.props.addFortniteBet(this.state.type, this.state.ecoinOption.value).then(response => {
                 this.setState({ loading: false });
-                if (response.statusCode === 500) {
+                if (Number(response.statusCode) === 500) {
                     this.refs.reponseError.style.display = 'inline';
                     this.refs.reponseError.innerHTML = response.body.error;
                 }
@@ -115,7 +114,7 @@ class Fortnite extends Component {
         this.setState({ popUpLoading: true });
         this.props.updateBetLost('fortnite', this.props.pendingBets.fortnite.betId).then(response => {
             this.setState({ popUpLoading: false });
-            if (response.statusCode === 500) {
+            if (Number(response.statusCode) === 500) {
                 this.refs.popUpError.style.display = 'inline';
                 this.refs.popUpError.innerHTML = response.body.error;
             }
@@ -126,7 +125,7 @@ class Fortnite extends Component {
     }
 
     handleEnter(e) {
-        if (this.props.display && e.keyCode === 13) {
+        if (this.props.display && Number(e.keyCode) === 13) {
             if (this.props.accountConfirmed) {
                 this.addFortniteBet();
             }
@@ -187,18 +186,18 @@ class Fortnite extends Component {
                             <Select
                                 className="select-ecoin"
                                 options={ecoinOptions}
-                                defaultValue={ecoinOptions[0]}
-                                value={this.state.defaultEcoinOption}
+                                value={this.state.ecoinOption}
                                 components={{ SingleValue: CustomSingleValue }}
                                 blurInputOnSelect={true}
                                 isSearchable={false}
                                 isDisabled={this.state.betIsPending}
-                                onChange={obj => this.selectChange('ecoinOption', obj.value)}
+                                onChange={obj => this.selectChange('ecoinOption', obj)}
                             />
-                            <div>
-                                <span className="goal-price">Finir top 10 en Battle Royal solo : <span className="number">{this.state.ecoinOption * odds[this.state.type]}</span>
+                            <div className="bet-infos">
+                                <span className="goal-price">Finir top 10 en Battle Royal solo : <span className="number">{this.state.ecoinOption.value * odds[this.state.type]}</span>
                                     <img className="ecoin" src={ecoin} alt="ecoin"></img>
                                 </span>
+                                <p className="tips">(Lancez votre pari avant la recherche de partie)</p>
                             </div>
 
                             <button ref="buttonFortniteBet" className="e-button" onClick={this.addFortniteBet}>Parier</button>
@@ -251,7 +250,7 @@ class Fortnite extends Component {
                         <>
                             <div className="confirm-inputs">
                                 <div>
-                                <p>(PC, xbox et ps4 seulement)</p>
+                                <p>(Le 1er pari peut prendre ~2h à être validé)</p>
                                     <label htmlFor="fortniteId">
                                         <span>ID de votre compte</span>
                                     </label>

@@ -97,9 +97,6 @@
     max-width: 350px;
     padding: 0 12px 20px 12px;
 }
-.article span {
-    padding: 0 12px;
-}
 .article span:last-child {
     float: right;
 }
@@ -138,34 +135,48 @@
 }
 
 /* -------------------- Infos -------------------- */
-.shop-article-id > div > .article-infos {
-    display: flex; flex-direction: column; justify-content: space-between;
-    height: 300px; width: 50%;
+.shop-article-id .article-infos {
+    display: flex; flex-direction: column;
+    width: 50%;
     padding: 20px 32px 20px 70px;
 }
-.shop-article-id > div > .article-infos h3 {
+.shop-article-id .article-infos h3 {
     font-family: 'Poppins', Arial; font-size: 24px;
     font-weight: normal; -webkit-text-stroke: 0.4px;
     margin: 0;
 }
-.shop-article-id > div > .article-infos span {
+.shop-article-id .article-infos span {
     font-size: 18px;
     margin-bottom: 30px;
 }
-.shop-article-id > div > .article-infos .description {
+.shop-article-id .article-infos .description {
     line-height: 24px;
     margin-bottom: 30px;
 }
 
+
+.shop-article-id .article-infos .article-option {
+    display: flex; justify-items: center; align-items: center;
+    margin-bottom: 30px;
+}
+.shop-article-id .article-infos .article-option > label {
+    margin-right: 10px;
+    -webkit-text-stroke: 0.25px;
+}
+.shop-article-id .article-infos .article-option > .select {
+    width: 65px;
+}
+
+
 /* -------------------- Options -------------------- */
-.shop-article-id .options {
+.shop-article-id .final {
     display: flex; align-items: flex-end;
 }
-.shop-article-id .options .quantity-picker {
+.shop-article-id .final .quantity-picker {
     display: flex; flex-direction: column; align-items: center;
     margin-right: 50px;
 }
-.shop-article-id .options .quantity-picker label {
+.shop-article-id .final .quantity-picker label {
     margin-bottom: 10px;
     -webkit-text-stroke: 0.25px;
 }
@@ -175,14 +186,17 @@
     margin: 0;
     font-size: 18px; font-family: 'Poppins', Arial;
 }
-.shop-article-id .options .e-button {
+.shop-article-id .final .add-button {
+    display: flex; flex-direction: column; align-items: center;
+}
+.shop-article-id .final .e-button {
     align-self: center;
     padding: 12px 26px;
     margin: 0;
     font-size: 18px;
 }
 .shop-article-id .error-button {
-    margin: 10px 0 -26px 0;
+    margin: 10px 0 -26px 0 !important;
 }
 
 
@@ -394,22 +408,22 @@
     }
 
     /* -------------------- Infos -------------------- */
-    .shop-article-id > div > .article-infos {
+    .shop-article-id .article-infos {
         height: auto; width: 100%;
         padding: 40px 0 20px 0;
     }
-    .shop-article-id > div > .article-infos span {
+    .shop-article-id .article-infos span {
         margin-bottom: 20px;
     }
-    .shop-article-id > div > .article-infos .description {
+    .shop-article-id .article-infos .description {
         margin-bottom: 25px;
     }
 
     /* -------------------- Options -------------------- */
-    .shop-article-id .options {
+    .shop-article-id .final {
         flex-wrap: wrap;
     }
-    .shop-article-id .options .quantity-picker {
+    .shop-article-id .final .quantity-picker {
         margin-right: auto;
     }
 
