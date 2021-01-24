@@ -20,7 +20,7 @@ export const gameNames = {
     leagueoflegends: 'League of legends',
     fortnite: 'Fortnite',
     counterstrikego: 'Counter Strike',
-    fifa20: 'Fifa 20'
+    fifa20: 'Fifa 21'
 };
 
 export const betStatus = {

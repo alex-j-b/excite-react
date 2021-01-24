@@ -306,7 +306,7 @@ class Fifa20 extends Component {
                         multiplayer={true}
                         onSwitch={this.onSwitch}
                     />
-                    <p className="title"><span className="purple">F</span>IFA 20</p>
+                    <p className="title"><span className="purple">F</span>IFA 21</p>
 
                     { this.props.accountConfirmed ?
                         <>

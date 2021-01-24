@@ -93,7 +93,7 @@ class Play extends Component {
                 leagueoflegends: 'League of legends',
                 fortnite: 'Fortnite',
                 counterstrikego: 'Counter Strike',
-                fifa20: 'Fifa 20',
+                fifa20: 'Fifa 21',
                 history: 'Historique'
             })[this.state.tab] || 'undefined';
             let title = document.querySelector('head > title');
@@ -115,7 +115,7 @@ class Play extends Component {
                 leagueoflegends: 'League of legends',
                 fortnite: 'Fortnite',
                 counterstrikego: 'Counter Strike',
-                fifa20: 'Fifa 20',
+                fifa20: 'Fifa 21',
                 history: 'Historique'
             })[tab] || 'undefined';
 
