@@ -13,7 +13,7 @@ import controlerIcon from "../images/controler.png";
 import giftIcon from "../images/gift.png";
 import lolImage from "../images/lol-image.png";
 import fortniteImage from "../images/fortnite-image.png";
-import csgoImage from "../images/counter-strike-image.jpg";
+// import csgoImage from "../images/counter-strike-image.jpg";
 import fifa20Image from "../images/fifa20-image.jpg";
 import separator from "../images/separator.png";
 
@@ -32,7 +32,7 @@ export default class Home extends Component {
         return (
             <div className="home">
 
-                <div className="home-1">
+                <div className="home-1" onClick={() => this.props.history.push('/jouer')}>
                     <video id="videoBG" poster={frame1BG} playbackrate="3.0" autoPlay playsInline muted loop>
                         <source src={esportBG} type="video/mp4"></source>
                     </video>
@@ -53,7 +53,7 @@ export default class Home extends Component {
                     </svg>
                 </div>
 
-                <div className="home-2">
+                <div className="home-2" onClick={() => this.props.history.push('/jouer')}>
                     <div className="step first">
                         <img className="number" src={oneIcon} alt="oneIcon"></img>
                         <div>
@@ -91,9 +91,9 @@ export default class Home extends Component {
                         <Link to="/jouer?game=leagueoflegends">
                             <img src={lolImage} alt="lolImage"></img>
                         </Link>
-                        <Link to="/jouer?game=counterstrikego">
+                        {/* <Link to="/jouer?game=counterstrikego">
                             <img src={csgoImage} alt="csgoImage"></img>
-                        </Link>
+                        </Link> */}
                     </div>
                 </div>
 

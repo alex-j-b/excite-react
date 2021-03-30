@@ -16,14 +16,14 @@ import { odds, goals, gameNames } from '../libs/infos';
 //Components
 import LeagueOfLegends from '../components/LeagueOfLegends';
 import Fortnite from '../components/Fortnite';
-import CounterStrike from '../components/CounterStrike';
+// import CounterStrike from '../components/CounterStrike';
 import Fifa20 from '../components/Fifa20.js';
 import CircleLoader from '../components/CircleLoader';
 //Images
 import authBG from "../images/mystique-statue.jpg";
 import lolLogo from "../images/lol-logo.png";
 import fortniteLogo from "../images/fortnite-logo.png";
-import csgoLogo from "../images/csgo-logo.png";
+// import csgoLogo from "../images/csgo-logo.png";
 import fifa20Logo from "../images/fifa20-logo.png";
 import historyBlack from "../images/history-black.png";
 import ecoin from "../images/e-coin.png";
@@ -185,7 +185,7 @@ class Play extends Component {
                             name="fortnite"
                             onClick={this.switchTab}
                         ></button>
-                        <button
+                        {/* <button
                             className="csgo-button" 
                             style={{
                                 filter: `${this.state.tab === 'counterstrikego' ? '' : 'invert(100%)'}`,
@@ -194,7 +194,7 @@ class Play extends Component {
                             }}
                             name="counterstrikego"
                             onClick={this.switchTab}
-                        ></button>
+                        ></button> */}
 
                         <button
                             className="fifa20-button" 
@@ -243,12 +243,12 @@ class Play extends Component {
                                 imageReady={this.state.imageReady}
                                 accountConfirmed={this.props.isLogged && 'fortnite' in this.props.user['game_accounts']}
                             />
-                            <CounterStrike
+                            {/* <CounterStrike
                                 display={this.state.tab === 'counterstrikego'}
                                 imageReady={this.state.imageReady}
                                 accountConfirmed={this.props.isLogged && 'counterstrikego' in this.props.user['game_accounts']}
                                 queue={this.state.queue.counterstrikego ? this.state.queue.counterstrikego : {}}
-                            />
+                            /> */}
                             <Fifa20
                                 display={this.state.tab === 'fifa20'}
                                 imageReady={this.state.imageReady}
