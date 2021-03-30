@@ -16,7 +16,6 @@
     display: flex; flex-direction: column; align-items: center;
     padding: 50px 90px 40px 90px;
     background-color: #f9f9f9 !important;
-    border: 1px solid black;
 }
 
 /* -------------------- Form -------------------- */

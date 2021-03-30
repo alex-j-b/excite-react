@@ -23,7 +23,6 @@
     display: flex; flex-direction: column; align-items: center;
     height: auto; max-width: 280px;
     padding: 0 90px 40px 90px;
-    border: 1px solid black;
     background-color: #f9f9f9 !important;
     overflow: hidden;
 }
@@ -133,7 +132,6 @@
     display: flex; flex-direction: column; align-items: center;
     max-width: 780px;
     padding-bottom: 40px;
-    border: 1px solid black;
     background-color: #f9f9f9 !important;
 }
 .auth form > .wrap-columns {
