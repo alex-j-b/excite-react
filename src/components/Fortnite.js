@@ -251,7 +251,7 @@ class Fortnite extends Component {
                         <>
                             <div className="confirm-inputs">
                                 <div>
-                                <p>(Le 1er pari peut prendre ~2h à être validé)</p>
+                                {/* <p>(Le 1er pari peut prendre ~2h à être validé)</p> */}
                                     <label htmlFor="fortniteId">
                                         <span>ID de votre compte</span>
                                     </label>
@@ -270,6 +270,12 @@ class Fortnite extends Component {
                             <div className="confirm-instructions">
                                 <p>L'ID de votre compte se trouve sur le site d'epic games :
                                     <a href="https://www.epicgames.com/account/personal" target="_blank" rel="noopener noreferrer"> epicgames.com/account...</a>
+                                </p>
+                            </div>
+
+                            <div className="confirm-instructions">
+                                <p>Veuillez également rendre votre historique publique&nbsp;
+                                    <a href="https://translate.google.com/translate?sl=en&tl=fr&u=https://trackernetwork.freshdesk.com/support/solutions/articles/19000114059-how-to-change-your-fortnite-privacy-settings" target="_blank" rel="noopener noreferrer">(comment faire ?)</a>
                                 </p>
                             </div>
 
