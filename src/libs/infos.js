@@ -1,9 +1,9 @@
 export const odds = {
-    "leagueoflegends-5v5-ranked-solo": 1.8,
+    "leagueoflegends-5v5-ranked-solo": 2,
     "leagueoflegends-5v5-private-solo": 2,
-    "counterstrikego-5v5-competitive-solo": 1.8,
+    "counterstrikego-5v5-competitive-solo": 2,
     "counterstrikego-5v5-private-solo": 2,
-    "fortnite-top10-BR-solo": 1.8,
+    "fortnite-top10-BR-solo": 2,
     "fifa20-1v1-private-solo": 2
 };
 

@@ -60,7 +60,7 @@ export default class Home extends Component {
                             <img className="icon" src={ecoin} alt="ecoin"></img>
                             <p>Mise des eCoins</p>
                         </div>
-                        <span>500 gratuits à l'inscription !</span>
+                        <span>500 offerts à l'inscription !</span>
                     </div>
                     <div className="step second">
                         <img className="number" src={twoIcon} alt="twoIcon"></img>
