@@ -1,0 +1,47 @@
+
+.faq {
+    display: flex;
+    width: 100%;
+    margin: 0 auto 0 auto;
+    background-color: white;
+    font-size: 16px; font-family: 'Raleway', Arial;
+    padding: 80px 0 50px 0;
+}
+.wrap-faq {
+    width: 70%;
+    margin: 0 auto 0 auto;
+}
+
+.wrap-faq ul {
+    list-style-type: decimal;
+    font-family: 'Open Sans', Arial;
+}
+.wrap-faq li {
+    margin-bottom: 5px;
+}
+
+.wrap-faq > .title {
+    font-size: 30px; font-family: 'Raleway', Arial; -webkit-text-stroke: 1px;
+    text-align: center;
+    margin: 0 0 70px 0;
+}
+.wrap-faq > h3 {
+    font-size: 20px; -webkit-text-stroke: 0.05px;
+    margin: 40px 0 15px 0;
+}
+
+.wrap-faq > p {
+    font-family: 'Open Sans', Arial;
+    margin-bottom: 10px;
+}
+.wrap-faq a {
+    font-size: 16px;
+}
+
+
+@media screen and (max-width: 1460px) {
+    .wrap-faq {
+        width: calc(70vw + (1460px - 100vw));
+        max-width: 90vw;
+    }
+}

@@ -16,6 +16,7 @@ import BuyEcoin from "./containers/BuyEcoin";
 import Contact from "./containers/Contact";
 import Conditions from "./containers/Conditions";
 import Mentions from "./containers/Mentions";
+import Faq from "./containers/Faq";
 
 const reload = () => window.location.reload();
 
@@ -25,6 +26,7 @@ export default function Routes({ authProps }) {
             <Route exact path="/" component={Home} />
             <Route exact path="/boutique" component={Shop} />
             <Route exact path="/contact" component={Contact} />
+            <Route exact path="/faq" component={Faq} />
             <Route exact path="/conditions" component={Conditions} />
             <Route exact path="/mentions" component={Mentions} />
             <UnloggedRoute exact path="/connexion" component={Log} authProps={authProps} />
