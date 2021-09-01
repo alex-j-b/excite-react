@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import "./Auth.css";
 //Redux
 import { connect } from "react-redux";
-import { loggedInCheck, updateUser, logOut, disableUser, updatePassword } from '../../redux/actions/authActions';
+import { updateUser, logOut, disableUser, updatePassword } from '../../redux/actions/authActions';
 //Libs
 import DotsLoader from '../../components/loaders/DotsLoader';
 import Popup from "reactjs-popup";
@@ -410,31 +410,18 @@ class Account extends Component {
     }
 }
 
-function mapDispatchToProps(dispatch) {
+const dispatchToProps = {
+    updateUser,
+    updatePassword,
+    logOut,
+    disableUser,
+}
+const mapStateToProps = state => {
     return {
-        loggedInCheck: function(userCredentials){
-            dispatch(loggedInCheck(userCredentials));
-        },
-        updateUser: function(newAttributes){
-            dispatch(updateUser(newAttributes));
-        },
-        updatePassword: function(currentPassword, newPassword){
-            dispatch(updatePassword(currentPassword, newPassword));
-        },
-        logOut: function(){
-            dispatch(logOut());
-        },
-        disableUser: function(){
-            dispatch(disableUser());
-        }
-    }
-};
-function mapStateToProps(reduxState) {
-    return {
-        user: reduxState.user,
-        isLogged: reduxState.isLogged,
-        authStatus: reduxState.authStatus,
-        forceUpdate: reduxState.forceUpdate
+        user: state.user,
+        isLogged: state.isLogged,
+        authStatus: state.authStatus,
+        forceUpdate: state.forceUpdate
     };
 }
-export default connect(mapStateToProps, mapDispatchToProps)(Account);
+export default connect(mapStateToProps, dispatchToProps)(Account);

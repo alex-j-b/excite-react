@@ -120,11 +120,11 @@ class Contact extends Component {
     }
 }
 
-function mapStateToProps(reduxState) {
+const mapStateToProps = state => {
     return {
-        user: reduxState.user,
-        isLogged: reduxState.isLogged,
-        isLogging: reduxState.isLogging
+        user: state.user,
+        isLogged: state.isLogged,
+        isLogging: state.isLogging
     };
 }
 export default connect(mapStateToProps, null)(Contact);

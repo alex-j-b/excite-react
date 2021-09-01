@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 //Redux
 import { connect } from 'react-redux';
-import { loggedInCheck } from '../../redux/actions/authActions';
 import {
     confirmCsgoAccount,
     addCsgoBet,
@@ -397,24 +396,15 @@ class CounterStrike extends Component {
     }
 }
 
-function mapDispatchToProps(dispatch) {
-    return {
-        confirmCsgoAccount: function(steamId64, authenticationCode, lastMatchToken) {
-            return dispatch(confirmCsgoAccount(steamId64, authenticationCode, lastMatchToken));
-        },
-        addCsgoBet: function(type, ecoin) {
-            return dispatch(addCsgoBet(type, ecoin));
-        },
-        loggedInCheck: function() {
-            dispatch(loggedInCheck());
-        }
-    }
+const dispatchToProps = {
+    confirmCsgoAccount,
+    addCsgoBet,
 }
-function mapStateToProps(reduxState) {
+const mapStateToProps = state => {
     return {
-        pendingBets: reduxState.pendingBets,
-        user: reduxState.user
+        pendingBets: state.pendingBets,
+        user: state.user
     };
 }
 CounterStrike = withRouter(CounterStrike);
-export default connect(mapStateToProps, mapDispatchToProps)(CounterStrike);
+export default connect(mapStateToProps, dispatchToProps)(CounterStrike);

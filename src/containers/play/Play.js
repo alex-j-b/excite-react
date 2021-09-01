@@ -277,28 +277,18 @@ class Play extends Component {
     }
 }
 
-function mapDispatchToProps(dispatch) {
-    return {
-        getLolBets: function(){
-            dispatch(getLolBets());
-        },
-        getFortniteBets: function () {
-            dispatch(getFortniteBets());
-        },
-        getCsgoBets: function () {
-            dispatch(getCsgoBets());
-        },
-        getFifa20Bets: function () {
-            dispatch(getFifa20Bets());
-        }
-    }
+const dispatchToProps = {
+    getLolBets,
+    getFortniteBets,
+    getCsgoBets,
+    getFifa20Bets,
 }
-function mapStateToProps(reduxState) {
+const mapStateToProps = state => {
     return {
-        user: reduxState.user,
-        isLogged: reduxState.isLogged,
-        betsHistory: reduxState.betsHistory,
-        pendingBets: reduxState.pendingBets
+        user: state.user,
+        isLogged: state.isLogged,
+        betsHistory: state.betsHistory,
+        pendingBets: state.pendingBets
     };
 }
-export default connect(mapStateToProps, mapDispatchToProps)(Play);
+export default connect(mapStateToProps, dispatchToProps)(Play);

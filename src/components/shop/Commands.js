@@ -166,9 +166,9 @@ class Commands extends Component {
     }
 }
 
-function mapStateToProps(reduxState) {
+const mapStateToProps = state => {
     return {
-        commandArticles: reduxState.commandArticles
+        commandArticles: state.commandArticles
     };
 }
 export default connect(mapStateToProps, null)(Commands);

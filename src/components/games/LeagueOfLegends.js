@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 //Redux
 import { connect } from 'react-redux';
-import { loggedInCheck } from '../../redux/actions/authActions';
 import {
     confirmLolAccount,
     addLolBet
@@ -335,23 +334,14 @@ class LeagueOfLegends extends Component {
     }
 }
 
-function mapDispatchToProps(dispatch) {
-    return {
-        confirmLolAccount: function(summonerName, region) {
-            return dispatch(confirmLolAccount(summonerName, region));
-        },
-        addLolBet: function(type, ecoin) {
-            return dispatch(addLolBet(type, ecoin));
-        },
-        loggedInCheck: function() {
-            dispatch(loggedInCheck());
-        }
-    }
+const dispatchToProps = {
+    confirmLolAccount,
+    addLolBet,
 }
-function mapStateToProps(reduxState) {
+const mapStateToProps = state => {
     return {
-        pendingBets: reduxState.pendingBets,
-        user: reduxState.user
+        pendingBets: state.pendingBets,
+        user: state.user
     };
 }
-export default connect(mapStateToProps, mapDispatchToProps)(LeagueOfLegends);
+export default connect(mapStateToProps, dispatchToProps)(LeagueOfLegends);

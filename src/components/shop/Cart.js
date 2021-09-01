@@ -497,23 +497,15 @@ class Cart extends Component {
     }
 }
 
-function mapDispatchToProps(dispatch) {
-    return {
-        addCart: function (articleId, options, quantity, changeQuantity) {
-            return dispatch(addCart(articleId, options, quantity, changeQuantity));
-        },
-        deleteCart: function (articleId) {
-            dispatch(deleteCart(articleId));
-        },
-        addCommand: function (articles, givenName,familyName, address1, address2, postalCode, city, country, phoneNumber, promoCode) {
-            return dispatch(addCommand(articles, givenName,familyName, address1, address2, postalCode, city, country, phoneNumber, promoCode));
-        }
-    }
+const dispatchToProps = {
+    addCart,
+    deleteCart,
+    addCommand,
 }
-function mapStateToProps(reduxState) {
+const mapStateToProps = state => {
     return {
-        user: reduxState.user,
-        isLogged: reduxState.isLogged,
+        user: state.user,
+        isLogged: state.isLogged,
     };
 }
-export default connect(mapStateToProps, mapDispatchToProps)(Cart);
+export default connect(mapStateToProps, dispatchToProps)(Cart);

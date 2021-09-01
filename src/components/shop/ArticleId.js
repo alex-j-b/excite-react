@@ -156,16 +156,12 @@ class ArticleId extends Component {
     }
 }
 
-function mapStateToProps(reduxState) {
+const dispatchToProps = {
+    addCart,
+}
+const mapStateToProps = state => {
     return {
-        isLogged: reduxState.isLogged
+        isLogged: state.isLogged
     };
 }
-function mapDispatchToProps(dispatch) {
-    return {
-        addCart: function (articleId, options, quantity, changeQuantity) {
-            return dispatch(addCart(articleId, options, quantity, changeQuantity));
-        }
-    }
-}
-export default connect(mapStateToProps, mapDispatchToProps)(ArticleId);
+export default connect(mapStateToProps, dispatchToProps)(ArticleId);

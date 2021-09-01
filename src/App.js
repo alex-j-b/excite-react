@@ -140,19 +140,15 @@ class App extends Component {
     }
 }
 
-function mapDispatchToProps(dispatch) {
+const dispatchToProps = {
+    loggedInCheck,
+}
+const mapStateToProps = state => {
     return {
-        loggedInCheck: function(){
-            dispatch(loggedInCheck());
-        }
-    }
-};
-function mapStateToProps(reduxState) {
-    return {
-        user: reduxState.user,
-        isLogged: reduxState.isLogged,
-        isLogging: reduxState.isLogging
+        user: state.user,
+        isLogged: state.isLogged,
+        isLogging: state.isLogging
     };
 }
 App = withRouter(App);
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(mapStateToProps, dispatchToProps)(App);

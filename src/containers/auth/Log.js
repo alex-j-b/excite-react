@@ -233,19 +233,15 @@ class Log extends Component {
     }
 }
 
-function mapDispatchToProps(dispatch) {
-    return {
-        logIn: function(userCredentials){
-            dispatch(logIn(userCredentials));
-        }
-    }
+const dispatchToProps = {
+    logIn,
 }
-function mapStateToProps(reduxState) {
+const mapStateToProps = state => {
     return {
-        authStatus: reduxState.authStatus,
-        isLogged: reduxState.isLogged,
-        user: reduxState.user,
-        forceUpdate: reduxState.forceUpdate
+        authStatus: state.authStatus,
+        isLogged: state.isLogged,
+        user: state.user,
+        forceUpdate: state.forceUpdate
     };
 }
-export default connect(mapStateToProps, mapDispatchToProps)(Log);
+export default connect(mapStateToProps, dispatchToProps)(Log);

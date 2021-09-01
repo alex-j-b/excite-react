@@ -340,20 +340,14 @@ class Sign extends Component {
     }
 }
 
-function mapDispatchToProps(dispatch) {
+const dispatchToProps = {
+    updateUser,
+    deleteUser,
+}
+const mapStateToProps = state => {
     return {
-        updateUser: function(newAttributes){
-            dispatch(updateUser(newAttributes));
-        },
-        deleteUser: function(){
-            dispatch(deleteUser());
-        }
-    }
-};
-function mapStateToProps(reduxState) {
-    return {
-        user: reduxState.user,
-        isLogged: reduxState.isLogged
+        user: state.user,
+        isLogged: state.isLogged
     };
 }
-export default connect(mapStateToProps, mapDispatchToProps)(Sign);
+export default connect(mapStateToProps, dispatchToProps)(Sign);

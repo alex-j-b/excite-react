@@ -157,26 +157,18 @@ class Shop extends Component {
     }
 }
 
-function mapDispatchToProps(dispatch) {
-    return {
-        getShopArticles: function () {
-            return dispatch(getShopArticles());
-        },
-        getCart: function () {
-            return dispatch(getCart());
-        },
-        getCommand: function () {
-            return dispatch(getCommand());
-        }
-    }
+const dispatchToProps = {
+    getShopArticles,
+    getCart,
+    getCommand
 }
-function mapStateToProps(reduxState) {
+const mapStateToProps = state => {
     return {
-        user: reduxState.user,
-        isLogged: reduxState.isLogged,
-        shopArticles: reduxState.shopArticles,
-        cartArticles: reduxState.cartArticles,
-        commandArticles: reduxState.commandArticles
+        user: state.user,
+        isLogged: state.isLogged,
+        shopArticles: state.shopArticles,
+        cartArticles: state.cartArticles,
+        commandArticles: state.commandArticles
     };
 }
-export default connect(mapStateToProps, mapDispatchToProps)(Shop);
+export default connect(mapStateToProps, dispatchToProps)(Shop);

@@ -193,12 +193,8 @@ class BuyEcoinForm extends Component {
     }
 }
 
-function mapDispatchToProps(dispatch) {
-    return {
-        buyEcoin: function (method, ecoinAmount, source) {
-            return dispatch(buyEcoin(method, ecoinAmount, source));
-        }
-    }
+const dispatchToProps = {
+    buyEcoin,
 }
 BuyEcoinForm = injectStripe(BuyEcoinForm);
-export default connect(null, mapDispatchToProps)(BuyEcoinForm);
+export default connect(null, dispatchToProps)(BuyEcoinForm);

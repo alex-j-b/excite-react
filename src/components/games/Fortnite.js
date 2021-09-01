@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 //Redux
 import { connect } from 'react-redux';
-import { loggedInCheck } from '../../redux/actions/authActions';
 import {
     confirmFortniteAccount,
     addFortniteBet,
@@ -293,27 +292,16 @@ class Fortnite extends Component {
     }
 }
 
-function mapDispatchToProps(dispatch) {
-    return {
-        confirmFortniteAccount: function(summonerName, region) {
-            return dispatch(confirmFortniteAccount(summonerName, region));
-        },
-        addFortniteBet: function(type, ecoin) {
-            return dispatch(addFortniteBet(type, ecoin));
-        },
-        updateBetLost: function(game, betId) {
-            return dispatch(updateBetLost(game, betId));
-        },
-        loggedInCheck: function() {
-            dispatch(loggedInCheck());
-        }
-    }
+const dispatchToProps = {
+    confirmFortniteAccount,
+    addFortniteBet,
+    updateBetLost,
 }
-function mapStateToProps(reduxState) {
+const mapStateToProps = state => {
     return {
-        pendingBets: reduxState.pendingBets,
-        user: reduxState.user,
-        isLogged: reduxState.isLogged
+        pendingBets: state.pendingBets,
+        user: state.user,
+        isLogged: state.isLogged
     };
 }
-export default connect(mapStateToProps, mapDispatchToProps)(Fortnite);
+export default connect(mapStateToProps, dispatchToProps)(Fortnite);

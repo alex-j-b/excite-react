@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 //Redux
 import { connect } from 'react-redux';
-import { loggedInCheck } from '../../redux/actions/authActions';
 import {
     confirmFifa20Account,
     joinFifa20Queue,
@@ -479,27 +478,16 @@ class Fifa20 extends Component {
     }
 }
 
-function mapDispatchToProps(dispatch) {
-    return {
-        confirmFifa20Account: function(accountId, plateform) {
-            return dispatch(confirmFifa20Account(accountId, plateform));
-        },
-        addScreenshot: function(betId, game, file) {
-            return dispatch(addScreenshot(betId, game, file));
-        },
-        updateBetLost: function(game, betId) {
-            return dispatch(updateBetLost(game, betId));
-        },
-        loggedInCheck: function() {
-            dispatch(loggedInCheck());
-        }
-    }
+const dispatchToProps = {
+    confirmFifa20Account,
+    addScreenshot,
+    updateBetLost,
 }
-function mapStateToProps(reduxState) {
+const mapStateToProps = state => {
     return {
-        pendingBets: reduxState.pendingBets,
-        user: reduxState.user,
-        isLogged: reduxState.isLogged
+        pendingBets: state.pendingBets,
+        user: state.user,
+        isLogged: state.isLogged
     };
 }
-export default connect(mapStateToProps, mapDispatchToProps)(Fifa20);
+export default connect(mapStateToProps, dispatchToProps)(Fifa20);

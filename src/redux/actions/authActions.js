@@ -3,18 +3,13 @@ import AWS from 'aws-sdk/global';
 
 export const SET_USER = 'SET_USER';
 
-
-const rmvEmptyValues = (obj) => {
-    Object.keys(obj).forEach((key) => (obj[key] === '') && delete obj[key]);
-    return obj;
-}
-
 export function setUser(user) {
     return {
         type: SET_USER,
         user
     };
 }
+
 
 export function loggedInCheck() {
     return async dispatch => {
@@ -86,6 +81,11 @@ export function logOut() {
             console.log(e);
         }
     }
+}
+
+const rmvEmptyValues = (obj) => {
+    Object.keys(obj).forEach((key) => (obj[key] === '') && delete obj[key]);
+    return obj;
 }
 
 export function updateUser(newAttributes) {
