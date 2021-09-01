@@ -11,16 +11,12 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import './index.css';
 //Redux
-import { createStore, applyMiddleware, compose } from 'redux';
-import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
-import rootReducer from './rootReducer';
+import store from "./redux/store";
 //Amplify
 import config from "./config";
 import Amplify from "aws-amplify";
 
-
-const store = createStore(rootReducer, compose(applyMiddleware(thunk)));
 
 Amplify.configure({
     Auth: {

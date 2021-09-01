@@ -28,3 +28,5 @@ export const betStatus = {
     lost: 'Défaite -',
     dispute: 'Dispute...'
 };
+
+export const pendingStatus = ['pending', 'playing', 'creating', 'confirmLost'];

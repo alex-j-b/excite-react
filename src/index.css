@@ -32,6 +32,13 @@ input, textarea, select, button, button:focus, button:active {
     }
 }
 
+.dNone {
+    display: none !important;
+}
+.dInline {
+    display: inline !important
+}
+
 /* ---------------------------------------- Buttons ---------------------------------------- */
 button {
     cursor: pointer;

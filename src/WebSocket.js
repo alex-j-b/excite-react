@@ -1,7 +1,7 @@
 //React
 import React, { createContext } from 'react'
 import { useDispatch } from 'react-redux';
-import { setMessageSent, setMessageReceived } from './actions';
+import { setMessageSent, setMessageReceived } from './redux/actions/websocketActions';
 //WebSocket
 import config from './config';
 import { w3cwebsocket as W3CWebSocket } from 'websocket';
