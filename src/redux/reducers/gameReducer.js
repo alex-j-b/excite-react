@@ -1,8 +1,5 @@
 import {
-    CONFIRM_LOL_ACCOUNT,
-    CONFIRM_FORTNITE_ACCOUNT,
-    CONFIRM_CSGO_ACCOUNT,
-    CONFIRM_FIFA20_ACCOUNT,
+    CONFIRM_GAME_ACCOUNT,
     GET_BETS,
     ADD_BET,
     UPDATE_BET_LOST,
@@ -20,40 +17,12 @@ const gameReducer = (state, action) => {
 
         ////////////////////////////////////////////////////////////// CONFIRM ACCOUNTS ///////////////////////////////////////////////////////////
 
-        case CONFIRM_LOL_ACCOUNT:
-            const lolAccount = action.body;
-            newState.user['game_accounts'].leagueoflegends = lolAccount;
-            delete newState.user['game_accounts'].leagueoflegends.game;
+        case CONFIRM_GAME_ACCOUNT:
+            const account = action.body;
+            const game = action.game;
 
-            return {
-                ...newState,
-                user: newState.user
-            };
-
-        case CONFIRM_FORTNITE_ACCOUNT:
-            const fortniteAccount = action.body;
-            newState.user['game_accounts'].fortnite = fortniteAccount;
-            delete newState.user['game_accounts'].fortnite.game;
-
-            return {
-                ...newState,
-                user: newState.user
-            };
-
-        case CONFIRM_CSGO_ACCOUNT:
-            const csgoAccount = action.body;
-            newState.user['game_accounts'].counterstrikego = csgoAccount;
-            delete newState.user['game_accounts'].counterstrikego.game;
-
-            return {
-                ...newState,
-                user: newState.user
-            };
-
-        case CONFIRM_FIFA20_ACCOUNT:
-            const fifa20Account = action.body;
-            newState.user['game_accounts'].fifa20 = fifa20Account;
-            delete newState.user['game_accounts'].fifa20.game;
+            newState.user['game_accounts'][game] = account;
+            delete newState.user['game_accounts'][game].game;
 
             return {
                 ...newState,

@@ -1,9 +1,6 @@
 import { API } from "aws-amplify";
 
-export const CONFIRM_LOL_ACCOUNT = 'CONFIRM_LOL_ACCOUNT';
-export const CONFIRM_FORTNITE_ACCOUNT = 'CONFIRM_FORTNITE_ACCOUNT';
-export const CONFIRM_CSGO_ACCOUNT = 'CONFIRM_CSGO_ACCOUNT';
-export const CONFIRM_FIFA20_ACCOUNT = 'CONFIRM_FIFA20_ACCOUNT';
+export const CONFIRM_GAME_ACCOUNT = 'CONFIRM_GAME_ACCOUNT';
 export const GET_BETS = 'GET_BETS';
 export const ADD_BET = 'ADD_BET';
 export const UPDATE_BET_LOST = 'UPDATE_BET_LOST';
@@ -18,15 +15,19 @@ export function checkQueue() {
     });
 }
 
+/* ----------------- confirmAccount ----------------- */
+function setConfirmAccount(game, body) {
+    return {
+        type: CONFIRM_GAME_ACCOUNT,
+        game: game,
+        body: body,
+    };
+}
+
+
 // ----------------//---------------- League of Legends ----------------//---------------- //
 
 /* ----------------- ConfirmLolAccount ----------------- */
-export function setConfirmLolAccount(body) {
-    return {
-        type: CONFIRM_LOL_ACCOUNT,
-        body: body
-    };
-}
 export function confirmLolAccount(summonerName, region) {
     return dispatch => {
         return API.get('exciteAPI', '/lol/confirmAccount', {
@@ -37,7 +38,7 @@ export function confirmLolAccount(summonerName, region) {
         }).then(response => {
             console.log(response)
             if (Number(response.statusCode) === 200) {
-                dispatch(setConfirmLolAccount(response.body));
+                dispatch(setConfirmAccount('leagueoflegends', response.body));
             }
             return response;
         });
@@ -95,12 +96,6 @@ export function addLolBet(type, ecoin) {
 // -------------------//----------------- Fortnite -------------------//------------------ //
 
 /* ------------- ConfirmFortniteAccount --------------- */
-export function setConfirmFortniteAccount(body) {
-    return {
-        type: CONFIRM_FORTNITE_ACCOUNT,
-        body
-    };
-}
 export function confirmFortniteAccount(accountId) {
     return dispatch => {
         return API.get('exciteAPI', '/fortnite/confirmAccount', {
@@ -110,7 +105,7 @@ export function confirmFortniteAccount(accountId) {
         }).then(response => {
             console.log(response)
             if (Number(response.statusCode) === 200) {
-                dispatch(setConfirmFortniteAccount(response.body));
+                dispatch(setConfirmAccount('fortnite', response.body));
             }
             return response;
         });
@@ -168,12 +163,6 @@ export function addFortniteBet(type, ecoin) {
 // ----------------//---------------- Counter Strike -------------------//------------- //
 
 /* ----------------- ConfirmCsgoAccount ------------------- */
-export function setConfirmCsgoAccount(body) {
-    return {
-        type: CONFIRM_CSGO_ACCOUNT,
-        body: body
-    };
-}
 export function confirmCsgoAccount(steamId64, authenticationCode, lastMatchToken) {
     return dispatch => {
         return API.get('exciteAPI', '/csgo/confirmAccount', {
@@ -185,7 +174,7 @@ export function confirmCsgoAccount(steamId64, authenticationCode, lastMatchToken
         }).then(response => {
             console.log(response)
             if (Number(response.statusCode) === 200) {
-                dispatch(setConfirmCsgoAccount(response.body));
+                dispatch(setConfirmAccount('counterstrikego', response.body));
             }
             return response;
         });
@@ -255,12 +244,6 @@ export function joinCsgoQueue(type, ecoin) {
 // ----------------//---------------- Fifa 20 -------------------//------------- //
 
 /* ----------------- ConfirmFifa20Account ------------------- */
-export function setConfirmFifa20Account(body) {
-    return {
-        type: CONFIRM_FIFA20_ACCOUNT,
-        body: body
-    };
-}
 export function confirmFifa20Account(accountId, plateform) {
     return dispatch => {
         return API.get('exciteAPI', '/fifa20/confirmAccount', {
@@ -271,7 +254,7 @@ export function confirmFifa20Account(accountId, plateform) {
         }).then(response => {
             console.log(response)
             if (Number(response.statusCode) === 200) {
-                dispatch(setConfirmFifa20Account(response.body));
+                dispatch(setConfirmAccount('fifa20', response.body));
             }
             return response;
         });
