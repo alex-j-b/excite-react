@@ -27,7 +27,7 @@ export default ({ children, ...props }) => {
     const connect = () => {
         if (!socket) {
             socket = new W3CWebSocket(config.apiGateway.SOCKET_ENDPOINT);
-    
+
             socket.onerror = (e) => {
                 console.log(`Connection Error: ${JSON.stringify(e)}`);
             };

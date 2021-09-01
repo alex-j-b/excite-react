@@ -5,14 +5,14 @@ import {
 
 const authReducer = (state, action) => {
     let newState = JSON.parse(JSON.stringify(state));
-    
+
     switch (action.type) {
 
         ////////////////////////////////////////////////////////////// USER COGNITO ///////////////////////////////////////////////////////////
         case SET_USER:
             let user = action.user;
             let isLogged, authStatus;
-            
+
             if (typeof user === "string") {
                 console.log('userNotif: ', user)
                 authStatus = action.user;

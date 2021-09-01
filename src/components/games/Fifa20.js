@@ -423,7 +423,7 @@ class Fifa20 extends Component {
                             <p ref="notifFifa20Screenshot" className="notif">En cas de victoire n'oubliez pas de prendre une photo ou capture d'écran du résultat du match</p>
 
                             <p ref="notifDiscord" className="notif">Une question ? venez sur&nbsp;
-                                <a 
+                                <a
                                     ref="discordLink"
                                     className="grey-link"
                                     title="Où cà ?"

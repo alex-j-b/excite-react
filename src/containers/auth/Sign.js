@@ -185,7 +185,7 @@ class Sign extends Component {
                     <span><span className="purple">M</span>ot de passe</span>
                     <span className="error-input password">8 caractères minimum</span>
                 </label>
-                <input 
+                <input
                     type="password"
                     placeholder="Mot de passe"
                     name="password"
@@ -209,7 +209,7 @@ class Sign extends Component {
                         spellCheck={false}
                     ></input>
                     <select
-                        className="month" 
+                        className="month"
                         name='bd_month'
                         onChange={this.onChange}
                         value={this.state.bd_month}
@@ -238,7 +238,7 @@ class Sign extends Component {
                     ></input>
                 </div>
                 <p className="grey-element">En créant ce compte vous acceptez les <a className="grey-link" title="https://excite.world/conditions" href="https://excite.world/conditions" target="_blank" rel="noopener noreferrer">conditions générales d’utilisation</a>.</p>
-                
+
                 <div>
                     <button className="e-button">Démarrer</button>
                     <DotsLoader loading={this.state.loading}/>

@@ -120,9 +120,9 @@ class Log extends Component {
                             <img className="csgo-logo" src={csgoLogo} alt="csgoLogo"></img>
                             <img className="fifa20-logo" src={fifa20Logo} alt="fifa20Logo"></img>
 
-                            
+
                         </div>
-                        
+
                         <span><span className="purple">C</span>onnexion</span>
                         <p className="grey-link"><Link to="/inscription">Créer un compte</Link></p>
 
@@ -142,7 +142,7 @@ class Log extends Component {
                         <label htmlFor="password">
                             <span><span className="purple">M</span>ot de passe</span>
                         </label>
-                        <input 
+                        <input
                             type="password"
                             placeholder="Mot de passe"
                             name="password"
@@ -150,13 +150,13 @@ class Log extends Component {
                             value={this.state.password}
                             required
                         ></input>
-                        
-                        <p 
+
+                        <p
                             className="grey-link forgot"
                             onClick={() => this.setState({ forgotForm: 1 })}
                             >Mot de passe oublié ?
                         </p>
-                        
+
                         <div>
                             <button className="e-button">Connexion</button>
                             <DotsLoader loading={this.state.loading}/>
@@ -171,7 +171,7 @@ class Log extends Component {
                             <img className="fortnite-logo" src={fortniteLogo} alt="fortniteLogo"></img>
                             <img className="csgo-logo" src={csgoLogo} alt="csgoLogo"></img>
                         </div>
-                        
+
                         <span><span className="purple">M</span>ot de passe oublié</span>
 
                         {this.state.forgotForm === 1 &&
@@ -198,7 +198,7 @@ class Log extends Component {
                                 <span><span className="purple">C</span>ode</span>
                                 <span className="error-input forgot-code">incorrect</span>
                             </label>
-                            <input 
+                            <input
                                 type="text"
                                 placeholder="Code de confirmation"
                                 name="forgotCode"
@@ -211,7 +211,7 @@ class Log extends Component {
                                 <span><span className="purple">N</span>ouveau mot de passe</span>
                                 <span className="error-input forgot-password">8 caractères minimum</span>
                             </label>
-                            <input 
+                            <input
                                 type="password"
                                 placeholder="Mot de passe"
                                 name="forgotPassword"

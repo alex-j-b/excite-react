@@ -287,7 +287,7 @@ class CounterStrike extends Component {
                             </span>
                             <p className="tips">(Lancez votre pari avant la recherche de partie)</p>
                         </div>
-                        <button 
+                        <button
                             className="e-button"
                             ref="buttonCsgoBet"
                             onClick={this.addCsgoBet}
@@ -324,7 +324,7 @@ class CounterStrike extends Component {
                         </p>
 
                         <p ref="notifDiscord" className="notif">Une question ? venez sur&nbsp;
-                            <a 
+                            <a
                                 ref="discordLink"
                                 className="grey-link"
                                 title="Où cà ?"
@@ -338,7 +338,7 @@ class CounterStrike extends Component {
                         </>
                         :
                         ( !this.state.steamId64 ?
-                            <button 
+                            <button
                                 className="e-button steam-login"
                                 onClick={this.steamLogin}
                                 >Connexion Steam

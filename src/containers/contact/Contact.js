@@ -68,7 +68,7 @@ class Contact extends Component {
                     <p className="title"><span className="purple">C</span>ontactez-nous</p>
                     <h5>Si vous avez une question, n'hésitez pas à nous écrire, nous vous répondrons rapidement.</h5>
                     <span className="discord-infos">Vous pouvez aussi nous rejoindre sur&nbsp;
-                        <a 
+                        <a
                             ref="discordLink"
                             className="grey-link"
                             title="Où cà ?"

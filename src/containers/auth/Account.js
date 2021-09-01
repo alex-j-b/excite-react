@@ -190,7 +190,7 @@ class Account extends Component {
             }
         }
     }
-    
+
     componentDidMount() {
         if (this.props.isLogged) {
             this.setState({
@@ -281,7 +281,7 @@ class Account extends Component {
                                     spellCheck={false}
                                 ></input>
                                 <select
-                                    className="month" 
+                                    className="month"
                                     name='bdMonth'
                                     onChange={this.onChange}
                                     value={this.state.bdMonth}
@@ -346,21 +346,21 @@ class Account extends Component {
                                 <span className="error-input new-password-repeat">ne correspond pas.</span>
                                 <span className="confirmation-input password">modifié &#10004;</span>
                             </label>
-                            <input 
+                            <input
                                 type="password"
                                 placeholder="Mot de passe actuel"
                                 name="currentPassword"
                                 onChange={this.onChange}
                                 value={this.state.currentPassword}
                             ></input>
-                            <input 
+                            <input
                                 type="password"
                                 placeholder="Nouveau mot de passe"
                                 name="newPassword"
                                 onChange={this.onChange}
                                 value={this.state.newPassword}
                             ></input>
-                            <input 
+                            <input
                                 type="password"
                                 placeholder="Confirmez nouveau mot de passe"
                                 name="newPasswordRepeat"
@@ -372,7 +372,7 @@ class Account extends Component {
 
                     <div className="wrap-account-buttons">
                         <div>
-                            <button 
+                            <button
                                 className="log-out"
                                 type="button"
                                 onClick={() => this.props.logOut()}

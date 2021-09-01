@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PlacesAutocomplete from 'react-places-autocomplete';
-    
+
 export default class LocationSearchInput extends Component {
     handleChange = this.handleChange.bind(this);
     handleSelect = this.handleSelect.bind(this);
@@ -8,11 +8,11 @@ export default class LocationSearchInput extends Component {
     handleChange(address) {
         this.props.onLocationChange(address);
     };
-    
+
     handleSelect(address) {
         this.props.onLocationChange(address);
     };
-    
+
     render() {
         return (
             <PlacesAutocomplete

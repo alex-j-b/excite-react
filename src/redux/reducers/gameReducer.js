@@ -15,7 +15,7 @@ import { betStatus, pendingStatus } from '../../libs/infos';
 
 const gameReducer = (state, action) => {
     let newState = JSON.parse(JSON.stringify(state));
-    
+
     switch (action.type) {
 
         ////////////////////////////////////////////////////////////// CONFIRM ACCOUNTS ///////////////////////////////////////////////////////////

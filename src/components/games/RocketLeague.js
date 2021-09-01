@@ -106,7 +106,7 @@ export default class RocketLeague extends Component {
                             </label>
                         </div>
                     </div>
-                    
+
                     <div className="lol-confirm-icon">
                         <p>Veuillez changer votre icon afin de valider votre compte</p>
                     </div>

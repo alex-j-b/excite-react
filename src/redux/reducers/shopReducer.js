@@ -13,7 +13,7 @@ import { timestampToDate } from '../../libs/timestampToDate';
 
 const shopReducer = (state, action) => {
     let newState = JSON.parse(JSON.stringify(state));
-    
+
     switch (action.type) {
 
         //////////////////////////////////////////////////////////////////// SHOP /////////////////////////////////////////////////////////////////

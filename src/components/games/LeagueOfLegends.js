@@ -260,7 +260,7 @@ class LeagueOfLegends extends Component {
                             <p ref="notifLolSearch" className="notif search">Recherche d'une partie...<span ref="chrono">00:00</span></p>
 
                             <p ref="notifGameFound" className="notif">Partie trouvée ! Entrez le code&nbsp;
-                                <a 
+                                <a
                                     ref="linkLolHelp"
                                     className="grey-link"
                                     title="Où cà ?"
@@ -274,7 +274,7 @@ class LeagueOfLegends extends Component {
                             <p ref="notifLolJoin" className="notif">Puis rejoignez l'équipe de gauche</p>
 
                             <p ref="notifDiscord" className="notif">Une question ? venez sur&nbsp;
-                                <a 
+                                <a
                                     ref="discordLink"
                                     className="grey-link"
                                     title="Où cà ?"

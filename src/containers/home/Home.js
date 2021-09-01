@@ -40,7 +40,7 @@ export default class Home extends Component {
                     <div>
                         <p>Mise sur ton skill et</p>
                         <p>Gagne des cadeaux !</p>
-                        <button 
+                        <button
                             className="e-button"
                             onClick={() => this.props.history.push('/jouer')}
                             >Jouer
@@ -78,7 +78,7 @@ export default class Home extends Component {
                         </div>
                     </div>
                 </div>
-    
+
                 <div className="home-3">
                     <img src={separator} alt="separator"></img>
                     <p>Jeux disponibles</p>

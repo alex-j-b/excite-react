@@ -1,4 +1,4 @@
 {
-  "name": "hamburger-squeeze",
-  "main": "./HamburgerSqueeze.js"
+    "name": "hamburger-squeeze",
+    "main": "./HamburgerSqueeze.js"
 }

@@ -7,7 +7,7 @@ import { addCart } from '../../redux/actions/shopActions';
 import DotsLoader from '../loaders/DotsLoader';
 import Slider from 'react-slick';
 import Select from 'react-select';
-import "../../../node_modules/slick-carousel/slick/slick.css"; 
+import "../../../node_modules/slick-carousel/slick/slick.css";
 import "../../../node_modules/slick-carousel/slick/slick-theme.css";
 //Images
 import { ecoin } from "../../assets/export.js";
@@ -134,7 +134,7 @@ class ArticleId extends Component {
                         <div className="final">
                             <div className="quantity-picker">
                                 <label htmlFor="quantity">Quantité</label>
-                                <input 
+                                <input
                                     type="number"
                                     name="quantity"
                                     id="quantity"

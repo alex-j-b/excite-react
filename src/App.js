@@ -75,7 +75,7 @@ class App extends Component {
                             <img src={logoExcite} alt="logoExcite"></img>
                         </Link>
 
-                        {this.props.isLogged && 
+                        {this.props.isLogged &&
                             <NavLink to={`/ecoin?redirect=${window.location.pathname+window.location.search}`} activeClassName="current-route">
                                 <span className="number">{this.props.user['custom:ecoin']}</span>&nbsp;
                                 <img className="ecoin" src={ecoin} alt="ecoin"></img>
@@ -97,7 +97,7 @@ class App extends Component {
                     </div>
 
                     <div className="app-menu" ref="appMenu">
-                        {this.props.isLogged && 
+                        {this.props.isLogged &&
                             <NavLink to={`/ecoin?redirect=${window.location.pathname+window.location.search}`} onClick={this.toggleButton}>
                                 <span className="number">{this.props.user['custom:ecoin']}</span>&nbsp;
                                 <img className="ecoin" src={ecoin} alt="ecoin"></img>

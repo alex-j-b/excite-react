@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { css } from '@emotion/core';
 import { PulseLoader } from 'react-spinners';
- 
+
 const override = css`
     display: table;
     margin: 3px auto -22px auto;
@@ -19,7 +19,7 @@ export default class DotsLoader extends Component {
                 color={'rgb(100, 0, 100)'}
                 loading={this.props.loading}
             />
-        </div> 
+        </div>
         )
     }
 }

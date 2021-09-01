@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { css } from '@emotion/core';
 import { ClipLoader } from 'react-spinners';
- 
+
 const override = css`
     position: absolute;
     top: calc(50% - 25px);
@@ -19,7 +19,7 @@ export default class CircleLoader extends Component {
                 color={'rgb(100, 0, 100)'}
                 loading={this.props.loading}
             />
-        </div> 
+        </div>
         )
     }
 }

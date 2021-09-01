@@ -161,7 +161,7 @@ export function onBetPending(game, bet) {
                     searching: false
                 });
                 this.refs.notifCsgoBet.style.display = 'inline';
-                
+
                 csgoCountDown = csgoCountDown.bind(this);
                 csgoCountDown(bet);
                 window.intervalCsgoBet = setInterval(() => {

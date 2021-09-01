@@ -46,7 +46,7 @@ class Shop extends Component {
         let urlParams = (new URL(document.location)).searchParams;
         if ((urlParams.get('tab') !== this.state.tab) || (urlParams.get('id') !== this.state.id)) {
             if (urlParams.get('tab') !== null) {
-                this.setState({ 
+                this.setState({
                     tab: urlParams.get('tab'),
                     id: urlParams.get('id')
                 });
@@ -61,7 +61,7 @@ class Shop extends Component {
     componentDidMount() {
         let urlParams = (new URL(document.location)).searchParams;
         if (urlParams.get('tab') !== null) {
-            this.setState({ 
+            this.setState({
                 tab: urlParams.get('tab'),
                 id: urlParams.get('id')
             });
@@ -107,8 +107,8 @@ class Shop extends Component {
                         ><img src={backArrow} alt="backArrow"></img>
                     </Link>}
 
-                    { this.props.isLogged && 
-                        <Link 
+                    { this.props.isLogged &&
+                        <Link
                             to={`/ecoin?redirect=${window.location.pathname+window.location.search}`}
                             className="wallet-ecoin"
                         >
@@ -118,7 +118,7 @@ class Shop extends Component {
                     }
 
                     <div className="tabs">
-                        <Link 
+                        <Link
                             to="/boutique?tab=articles"
                             className={this.state.tab === 'articles' ? 'current-shop-tab' : ''}
                             style={{ backgroundColor: `${this.state.tab === 'articles' ? 'white' : 'transparent'}` }}
@@ -126,7 +126,7 @@ class Shop extends Component {
                             ><span>Articles</span>
                             <img src={articlesIcon} alt="articlesIcon" style={{ filter: `${this.state.tab === 'articles' ? '' : 'invert(100%)'}` }}></img>
                         </Link>
-                        <Link 
+                        <Link
                             to="/boutique?tab=commandes"
                             className={this.state.tab === 'commandes' ? 'current-shop-tab' : ''}
                             style={{ backgroundColor: `${this.state.tab === 'commandes' ? 'white' : 'transparent'}` }}
@@ -134,7 +134,7 @@ class Shop extends Component {
                             ><span>Mes commandes</span>
                             <img src={commandesIcon} alt="commandesIcon" style={{ filter: `${this.state.tab === 'commandes' ? '' : 'invert(100%)'}` }}></img>
                         </Link>
-                        <Link 
+                        <Link
                             to="/boutique?tab=panier"
                             className={this.state.tab === 'panier' ? 'current-shop-tab' : ''}
                             style={{ backgroundColor: `${this.state.tab === 'panier' ? 'white' : 'transparent'}` }}

@@ -170,7 +170,7 @@ class Play extends Component {
                 <div>
                     <div className="header">
                         <button
-                            className="lol-button" 
+                            className="lol-button"
                             style={{
                                 backgroundImage: `url(${lolLogo})`,
                                 backgroundColor: `${this.state.tab === 'leagueoflegends' ? '#f9f9f9' : 'transparent'}`
@@ -179,7 +179,7 @@ class Play extends Component {
                             onClick={this.switchTab}
                         ></button>
                         <button
-                            className="fortnite-button" 
+                            className="fortnite-button"
                             style={{
                                 backgroundImage: `url(${fortniteLogo})`,
                                 backgroundColor: `${this.state.tab === 'fortnite' ? '#f9f9f9' : 'transparent'}`
@@ -188,7 +188,7 @@ class Play extends Component {
                             onClick={this.switchTab}
                         ></button>
                         {/* <button
-                            className="csgo-button" 
+                            className="csgo-button"
                             style={{
                                 filter: `${this.state.tab === 'counterstrikego' ? '' : 'invert(100%)'}`,
                                 backgroundImage: `url(${csgoLogo})`,
@@ -199,7 +199,7 @@ class Play extends Component {
                         ></button> */}
 
                         <button
-                            className="fifa20-button" 
+                            className="fifa20-button"
                             style={{
                                 filter: `${this.state.tab === 'fifa20' ? '' : 'invert(100%)'}`,
                                 backgroundImage: `url(${fifa20Logo})`,
@@ -209,8 +209,8 @@ class Play extends Component {
                             onClick={this.switchTab}
                         ></button>
 
-                        { this.props.isLogged && 
-                            <Link 
+                        { this.props.isLogged &&
+                            <Link
                                 to={`/ecoin?redirect=${window.location.pathname+window.location.search}`}
                                 className="wallet-ecoin"
                             >
@@ -220,7 +220,7 @@ class Play extends Component {
                         }
 
                         <button
-                            className="history-button" 
+                            className="history-button"
                             style={{
                                 filter: `${this.state.tab === 'history' ? '' : 'invert(100%)'}`,
                                 backgroundImage: `url(${historyBlack})`,

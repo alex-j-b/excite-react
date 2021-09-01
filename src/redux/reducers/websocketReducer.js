@@ -9,7 +9,7 @@ import { timestampToDate } from '../../libs/timestampToDate';
 
 const websocketReducer = (state, action) => {
     let newState = JSON.parse(JSON.stringify(state));
-    
+
     switch (action.type) {
 
         case SET_MESSAGE_SENT:

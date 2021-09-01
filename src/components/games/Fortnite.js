@@ -236,13 +236,13 @@ class Fortnite extends Component {
                                     <p ref="popUpError" className="error-button"></p>
                                 </div>
                             </Popup>
-                            
+
                             <p ref="notifFortniteBet" className="notif">
                                 Pari en cours... il vous reste&nbsp;
                                 <span ref="countDown"></span>
                                 &nbsp;pour rejoindre une partie
                             </p>
-                            <p 
+                            <p
                                 ref="unconfirmedGameAccount"
                                 className="error-button unconfirmed-game-account"
                                 style={{ display: `${this.props.isLogged && this.props.user.game_accounts.fortnite.confirmed === 'false' ? 'inline' : 'none'}` }}

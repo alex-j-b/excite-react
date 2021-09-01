@@ -13,7 +13,7 @@ export default class SwitchPlay extends Component {
     render() {
         return (
             <label className="switch-play" style={{ visibility: this.props.display ? 'visible' : 'hidden' }}>
-                <Switch 
+                <Switch
                     onChange={this.props.onSwitch}
                     checked={this.props.multiplayer}
                     disabled={this.props.disabled}
@@ -23,7 +23,7 @@ export default class SwitchPlay extends Component {
 
                     offColor="#800080"
                     uncheckedIcon={
-                        <img 
+                        <img
                             className="solo-avatar"
                             src={soloAvatar}
                             alt="soloAvatar"
@@ -32,7 +32,7 @@ export default class SwitchPlay extends Component {
 
                     onColor="#800080"
                     checkedIcon={
-                        <img 
+                        <img
                             className="team-avatar"
                             src={teamAvatar}
                             alt="teamAvatar"

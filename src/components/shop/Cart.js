@@ -89,7 +89,7 @@ class Cart extends Component {
                 const articleIndex = this.props.cartArticles.findIndex(el => el.articleId === articleId);
                 const oldOptions = JSON.parse(JSON.stringify(this.props.cartArticles[articleIndex].options));
                 console.log('oldOptions: ', oldOptions);
-                
+
                 const optionChange = JSON.parse(e.target.name.split('|')[1]);
                 options = oldOptions.filter(el => !isEqual(el, optionChange));
                 console.log('options filter: ', options);
@@ -114,7 +114,7 @@ class Cart extends Component {
             articleId = fullArticleId.split('|')[0];
             const articleIndex = this.props.cartArticles.findIndex(el => el.articleId === articleId);
             const oldOptions = JSON.parse(JSON.stringify(this.props.cartArticles[articleIndex].options));
-            
+
             const optionChange = JSON.parse(fullArticleId.split('|')[1]);
             const options = oldOptions.filter(el => !isEqual(el, optionChange));
             const quantity = options.length;
@@ -234,7 +234,7 @@ class Cart extends Component {
                 for (let i = 0; i < allOptions.length; i++) {
                     countOptions[allOptions[i]] = (countOptions[allOptions[i]] + 1) || 1;
                 }
-    
+
                 for (let [key, value] of Object.entries(countOptions)) {
                     let baseArticleId = (' ' + article.articleId).slice(1);
                     article.articleId += `|${key}`;
@@ -271,7 +271,7 @@ class Cart extends Component {
                 price: <div><span className="number">{el.price}<img className="ecoin" src={ecoin} alt="ecoin"></img></span></div>,
                 quantity:
                     <div>
-                        <input 
+                        <input
                             type="number"
                             name={el.articleId}
                             value={el.articleId in this.state ? this.state[el.articleId] : el.quantity}
@@ -300,7 +300,7 @@ class Cart extends Component {
                 1: <div><span className="number">{el.price}<img className="ecoin" src={ecoin} alt="ecoin"></img></span></div>,
                 2:
                     <div>
-                        <input 
+                        <input
                             type="number"
                             name={el.articleId}
                             value={el.articleId in this.state ? this.state[el.articleId] : el.quantity}
@@ -356,7 +356,7 @@ class Cart extends Component {
                     }
                 </div>
             }
-            { this.state.step === 2 && 
+            { this.state.step === 2 &&
                 <div className="shop-expedition">
                     <p className="title"><span className="purple">A</span>dresse d'expédition</p>
                     <form onSubmit={this.onSubmit}>

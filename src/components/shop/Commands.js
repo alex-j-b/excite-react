@@ -64,24 +64,24 @@ class Commands extends Component {
                         let allOptions = article.options.map(el => {
                             return JSON.stringify(el);
                         });
-        
+
                         let countOptions = {};
                         for (let i = 0; i < allOptions.length; i++) {
                             countOptions[allOptions[i]] = (countOptions[allOptions[i]] + 1) || 1;
                         }
-            
+
                         for (let [key, value] of Object.entries(countOptions)) {
                             let baseArticleId = (' ' + article.articleId).slice(1);
                             article.articleId += `|${key}`;
-        
+
                             article.options = JSON.parse(key);
                             article.quantity = value;
-        
+
                             let baseName = (' ' + article.name).slice(1);
                             Object.values(article.options).forEach(value => {
                                 article.name += ` ${value}`;
                             });
-        
+
                             commandParsed.push(JSON.parse(JSON.stringify(article)));
                             article.name = baseName;
                             article.articleId = baseArticleId;

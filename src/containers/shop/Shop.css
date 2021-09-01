@@ -128,7 +128,7 @@
 
 /* -------------------- Images -------------------- */
 .slider-wrap {
-    min-height: 0px;  width: 50%; min-width: 0px; 
+    min-height: 0px;  width: 50%; min-width: 0px;
 }
 .slick-prev:before, .slick-next:before {
     color: #333333 !important;
