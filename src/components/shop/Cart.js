@@ -216,11 +216,6 @@ class Cart extends Component {
         }
     }
 
-    componentDidMount() {
-        let title = document.querySelector('head > title');
-        title.innerHTML = 'Excite | Panier';
-    }
-
     render() {
         let cartArticles = JSON.parse(JSON.stringify(this.props.cartArticles));
         let cartParsed = [];

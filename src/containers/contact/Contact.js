@@ -1,5 +1,6 @@
 //React
 import React, { Component } from "react";
+import { Helmet } from "react-helmet";
 import "./Contact.css";
 //Redux
 import { connect } from "react-redux";
@@ -55,14 +56,10 @@ class Contact extends Component {
         }
     }
 
-    componentDidMount() {
-        let title = document.querySelector('head > title');
-        title.innerHTML = 'Excite | Contact';
-    }
-
     render() {
         return (
             <div className="contact" style={{ backgroundImage: `url(${forestBG})` }}>
+                <Helmet><title>{this.props.title}</title></Helmet>
 
                 <form onSubmit={this.onSubmit}>
                     <p className="title"><span className="purple">C</span>ontactez-nous</p>

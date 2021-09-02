@@ -1,5 +1,6 @@
 //React
 import React, { Component } from "react";
+import { Helmet } from "react-helmet";
 import "./Auth.css";
 //Redux
 import { connect } from "react-redux";
@@ -205,14 +206,12 @@ class Account extends Component {
                 address: this.props.user.address || ''
             })
         }
-
-        let title = document.querySelector('head > title');
-        title.innerHTML = 'Excite | Mon Compte';
     }
 
     render() {
         return (
             <div className="auth account" style={{ backgroundImage: `url(${generalBG})` }}>
+                <Helmet><title>{this.props.title}</title></Helmet>
                 <form className="account-form" onSubmit={this.onSubmit}>
                     <span><span className="purple">M</span>on Compte</span>
                     <div className="wrap-columns">

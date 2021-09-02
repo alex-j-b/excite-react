@@ -1,17 +1,13 @@
 import React, { Component } from "react";
+import { Helmet } from "react-helmet";
 import "./Faq.css";
 
 
 export default class Conditions extends Component {
-
-    componentDidMount() {
-        let title = document.querySelector('head > title');
-        title.innerHTML = 'Excite | FAQ';
-    }
-
     render() {
         return (
             <div className="faq">
+                <Helmet><title>{this.props.title}</title></Helmet>
                 <div className="wrap-faq">
 
                 <p className="title">FAQ</p>

@@ -1,17 +1,13 @@
 import React, { Component } from "react";
+import { Helmet } from "react-helmet";
 import "./Legal.css";
 
 
 export default class Conditions extends Component {
-
-    componentDidMount() {
-        let title = document.querySelector('head > title');
-        title.innerHTML = 'Excite | Mentions légales';
-    }
-
     render() {
         return (
             <div className="legal">
+            <Helmet><title>{this.props.title}</title></Helmet>
             <div className="wrap-legal">
 
             <p className="title">Mentions légales</p>

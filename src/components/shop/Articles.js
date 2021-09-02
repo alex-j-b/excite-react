@@ -6,12 +6,6 @@ import { ecoin } from "../../assets/export.js";
 
 
 export default class Articles extends Component {
-
-    componentDidMount() {
-        let title = document.querySelector('head > title');
-        title.innerHTML = 'Excite | Boutique';
-    }
-
     render() {
         const shopArticles = this.props.shopArticles.map((el, idx) => {
             return (

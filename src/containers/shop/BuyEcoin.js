@@ -1,5 +1,6 @@
 //React
 import React, { Component } from 'react';
+import { Helmet } from "react-helmet";
 import config from '../../config';
 import './BuyEcoin.css';
 //Component
@@ -13,15 +14,10 @@ import {
 } from "../../assets/export.js";
 
 class BuyEcoin extends Component {
-
-    componentDidMount() {
-        let title = document.querySelector('head > title');
-        title.innerHTML = 'Excite | Obtenir des eCoins';
-    }
-
     render() {
         return (
             <div className="buy-ecoin" style={{ backgroundImage: `url(${generalBG})` }}>
+                <Helmet><title>{this.props.title}</title></Helmet>
                 <div>
                     <p className="title">
                         <span className="purple">O</span>btenir des eCoins&nbsp;

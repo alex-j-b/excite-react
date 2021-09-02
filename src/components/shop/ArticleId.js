@@ -63,11 +63,6 @@ class ArticleId extends Component {
         }
     }
 
-    componentDidMount() {
-        let title = document.querySelector('head > title');
-        title.innerHTML = `Excite | ${this.props.articleIdObj.name}`;
-    }
-
     render() {
         const settings = {
             className: 'slider-img',

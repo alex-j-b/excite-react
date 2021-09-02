@@ -1,5 +1,6 @@
 //React
 import React, { Component } from "react";
+import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 import "./Auth.css";
 //Redux
@@ -148,11 +149,6 @@ class Sign extends Component {
                 });
             }
         }
-    }
-
-    componentDidMount() {
-        let title = document.querySelector('head > title');
-        title.innerHTML = 'Excite | Inscription';
     }
 
     componentWillUnmount() {
@@ -326,6 +322,7 @@ class Sign extends Component {
 
         return (
             <div className="auth log-sign" style={{ backgroundImage: `url(${generalBG})` }}>
+                <Helmet><title>{this.props.title}</title></Helmet>
                 <form onSubmit={this.onSubmit}>
                     <div className="games-icons">
                         <img className="lol-logo" src={lolLogo} alt="lolLogo"></img>

@@ -48,12 +48,6 @@ function Table({ columns, data }) {
 
 
 class Commands extends Component {
-
-    componentDidMount() {
-        let title = document.querySelector('head > title');
-        title.innerHTML = 'Excite | Commandes';
-    }
-
     render() {
         let commandArticles = JSON.parse(JSON.stringify(this.props.commandArticles));
         if (commandArticles.length > 0) {

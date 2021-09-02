@@ -1,7 +1,7 @@
 import React from "react";
 import { Route, Redirect } from "react-router-dom";
 
-export default function UnloggedRoute({ component: C, authProps, ...rest }) {
+export default function UnloggedRoute({ component: C, authProps, title, ...rest }) {
 
     const redirect = () => {
         let urlParams = (new URL(document.location)).searchParams;
@@ -18,7 +18,7 @@ export default function UnloggedRoute({ component: C, authProps, ...rest }) {
             {...rest}
             render={
                 props => !authProps.isLogged
-                ? <C {...props} />
+                ? <C {...props} title={title} />
                 : <Redirect to={redirect()} />
             }
         />

@@ -1,5 +1,6 @@
 //React
 import React, { Component } from "react";
+import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 import "./Shop.css";
 //Redux
@@ -91,6 +92,8 @@ class Shop extends Component {
 
     render() {
 
+        console.log('this.props.title :>> ', this.props.title);
+
         let articleIdObj = false;
         if (this.state.id) {
             const articleIndex = this.props.shopArticles.findIndex(el => el.articleId === this.state.id);
@@ -99,6 +102,7 @@ class Shop extends Component {
 
         return (
             <div className="shop">
+                <Helmet><title>{this.props.title}</title></Helmet>
 
                 <div className="shop-header">
                     { this.state.id && <Link

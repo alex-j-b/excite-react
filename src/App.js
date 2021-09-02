@@ -31,7 +31,8 @@ initializeReactGA();
 class App extends Component {
     toggleButton = this.toggleButton.bind(this);
     state = {
-        phoneMenuActive: false
+        phoneMenuActive: false,
+        title: 'Excite | Pariez sur vous',
     }
 
     toggleButton() {

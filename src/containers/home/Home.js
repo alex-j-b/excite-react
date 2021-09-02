@@ -1,5 +1,6 @@
 //React
 import React, { Component } from "react";
+import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 import "./Home.css";
 //Images
@@ -20,21 +21,12 @@ import {
 
 
 export default class Home extends Component {
-
-    componentDidMount() {
-        let videoBG = document.getElementById("videoBG");
-        videoBG.playbackRate = 0.75;
-
-        let title = document.querySelector('head > title');
-        title.innerHTML = 'Excite | Pariez sur vous';
-    }
-
     render() {
         return (
             <div className="home">
-
+                <Helmet><title>{this.props.title}</title></Helmet>
                 <div className="home-1" onClick={() => this.props.history.push('/jouer')}>
-                    <video id="videoBG" poster={frame1BG} playbackrate="3.0" autoPlay playsInline muted loop>
+                    <video id="videoBG" poster={frame1BG} playbackRate="0.75" autoPlay playsInline muted loop>
                         <source src={esportBG} type="video/mp4"></source>
                     </video>
                     <div>
@@ -97,7 +89,6 @@ export default class Home extends Component {
                         </Link> */}
                     </div>
                 </div>
-
             </div>
         );
     }

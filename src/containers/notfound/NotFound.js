@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 import "./NotFound.css";
 
@@ -9,15 +10,10 @@ import {
 
 
 export default class NotFound extends Component {
-
-    componentDidMount() {
-        let title = document.querySelector('head > title');
-        title.innerHTML = 'Excite | Page introuvable';
-    }
-
     render() {
         return (
             <div className="not-found" style={{ backgroundImage: `url(${forestBG})` }}>
+                <Helmet><title>{this.props.title}</title></Helmet>
                 <span>404</span>
                 <span>Page introuvable.</span>
                 <img src={teemo} alt="teemo"></img>

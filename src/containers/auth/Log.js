@@ -1,5 +1,6 @@
 //React
 import React, { Component } from "react";
+import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 import "./Auth.css";
 //Redux
@@ -30,7 +31,8 @@ class Log extends Component {
         forgotCode: '',
         forgotPassword: '',
         loading: false,
-        forgotForm: false
+        forgotForm: false,
+        errorButton: false,
     }
 
     onChange(e) {
@@ -47,16 +49,18 @@ class Log extends Component {
         const passwordRegex = /[^\s]{8,50}/;
         const validPassword = passwordRegex.test(password);
 
-        let errorAttempt = document.querySelector('.error-button.log-attempt');
         if (validMail && validPassword){
-            this.setState({ loading: true }, () => errorAttempt.style.display = "none");
+            this.setState({
+                loading: true,
+                errorButton: false
+            });
             this.props.logIn({
                 email: email,
                 password: password
             });
         }
         else {
-            errorAttempt.style.display = "inline";
+            this.setState({ errorButton: true });
         }
     }
 
@@ -98,20 +102,18 @@ class Log extends Component {
     }
 
     componentDidUpdate() {
-        let errorAttempt = document.querySelector('.error-button.log-attempt');
-        if (errorAttempt && this.props.authStatus === 'errorPassword' && errorAttempt.style.display !== "inline") {
-            this.setState({ loading: false }, () => errorAttempt.style.display = "inline");
+        if (!this.state.errorButton && this.props.authStatus === 'errorPassword') {
+            this.setState({
+                loading: false,
+                errorButton: true
+            });
         }
-    }
-
-    componentDidMount() {
-        let title = document.querySelector('head > title');
-        title.innerHTML = 'Excite | Connexion';
     }
 
     render() {
         return (
             <div className="auth log-sign" style={{ backgroundImage: `url(${generalBG})` }}>
+                <Helmet><title>{this.props.title}</title></Helmet>
                 {!this.state.forgotForm &&
                     <form onSubmit={this.onLogSubmit}>
                         <div className="games-icons">
@@ -161,7 +163,7 @@ class Log extends Component {
                             <button className="e-button">Connexion</button>
                             <DotsLoader loading={this.state.loading}/>
                         </div>
-                        <p className="error-button log-attempt">Mot de passe ou email invalide</p>
+                        <p className={`error-button log-attempt ${this.state.errorButton ? "dInline" : "dNone"}`}>Mot de passe ou email invalide</p>
                     </form>
                 }
                 {this.state.forgotForm &&

@@ -1,5 +1,6 @@
 //React
 import React, { Component } from 'react';
+import { Helmet } from "react-helmet";
 import { Link } from 'react-router-dom';
 import "./Play.css";
 //Redux
@@ -38,7 +39,8 @@ class Play extends Component {
         tab: '',
         historyScrollBar: false,
         imageReady: true,
-        queue: {}
+        queue: {},
+        displayGameFunc: 'Excite | Jouer'
     }
 
     onChange(e) {
@@ -98,8 +100,7 @@ class Play extends Component {
                 fifa20: 'Fifa 21',
                 history: 'Historique'
             })[this.state.tab] || 'undefined';
-            let title = document.querySelector('head > title');
-            title.innerHTML = `Excite | ${displayGameFunc}`;
+            this.setState({ displayGameFunc: `Excite | ${displayGameFunc}` });
         }
     }
 
@@ -121,8 +122,7 @@ class Play extends Component {
                 history: 'Historique'
             })[tab] || 'undefined';
 
-            let title = document.querySelector('head > title');
-            title.innerHTML = `Excite | ${displayGameFunc}`;
+            this.setState({ displayGameFunc: `Excite | ${displayGameFunc}` });
 
             this.props.getLolBets();
             this.props.getFortniteBets();
@@ -167,6 +167,7 @@ class Play extends Component {
 
         return (
             <div className="play" style={{ backgroundImage: `url(${generalBG})` }}>
+                <Helmet><title>{this.state.displayGameFunc}</title></Helmet>
                 <div>
                     <div className="header">
                         <button
